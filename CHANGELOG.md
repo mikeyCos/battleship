@@ -1,5 +1,10 @@
 # Changelog
 ---
+### 19 FEB 2024
+- Initial commit for Battleship project.
+- Created `ship` and `ship.test` modules.
+- The `ship` factory function currently returns an object with `hit` and `isSunk` methods.
+---
 ### 15 FEB 2024
 - Installed npm packages: `jest`, `babel/core`, `babel/preset-env`, and `babel-jest`.
 - Added `babel.config.js` file to target current version of Node.
