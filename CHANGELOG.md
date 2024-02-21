@@ -1,5 +1,13 @@
 # Changelog
 ---
+### 21 FEB 2024
+- 
+---
+### 20 FEB 2024
+- Created `gameboard` and `gameboard.test` modules.
+- The `gameboard` factory function currently returns an object with `board`/`receivedAttack`/`placeShip` properties/methods.
+- The `placeShip` method somewhat works for horizontally/vertically orientated ships.
+---
 ### 19 FEB 2024
 - Initial commit for Battleship project.
 - Created `ship` and `ship.test` modules.

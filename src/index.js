@@ -1,5 +1,7 @@
-import test from './components/test';
 import './index.css';
+import Gameboard from './containers/gameboard';
 
-test.print();
-document.body.appendChild(test.render());
+const foo = Gameboard();
+// foo.placeShip([5, 3], false);
+foo.placeShip([2, 8], true);
+console.log(foo.board);
