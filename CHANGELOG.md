@@ -1,7 +1,23 @@
 # Changelog
 ---
-### 21 FEB 2024
+### 24 FEB 2024
 - 
+---
+### 23 FEB 2024
+- Deleted `computer.test` module.
+- Created `isComputer`/`isHuman`/`pipe` modules.
+- The pipe function combines passed in factory functions and returns an object.
+- Implemented a `beforeEach` in `player.test` module to reset each player and their board.
+- Updated CHANGELOG.md.
+---
+### 22 FEB 2024
+- Created `computer`/`computer.test`/`player`/`player.test` modules.
+- In order for players to attack opponent's, player object will have `getPlayerBoard` and `setOpponentBoard` public methods.
+- The `player` factory function has a `human` parameter to determine whether or not the player is human or a computer.
+---
+### 21 FEB 2024
+- Created `getStatus` method for a gameboard object.
+- The `getStatus` method returns a boolean; true if all ships on the gameboard have been sunk, otherwise false. 
 ---
 ### 20 FEB 2024
 - Created `gameboard` and `gameboard.test` modules.

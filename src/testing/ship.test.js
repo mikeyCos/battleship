@@ -3,7 +3,7 @@ import Ship from '../containers/ship';
 // Only methods or properties that are used outside of your ‘ship’ object need unit tests.
 
 const foo = Ship(5);
-describe(`Checks ship object has specific public methods/properties`, () => {
+describe(`Tests ship object has specific public methods/properties`, () => {
   test(`Ship object has hit method`, () => {
     expect(foo.hit).toBeDefined();
   });
@@ -13,7 +13,7 @@ describe(`Checks ship object has specific public methods/properties`, () => {
   });
 });
 
-describe(`Checks ship.hit and ship.isSunk`, () => {
+describe(`Tests ship.hit and ship.isSunk`, () => {
   test(`Ship object is hit it's length times`, () => {
     while (!foo.isSunk()) {
       foo.hit();
