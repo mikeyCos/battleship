@@ -1,7 +1,7 @@
 # Changelog
 ---
 ### 27 FEB 2024
-- 
+- Created branches `factory-classes-revision` and `factory-revision`.
 ---
 ### 26 FEB 2024
 - Created `checkBoard` method that returns a boolean based on a coordinate and it's neighboring coordinates; the board's element at the coordinate and it's neighboring coordinates must be `undefined` to return true.

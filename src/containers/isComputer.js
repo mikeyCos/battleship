@@ -3,6 +3,7 @@ export default (player) => {
   // The AI does not have to be smart,
   // But it should know whether or not a given move is legal
   // (i.e. it shouldn’t shoot the same coordinate twice).
+  let getOpponentBoard = player.getOpponentBoard;
   const shots = [];
 
   const generateRandomCoordinate = () => {
@@ -22,8 +23,8 @@ export default (player) => {
       let [x, y] = generateRandomCoordinate();
       if (!shots.find(([a, b]) => a === x && b === y)) {
         shots.push([x, y]);
+        // getOpponentBoard.receiveAttack([x, y]);
         return [x, y];
-        // player.getOpponentBoard([x, y]);
       }
     }
   };
