@@ -12,9 +12,10 @@ export default (size) => {
   // - Destroyer	  3
   // - Submarine	  3
   // - Patrol Boat	2
-  const length = size;
+  // const length = size;
   // How or when to initialize a ship's length
   // What determines a ships length?
+  const length = size;
   let numHits = 0;
   let sunk = false;
   const hit = () => {
@@ -25,5 +26,11 @@ export default (size) => {
     return sunk;
   };
 
-  return { hit, isSunk };
+  return {
+    hit,
+    isSunk,
+    get length() {
+      return length;
+    },
+  };
 };

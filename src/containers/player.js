@@ -9,11 +9,20 @@ import Gameboard from './gameboard';
 export default () => {
   const playerBoard = Gameboard();
   let opponentBoard;
-  const setOpponentBoard = (board) => {
-    opponentBoard = board;
-  };
-  const getOpponentBoard = () => opponentBoard;
-  const getPlayerBoard = () => playerBoard;
+  // const setOpponentBoard = (board) => {
+  //   opponentBoard = board;
+  // };
 
-  return { getPlayerBoard, setOpponentBoard, getOpponentBoard };
+  return {
+    // setOpponentBoard,
+    get board() {
+      return playerBoard;
+    },
+    get opponentBoard() {
+      return opponentBoard;
+    },
+    set opponentBoard(board) {
+      opponentBoard = board;
+    },
+  };
 };

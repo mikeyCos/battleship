@@ -5,7 +5,7 @@ export default () => {
   // Be able to report whether or not all of their ships have been sunk.
 
   // 10 x 10 grid
-  const board = new Array(10).fill().map(() => new Array(10).fill().map(() => null));
+  const board = new Array(10).fill().map(() => new Array(10));
   /*
   [
         1     2     3     4     5     6     7     8     9     10
@@ -22,6 +22,44 @@ export default () => {
         0     1      2    3     4     5     6     7     8     9
   ]
   */
+  const generateShipCoordinates = ([x, y], orientation, shipLength) => {
+    const coordinates = [[x, y]];
+
+    if (orientation) {
+      // Vertical
+      // [5, 3] in 2d array terms => [7][4], [8][4], [9][4]
+      for (let i = x; i < x + shipLength; i += 1) {
+        coordinates.push([i, y]);
+      }
+    } else {
+      // Horizontal
+      // [5, 3] in 2d array terms => [7][4], [7][5], [7][6]
+      for (let i = y; i < y + shipLength; i += 1) {
+        coordinates.push([x, i]);
+      }
+    }
+
+    return coordinates;
+  };
+
+  const checkBoard = (x, y) => {
+    // Check if there is a ship at x and y
+    // Check if all surrounding coordinates are null
+    // Return true if ship can be place
+    let boolean = board[x][y] === undefined;
+    const check = [
+      [x, y + 1],
+      [x, y - 1],
+      [x + 1, y],
+      [x + 1, y + 1],
+      [x + 1, y - 1],
+      [x - 1, y],
+      [x - 1, y + 1],
+      [x - 1, y - 1],
+    ];
+    return boolean && check.every(([a, b]) => board[a][b] === undefined);
+  };
+
   const placeShip = (coordinates, orientation) => {
     // Be able to place ships at specific coordinates by calling the ship factory function.
     // Ship must fit on board based on coordinates
@@ -38,21 +76,25 @@ export default () => {
     //  How to determine if the ship will fit on the board?
     //  How to handle if the ship does not fit on the board?
     // What if there is a ship already at given coordinates?
-    const x = coordinates[0] - 1;
-    const y = board.length - coordinates[1];
-    if ((y <= 10 && y >= 0) || (x <= 10 && x >= 0)) {
+    // A ship MUST be 1 coordinate away from another ship
+    const x = board.length - coordinates[1];
+    const y = coordinates[0] - 1;
+    const newShip = Ship(3);
+    const shipCoordinates = generateShipCoordinates([x, y], orientation, newShip.length);
+    if (shipCoordinates.every(([a, b]) => checkBoard(a, b))) {
       // Check if x and y are within the board's size
+      // Check if there is a ship at x and y
       if (orientation) {
         // Vertical
-        const newShip = Ship(3);
-        for (let i = y; i <= y + 2; i += 1) {
-          board[i][x] = newShip;
+        for (let i = x; i < x + newShip.length; i += 1) {
+          board[i][y] = newShip;
         }
       } else {
         // Horizontal
-        const newShip = Ship(5);
-        board[y].fill(newShip, x, x + 5);
+        board[x].fill(newShip, y, y + newShip.length);
       }
+    } else {
+      throw new Error('There is a ship at or near coordinates');
     }
   };
 
@@ -85,5 +127,18 @@ export default () => {
     return flatBoard.every((ship) => ship.isSunk());
   };
 
-  return { board, receiveAttack, placeShip, missedShots, hitShots, getStatus };
+  return {
+    receiveAttack,
+    placeShip,
+    getStatus,
+    get board() {
+      return board;
+    },
+    get missedShots() {
+      return missedShots;
+    },
+    get hitShots() {
+      return hitShots;
+    },
+  };
 };

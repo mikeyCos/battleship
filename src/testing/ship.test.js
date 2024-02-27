@@ -13,6 +13,14 @@ describe(`Tests ship object has specific public methods/properties`, () => {
   });
 });
 
+describe(`Tests ship.length`, () => {
+  const ship = Ship(3);
+
+  test(`ship.length should return 3`, () => {
+    expect(ship.length).toBe(3);
+  });
+});
+
 describe(`Tests ship.hit and ship.isSunk`, () => {
   test(`Ship object is hit it's length times`, () => {
     while (!foo.isSunk()) {

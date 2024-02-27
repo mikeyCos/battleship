@@ -1,7 +1,13 @@
 # Changelog
 ---
-### 24 FEB 2024
+### 27 FEB 2024
 - 
+---
+### 26 FEB 2024
+- Created `checkBoard` method that returns a boolean based on a coordinate and it's neighboring coordinates; the board's element at the coordinate and it's neighboring coordinates must be `undefined` to return true.
+- The `checkBoard` method currently works only for when the coordinate is the beginning of a ship.
+- Added `beforeEach` in `gameboard.test` module to reinitiate the gameboard, placing and attacking ships.
+- Added a `getter` to the ship and gameboard objects. 
 ---
 ### 23 FEB 2024
 - Deleted `computer.test` module.
