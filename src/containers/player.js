@@ -6,23 +6,28 @@ import Gameboard from './gameboard';
 // Does each player have their own gameboard?
 // Does each player have access to the opponent's gameboard?
 // How to decide if game is player vs player and player vs computer?
-export default () => {
-  const playerBoard = Gameboard();
-  let opponentBoard;
-  // const setOpponentBoard = (board) => {
-  //   opponentBoard = board;
-  // };
+export default class {
+  #playerBoard = Gameboard();
+  #opponentBoard;
+  get board() {
+    return this.#playerBoard;
+  }
 
-  return {
-    // setOpponentBoard,
-    get board() {
-      return playerBoard;
-    },
-    get opponentBoard() {
-      return opponentBoard;
-    },
-    set opponentBoard(board) {
-      opponentBoard = board;
-    },
-  };
-};
+  get opponentBoard() {
+    return this.#opponentBoard;
+  }
+
+  set opponentBoard(board) {
+    this.#opponentBoard = board;
+  }
+}
+
+// class Human {
+//   height;
+// }
+
+// class Baby extends Human {
+//   speak() {
+//     return `I am ${this.height} inches tall.`;
+//   }
+// }

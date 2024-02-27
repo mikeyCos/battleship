@@ -1,14 +1,12 @@
-import pipe from '../containers/pipe';
-import Player from '../containers/player';
-import isHuman from '../containers/isHuman';
-import isComputer from '../containers/isComputer';
+import Human from '../containers/human';
+import Computer from '../containers/computer';
 
 let playerOne;
 let playerTwo;
 
 beforeEach(() => {
-  playerOne = pipe(Player, isHuman)();
-  playerTwo = pipe(Player, isComputer)();
+  playerOne = new Human();
+  playerTwo = new Computer();
   playerOne.opponentBoard = playerTwo.board;
   playerTwo.opponentBoard = playerOne.board;
 });
@@ -34,7 +32,7 @@ describe(`Tests computer can attack any coordinate on a 10x10 grid`, () => {
 });
 
 describe(`Tests human can attack computer`, () => {
-  test(`Tests playerOne.attack, attacks playerTwo's board`, () => {
+  test.skip(`Tests playerOne.attack, attacks playerTwo's board`, () => {
     // playerTwo.getPlayerBoard().placeShip([3, 3], true);
     // playerOne.attack([3, 3]);
     // expect(playerTwo.getPlayerBoard().hitShots).toContainEqual([3, 3]);

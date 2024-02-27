@@ -1,7 +1,10 @@
 # Changelog
 ---
 ### 27 FEB 2024
-- 
+- Attempted to inherit private properties from `player` factory function into `isHuman` and `isHuman` modules.
+- Branch `factory-classes-revision`.
+- Revised factory functions for `player`/`isHuman`/`isComputer` into classes.
+- Renamed `isHuman` to `human` and `isComputer` to `computer`.
 ---
 ### 26 FEB 2024
 - Created `checkBoard` method that returns a boolean based on a coordinate and it's neighboring coordinates; the board's element at the coordinate and it's neighboring coordinates must be `undefined` to return true.
