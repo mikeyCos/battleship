@@ -4,7 +4,6 @@ export default (player) => ({
   // But it should know whether or not a given move is legal
   // (i.e. it shouldn’t shoot the same coordinate twice).
 
-  shots: [],
   generateRandomCoordinate: () => {
     // Returns random coordinate with values between 1 and 10
     const coordinate = [];

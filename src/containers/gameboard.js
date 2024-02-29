@@ -23,7 +23,6 @@ export default () => {
   ]
   */
   const generateShipCoordinates = ([x, y], orientation, shipLength) => {
-    //
     const coordinates = [[x, y]];
 
     if (orientation) {
@@ -133,7 +132,7 @@ export default () => {
 
   const getStatus = () => {
     // Reports whether or not all of their ships have been sunk.
-    const flatBoard = board.flat().filter((item) => item !== null);
+    const flatBoard = board.flat();
     return flatBoard.every((ship) => ship.isSunk());
   };
 

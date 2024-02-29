@@ -2,15 +2,17 @@ import pipe from '../containers/pipe';
 import Player from '../containers/player';
 import isHuman from '../containers/isHuman';
 import isComputer from '../containers/isComputer';
+import GameBoard from '../containers/gameboard';
 
 let playerOne;
 let playerTwo;
 
 beforeEach(() => {
-  playerOne = pipe(Player, isHuman);
-  playerTwo = pipe(Player, isComputer);
-  playerOne.opponentBoard = playerTwo.board;
-  playerTwo.opponentBoard = playerOne.board;
+  const playerOneBoard = GameBoard();
+  const playerTwoBoard = GameBoard();
+  playerOne = pipe(Player, isHuman)(playerOneBoard, playerTwoBoard);
+  playerTwo = pipe(Player, isComputer)(playerTwoBoard, playerOneBoard);
+  playerTwo.board.placeShip([3, 3], true);
 });
 
 describe(`Tests computer can attack any coordinate on a 10x10 grid`, () => {
@@ -34,9 +36,23 @@ describe(`Tests computer can attack any coordinate on a 10x10 grid`, () => {
 });
 
 describe(`Tests human can attack computer`, () => {
+  const playerTwoShipCoordinates = [
+    [7, 2],
+    [8, 2],
+    [9, 2],
+  ];
   test(`Tests playerOne.attack, hits a ship on computer's board`, () => {
-    playerTwo.board.placeShip([3, 3], true);
     playerOne.attack([3, 3]);
     expect(playerTwo.board.hitShots).toContainEqual([3, 3]);
+  });
+
+  test(`Tests if player one sinks player two's ship`, () => {
+    const attackCoordinates = [
+      [3, 3],
+      [3, 2],
+      [3, 1],
+    ];
+    attackCoordinates.forEach(playerOne.attack);
+    expect(playerTwo.board.board[7][2].isSunk()).toBeTruthy();
   });
 });

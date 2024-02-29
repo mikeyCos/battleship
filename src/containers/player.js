@@ -1,25 +1,23 @@
-import Gameboard from './gameboard';
-
 // Players can take turns playing the game by attacking the enemy Gameboard.
 // The game is played against the computer,
 
 // Does each player have their own gameboard?
 // Does each player have access to the opponent's gameboard?
 // How to decide if game is player vs player and player vs computer?
-export default () => {
-  const playerBoard = Gameboard();
-  let opponentBoard;
+export default ([playerBoard, opponentBoard]) => {
+  const board = playerBoard;
   const state = {
     shots: [],
     opponentBoard,
     get board() {
-      return playerBoard;
+      return board;
     },
   };
 
   return state;
 };
 
+/*
 const pipe = (initialFn, ...fns) => {
   return fns.reduce((obj, fn) => {
     return Object.assign(obj, fn(obj));
@@ -75,3 +73,4 @@ console.log(bird.speak());
 console.log(bird.info());
 bird.weight = 3;
 console.log(bird.info());
+*/
