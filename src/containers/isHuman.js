@@ -1,8 +1,6 @@
-export default (player) => {
-  const attack = (coordinate) => {
-    // opponent.receiveAttack(coordinate);
-    player.getOpponentBoard().receiveAttack(coordinate);
-    // console.log(player.getOpponentBoard().board);
-  };
-  return { attack, ...player };
-};
+export default (player) => ({
+  attack: (coordinate) => {
+    player.opponentBoard.receiveAttack(coordinate);
+    player.shots.push(coordinate);
+  },
+});

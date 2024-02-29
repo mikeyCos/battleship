@@ -1,5 +1,16 @@
 # Changelog
 ---
+### 29 FEB 2024
+- 
+---
+### 28 FEB 2024
+- The `pipe` function now has two parameters, `initalFn` and `...fns`; the `initalFn` will dictate the state for the remaining factory functions' return values.
+- The `Object.assign()` method is used inside the `pipe` function ensures the state of the accumulator is assigned to the current value.
+- The `player` factory function now initializes a `state` object in scope and returns it.
+- The `isComputer` and `isHuman` modules now take a `player` parameter; in this case, the value of `player` is the `state` object returned from the `player` factory function.
+- Created `checkCoordinate` method in the `gameboard` module that checks if a given coordinate is within the gameboard's dimensions.
+- Initialized `gameController` module; this will control the main game loop for battleship.
+---
 ### 27 FEB 2024
 - Created branches `factory-classes-revision` and `factory-revision`.
 ---

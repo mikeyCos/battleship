@@ -7,8 +7,8 @@ let playerOne;
 let playerTwo;
 
 beforeEach(() => {
-  playerOne = pipe(Player, isHuman)();
-  playerTwo = pipe(Player, isComputer)();
+  playerOne = pipe(Player, isHuman);
+  playerTwo = pipe(Player, isComputer);
   playerOne.opponentBoard = playerTwo.board;
   playerTwo.opponentBoard = playerOne.board;
 });
@@ -34,9 +34,9 @@ describe(`Tests computer can attack any coordinate on a 10x10 grid`, () => {
 });
 
 describe(`Tests human can attack computer`, () => {
-  test(`Tests playerOne.attack, attacks playerTwo's board`, () => {
-    // playerTwo.getPlayerBoard().placeShip([3, 3], true);
-    // playerOne.attack([3, 3]);
-    // expect(playerTwo.getPlayerBoard().hitShots).toContainEqual([3, 3]);
+  test(`Tests playerOne.attack, hits a ship on computer's board`, () => {
+    playerTwo.board.placeShip([3, 3], true);
+    playerOne.attack([3, 3]);
+    expect(playerTwo.board.hitShots).toContainEqual([3, 3]);
   });
 });

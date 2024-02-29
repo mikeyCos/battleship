@@ -9,20 +9,69 @@ import Gameboard from './gameboard';
 export default () => {
   const playerBoard = Gameboard();
   let opponentBoard;
-  // const setOpponentBoard = (board) => {
-  //   opponentBoard = board;
-  // };
-
-  return {
-    // setOpponentBoard,
+  const state = {
+    shots: [],
+    opponentBoard,
     get board() {
       return playerBoard;
     },
-    get opponentBoard() {
-      return opponentBoard;
-    },
-    set opponentBoard(board) {
-      opponentBoard = board;
-    },
   };
+
+  return state;
 };
+
+const pipe = (initialFn, ...fns) => {
+  return fns.reduce((obj, fn) => {
+    return Object.assign(obj, fn(obj));
+  }, initialFn());
+};
+
+const Animal = () => {
+  let weight;
+
+  const state = {
+    weight,
+    info: () => ({
+      weight: state.weight,
+      legs: state.legs,
+    }),
+  };
+  return state;
+};
+
+const Cat = (state) => ({
+  type: 'cat',
+  legs: 4,
+  speak: () => `meow, I have ${state.legs} legs`,
+  poop: () => `meow...I am pooping.`,
+  poopAgain: () => `${state.poop()} meow meow...I am pooping once more`,
+});
+
+const Bird = (state) => ({
+  type: 'bird',
+  legs: 2,
+  speak: () => `chirp...chirp, I have ${state.legs} legs`,
+  poop: () => `chirp...I am pooping.`,
+  poopAgain: () => `${state.poop()} chirp chirp...I am pooping once more`,
+});
+
+const Wizard = (state) => ({
+  fireball: () => `${state.type} is casting fireball`,
+});
+
+const Necromancer = (state) => ({
+  defileDead: () => `${state.type} is casting defile dead`,
+});
+
+const cat = pipe(Animal, Cat, Wizard);
+const bird = pipe(Animal, Bird, Necromancer);
+console.log(cat.fireball());
+console.log(cat.speak());
+console.log(cat.info());
+cat.weight = 10;
+console.log(cat.info());
+console.log(bird.defileDead());
+console.log(bird.speak());
+console.log(bird.info());
+bird.weight = 3;
+console.log(bird.info());

@@ -23,6 +23,7 @@ export default () => {
   ]
   */
   const generateShipCoordinates = ([x, y], orientation, shipLength) => {
+    //
     const coordinates = [[x, y]];
 
     if (orientation) {
@@ -42,11 +43,15 @@ export default () => {
     return coordinates;
   };
 
+  const checkCoordinate = (x, y) => {
+    return x >= 0 && x < 10 && y >= 0 && y < 10;
+  };
+
   const checkBoard = (x, y) => {
     // Check if there is a ship at x and y
-    // Check if all surrounding coordinates are null
+    // Check if all surrounding coordinates are undefined
     // Return true if ship can be place
-    let boolean = board[x][y] === undefined;
+    const boolean = checkCoordinate(x, y);
     const check = [
       [x, y + 1],
       [x, y - 1],
@@ -57,7 +62,12 @@ export default () => {
       [x - 1, y + 1],
       [x - 1, y - 1],
     ];
-    return boolean && check.every(([a, b]) => board[a][b] === undefined);
+    return check.every(([a, b]) => {
+      // Need to check if a and b are within the board's size
+      // The value of a and b can only be between from 0 to 9.
+      // It is pointless to check if there is space when a ship is placed at the border of the board
+      return checkCoordinate(a, b) ? boolean && board[a][b] === undefined : boolean;
+    });
   };
 
   const placeShip = (coordinates, orientation) => {
