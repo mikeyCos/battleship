@@ -5,12 +5,15 @@
 // Does each player have access to the opponent's gameboard?
 // How to decide if game is player vs player and player vs computer?
 export default ([playerBoard, opponentBoard]) => {
-  const board = playerBoard;
+  // const board = playerBoard;
+  // Do I need to declare the const variable?
   const state = {
     shots: [],
-    opponentBoard,
+    get opponentBoard() {
+      return opponentBoard;
+    },
     get board() {
-      return board;
+      return playerBoard;
     },
   };
 

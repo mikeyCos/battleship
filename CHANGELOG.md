@@ -1,5 +1,10 @@
 # Changelog
 ---
+### 04 MAR FEB 2024
+- Created `switchPlayers` and `playRound` methods to the `gameController` module.
+- If the parameter for `switchPlayers` is undefined, `this.activePlayer` will be pseudo-randomly selected.
+- Changed variable declaration from `const playerOneBoard` to `this.playerOneBoard`.
+---
 ### 29 FEB 2024
 - Created `gameController.test` module.
 - The parameters for the `Player` factory function now utilizes array deconstruction into `playerBoard`, and `opponentBoard` parameters.
