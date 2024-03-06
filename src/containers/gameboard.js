@@ -109,23 +109,21 @@ export default () => {
 
   const missedShots = [];
   const hitShots = [];
-  const receiveAttack = (coordinates) => {
+  const receiveAttack = ([x, y]) => {
     //  Have a receiveAttack function that takes a pair of coordinates
     //  Determines whether or not the attack hit a ship
     //  Then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot.
-    const x = coordinates[0] - 1;
-    const y = board.length - coordinates[1];
-    const target = board[y][x];
-    const isInMissedShots = missedShots.find(
-      ([a, b]) => a === coordinates[0] && b === coordinates[1],
-    );
-    const isInHitShots = hitShots.find(([a, b]) => a === coordinates[0] && b === coordinates[1]);
+    const row = x - 1;
+    const col = board.length - y;
+    const target = board[col][row];
+    const isInMissedShots = missedShots.find(([a, b]) => a === x && b === y);
+    const isInHitShots = hitShots.find(([a, b]) => a === x && b === y);
     if (!isInMissedShots && !isInHitShots) {
       if (target) {
         target.hit();
-        hitShots.push(coordinates);
+        hitShots.push([x, y]);
       } else {
-        missedShots.push(coordinates);
+        missedShots.push([x, y]);
       }
     }
   };

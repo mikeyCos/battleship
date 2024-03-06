@@ -1,11 +1,11 @@
-import gameController from '../containers/gameController';
+import GameController from '../containers/gameController';
 import ship from '../containers/ship';
 // Not sure if I need this?
 
-const battleship = gameController;
+let battleship;
 
 beforeEach(() => {
-  battleship.init();
+  battleship = GameController();
 });
 
 const playerOneShipCoordinates = [
@@ -49,9 +49,7 @@ describe(`Tests if players can attack one another`, () => {
         [3, 2],
         [4, 2],
       ];
-      shipCoordinates.forEach((coordinate) => {
-        battleship.playerTwo.attack(coordinate);
-      });
+      shipCoordinates.forEach(battleship.playerTwo.attack);
     } else {
       let i = 0;
       while (i < 100) {
@@ -60,7 +58,7 @@ describe(`Tests if players can attack one another`, () => {
       }
     }
 
-    expect(battleship.playerOneBoard.board[8][1].isSunk()).toBeTruthy();
+    expect(battleship.playerOne.board.board[8][1].isSunk()).toBeTruthy();
   });
 });
 
@@ -68,6 +66,38 @@ describe(`Tests if a round can be played`, () => {
   test(`The active player should be different after the round is done`, () => {
     const initalActivePlayer = battleship.activePlayer;
     battleship.playRound([2, 2]);
+    // Is this a good way to compare objects?
     expect(battleship.activePlayer === initalActivePlayer).toBeFalsy();
+  });
+});
+
+describe(`Tests if a game is over or not`, () => {
+  test(`Player one attacks once, game is not over`, () => {
+    battleship.playRound([2, 2]);
+    expect(battleship.getGameStatus()).toBeFalsy();
+  });
+
+  test(`All of player two ships are sunk, game over`, () => {
+    const playerOne = battleship.playerOne;
+    const shipCoordinates = [
+      [6, 2],
+      [7, 2],
+      [8, 2],
+    ];
+    const dummyCoordinates = [
+      [2, 1],
+      [2, 1],
+      [2, 1],
+    ];
+
+    while (!battleship.getGameStatus()) {
+      if (battleship.activePlayer === playerOne) {
+        battleship.playRound(shipCoordinates.shift());
+      } else {
+        battleship.playRound(dummyCoordinates.shift());
+      }
+    }
+    // shipCoordinates.forEach(battleship.playerOne.attack);
+    expect(battleship.getGameStatus()).toBeTruthy();
   });
 });

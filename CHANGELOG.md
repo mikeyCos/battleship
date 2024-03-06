@@ -1,6 +1,12 @@
 # Changelog
 ---
-### 04 MAR FEB 2024
+### 05 MAR 2024
+- Created `screenController` and `createElement` modules.
+- Changed `gameController` from an object literal to a factory function; public properties/methods are subject to change.
+- Renamed `index.js` and `index.css` to `app.js` and `app.css`.
+- The `app.js` module will use an Immediately Invoked Function Expression (IIFE) to render the page on load.
+---
+### 04 MAR 2024
 - Created `switchPlayers` and `playRound` methods to the `gameController` module.
 - If the parameter for `switchPlayers` is undefined, `this.activePlayer` will be pseudo-randomly selected.
 - Changed variable declaration from `const playerOneBoard` to `this.playerOneBoard`.
