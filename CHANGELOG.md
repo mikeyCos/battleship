@@ -1,5 +1,10 @@
 # Changelog
 ---
+### 06 MAR 2024
+- Created `footer`/`header`/`main` directories and modules.
+- Added a `setChildren` method to the `createElement` module; it takes an array and appends children to the parent element and if calls itself if a children element has children.
+- Closures are planned to be used for component modules; object literal is declared inside the default function exported.
+---
 ### 05 MAR 2024
 - Created `screenController` and `createElement` modules.
 - Changed `gameController` from an object literal to a factory function; public properties/methods are subject to change.
