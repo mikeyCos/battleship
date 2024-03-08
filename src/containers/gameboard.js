@@ -5,7 +5,7 @@ export default () => {
   // Be able to report whether or not all of their ships have been sunk.
 
   // 10 x 10 grid
-  const board = new Array(10).fill().map(() => new Array(10));
+  const board = new Array(10).fill().map(() => new Array(10).fill(undefined));
   /*
   [
         1     2     3     4     5     6     7     8     9     10
@@ -130,7 +130,7 @@ export default () => {
 
   const getStatus = () => {
     // Reports whether or not all of their ships have been sunk.
-    const flatBoard = board.flat();
+    const flatBoard = board.flat().filter((item) => item);
     return flatBoard.every((ship) => ship.isSunk());
   };
 

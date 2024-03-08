@@ -6,7 +6,8 @@ import isComputer from './isComputer';
 // Module that controls the main game loop
 // For now just populate each Gameboard with predetermined coordinates.
 // You are going to implement a system for allowing players to place their ships later.
-export default () => {
+export default (mode) => {
+  // If mode is true player two will be a human, else a computer
   // The game loop should set up a new game by creating Players and Gameboards.
   // 1. Create gameboards
   // 2. Create players and pass in their gameboard and the opponent's gameboard.
@@ -16,7 +17,7 @@ export default () => {
   const playerTwoBoard = Gameboard();
 
   const playerOne = pipe(Player, isHuman)(playerOneBoard, playerTwoBoard);
-  const playerTwo = pipe(Player, isHuman)(playerTwoBoard, playerOneBoard);
+  const playerTwo = pipe(Player, mode ? isHuman : isComputer)(playerTwoBoard, playerOneBoard);
   playerOneBoard.placeShip([2, 2], false);
   playerTwoBoard.placeShip([6, 2], false);
 

@@ -6,6 +6,8 @@ export default {
   },
   unsubscribe(subscriber, fn) {
     if (this.subscribers[subscriber]) {
+      this.subscribers[subscriber].splice(this.subscribers[subscriber].indexOf(fn), 1);
+      if (this.subscribers[subscriber].length === 0) delete this.subscribers[subscriber];
     }
   },
   publish(subscriber, value) {
@@ -14,6 +16,3 @@ export default {
     }
   },
 };
-
-const foo = () => 'hello world';
-const bar = () => 'ello world';

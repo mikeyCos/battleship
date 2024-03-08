@@ -1,9 +1,19 @@
 # Changelog
 ---
+### 08 MAR 2024
+- 
+---
+### 07 MAR 2024
+- Created the `gameInit` module that temporarily renders the initial game state(?); the module is planned to allow user(s) to place their ships and then start game.
+- Moved `screenController` into the `components` subdirectory; the module is planned to control the visual representation of the board.
+- Subscribers subscribe with `pubSub` can now be unsubscribed; finds the index of a subscriber's function and slices it from the array.
+- Buttons that are rendered by the `home` module will publish the render method in the `main` module and `gameInit` is called.
+---
 ### 06 MAR 2024
 - Created `footer`/`header`/`main` directories and modules.
 - Added a `setChildren` method to the `createElement` module; it takes an array and appends children to the parent element and if calls itself if a children element has children.
 - Closures are planned to be used for component modules; object literal is declared inside the default function exported.
+- Installed `@iconfu/svg-inject` version 1.2.3 to `devDependencies` in `package.json`.
 ---
 ### 05 MAR 2024
 - Created `screenController` and `createElement` modules.

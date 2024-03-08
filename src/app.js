@@ -1,11 +1,13 @@
 import '@iconfu/svg-inject';
 import createElement from './helpers/createElement';
 import buildHeader from './components/header/header';
+import buildMain from './components/main/main';
 import './app.css';
 
 (() => {
   const build = {
     header: buildHeader,
+    main: buildMain,
   };
 
   const app = {
@@ -14,12 +16,10 @@ import './app.css';
     },
     render() {
       const appWrapper = createElement('div');
-      const appContent = createElement('div');
       appWrapper.id = 'battleship_app';
-      appContent.id = 'content';
 
       appWrapper.appendChild(build.header());
-      appWrapper.appendChild(appContent);
+      appWrapper.appendChild(build.main());
       document.body.appendChild(appWrapper);
     },
   };
