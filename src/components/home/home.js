@@ -1,5 +1,5 @@
 import createElement from '../../helpers/createElement';
-import screenController from '../screen/screenController';
+import screenController from '../screen_VOID/screenController_VOID';
 import homeConfig from './home.config';
 import pubSub from '../../containers/pubSub';
 export default () => {
@@ -8,7 +8,7 @@ export default () => {
     cacheDOM(element) {
       this.home = element;
       this.header = this.home.querySelector('h2');
-      this.modeBtns = this.home.querySelectorAll('.gamemode_button');
+      this.modeBtns = this.home.querySelectorAll('.gamemode_btn');
       console.log(this.home);
       console.log(this.modeBtns);
     },
@@ -32,7 +32,8 @@ export default () => {
       return homeContainer;
     },
     setGameMode(e) {
-      const gamemode = e.currentTarget.classList.value.includes('human');
+      const gamemode = !e.currentTarget.classList.value.includes('computer');
+      console.log(gamemode);
       pubSub.publish('initGame', gamemode);
     },
   };

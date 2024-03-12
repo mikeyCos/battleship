@@ -1,0 +1,52 @@
+#board_container {
+  display: flex;
+  justify-content: center;
+  gap: 1rem;
+}
+
+.player_two {
+  position: relative;
+}
+
+.player_one .board,
+.player_two .board {
+  display: grid;
+  grid-template-columns: repeat(10, 30px);
+  grid-auto-rows: 30px;
+}
+
+#board_container.wait .player_two .game_start {
+  display: block;
+  position: absolute;
+  top: 20%;
+}
+
+.player_two .game_start {
+  display: none;
+}
+
+#board_container.wait .player_two .board {
+  opacity: 0.4;
+}
+
+.cell {
+  /* width: 16px;
+  height: 16px; */
+  background-color: white;
+  border: 0.5px solid black;
+  position: relative;
+}
+
+.cell > .row_marker {
+  position: absolute;
+  right: 2rem;
+}
+
+.cell > .col_marker {
+  position: absolute;
+  bottom: 2rem;
+}
+
+.cell:nth-of-type(44) {
+  background-color: red;
+}

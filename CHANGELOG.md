@@ -1,7 +1,12 @@
 # Changelog
 ---
-### 08 MAR 2024
+### 12 MAR 2024
 - 
+---
+### 11 MAR 2024
+- Created `Cell` factory function in the `gameboard` module to return a `Cell` object that is initialized with `ship`/`hit`/`miss` properties; this object will help accommodate when gameboards are rendered.
+- The `placeShip` method for a `Gameboard` object reassigns the property value for `ship`.
+- Updated test modules that depend on the `gameboard` module to accommodate the changes in the `gameboard` module.
 ---
 ### 07 MAR 2024
 - Created the `gameInit` module that temporarily renders the initial game state(?); the module is planned to allow user(s) to place their ships and then start game.

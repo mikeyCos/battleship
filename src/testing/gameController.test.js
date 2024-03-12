@@ -1,11 +1,11 @@
 import GameController from '../containers/gameController';
-import ship from '../containers/ship';
-// Not sure if I need this?
 
 let battleship;
 
 beforeEach(() => {
   battleship = GameController();
+  battleship.playerOneBoard.placeShip([2, 2], false);
+  battleship.playerTwoBoard.placeShip([6, 2], false);
 });
 
 const playerOneShipCoordinates = [
@@ -13,7 +13,7 @@ const playerOneShipCoordinates = [
   [8, 2],
   [8, 3],
 ];
-
+//
 const playerTwoShipCoordinates = [
   [8, 5],
   [8, 6],
@@ -24,7 +24,7 @@ describe(`Tests if gameController.playRound works`, () => {
   test(`Tests if player one can place ships`, () => {
     expect(
       playerOneShipCoordinates.every(
-        ([x, y]) => battleship.playerOne.board.board[x][y] !== undefined,
+        ([x, y]) => battleship.playerOne.board.board[x][y].ship !== null,
       ),
     ).toBeTruthy();
   });
@@ -32,7 +32,7 @@ describe(`Tests if gameController.playRound works`, () => {
   test(`Tests if player two can place ships`, () => {
     expect(
       playerTwoShipCoordinates.every(
-        ([x, y]) => battleship.playerTwo.board.board[x][y] !== undefined,
+        ([x, y]) => battleship.playerTwo.board.board[x][y].ship !== null,
       ),
     ).toBeTruthy();
   });
@@ -58,7 +58,7 @@ describe(`Tests if players can attack one another`, () => {
       }
     }
 
-    expect(battleship.playerOne.board.board[8][1].isSunk()).toBeTruthy();
+    expect(battleship.playerOne.board.board[8][1].ship.isSunk()).toBeTruthy();
   });
 });
 

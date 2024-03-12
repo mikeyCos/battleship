@@ -18,8 +18,6 @@ export default (mode) => {
 
   const playerOne = pipe(Player, isHuman)(playerOneBoard, playerTwoBoard);
   const playerTwo = pipe(Player, mode ? isHuman : isComputer)(playerTwoBoard, playerOneBoard);
-  playerOneBoard.placeShip([2, 2], false);
-  playerTwoBoard.placeShip([6, 2], false);
 
   const switchPlayers = (player) => {
     if (player) {

@@ -8,13 +8,13 @@ export default [
   {
     element: 'section',
     attributes: {
-      class: 'gamemode_buttons',
+      class: 'gamemode_btns',
     },
     children: [
       {
         element: 'button',
         attributes: {
-          class: 'gamemode_button human_human',
+          class: 'gamemode_btn human_human',
         },
         children: [
           {
@@ -28,7 +28,7 @@ export default [
       {
         element: 'button',
         attributes: {
-          class: 'gamemode_button human_computer',
+          class: 'gamemode_btn human_computer',
         },
         children: [
           {

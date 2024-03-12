@@ -3,12 +3,12 @@ import screenController from '../screen/screenController';
 import mainConfig from './main.config';
 import buildHome from '../home/home';
 import pubSub from '../../containers/pubSub';
-import gameInit from '../gameInit/gameInit';
+import gameInit from '../screen/screenController';
 
 export default () => {
   const build = {
     home: buildHome,
-    game: gameInit,
+    game: screenController,
   };
   const main = {
     init() {},

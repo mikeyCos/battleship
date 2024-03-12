@@ -3,9 +3,16 @@ import Ship from '../containers/ship';
 export default () => {
   // Keep track of missed attacks so they can display them properly.
   // Be able to report whether or not all of their ships have been sunk.
-
+  const Cell = () => {
+    return {
+      ship: null,
+      hit: false,
+      miss: null,
+    };
+  };
+  const board = new Array(10).fill().map(() => new Array(10).fill().map(() => Cell()));
   // 10 x 10 grid
-  const board = new Array(10).fill().map(() => new Array(10).fill(undefined));
+  // const board = new Array(10).fill().map(() => new Array(10).fill(undefined));
   /*
   [
         1     2     3     4     5     6     7     8     9     10
@@ -65,7 +72,7 @@ export default () => {
       // Need to check if a and b are within the board's size
       // The value of a and b can only be between from 0 to 9.
       // It is pointless to check if there is space when a ship is placed at the border of the board
-      return checkCoordinate(a, b) ? boolean && board[a][b] === undefined : boolean;
+      return checkCoordinate(a, b) ? boolean && board[a][b].ship === null : boolean;
     });
   };
 
@@ -96,11 +103,14 @@ export default () => {
       if (orientation) {
         // Vertical
         for (let i = x; i < x + newShip.length; i += 1) {
-          board[i][y] = newShip;
+          board[i][y].ship = newShip;
         }
       } else {
         // Horizontal
-        board[x].fill(newShip, y, y + newShip.length);
+        // board[x].fill(newShip, y, y + newShip.length);
+        for (let i = y; i < y + newShip.length; i += 1) {
+          board[x][i].ship = newShip;
+        }
       }
     } else {
       throw new Error('There is a ship at or near coordinates');
@@ -110,19 +120,24 @@ export default () => {
   const missedShots = [];
   const hitShots = [];
   const receiveAttack = ([x, y]) => {
-    //  Have a receiveAttack function that takes a pair of coordinates
-    //  Determines whether or not the attack hit a ship
-    //  Then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot.
+    // Have a receiveAttack function that takes a pair of coordinates
+    // Determines whether or not the attack hit a ship
+    // Then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot.
+    // Can I store the missed shots directly on the board?
     const row = x - 1;
     const col = board.length - y;
-    const target = board[col][row];
+    const cell = board[col][row];
     const isInMissedShots = missedShots.find(([a, b]) => a === x && b === y);
     const isInHitShots = hitShots.find(([a, b]) => a === x && b === y);
     if (!isInMissedShots && !isInHitShots) {
-      if (target) {
-        target.hit();
+      if (cell.ship) {
+        // target.hit();
+        // console.log(target.ship);
+        cell.ship.hit();
+        cell.hit = true;
         hitShots.push([x, y]);
       } else {
+        cell.miss = true;
         missedShots.push([x, y]);
       }
     }
@@ -130,8 +145,8 @@ export default () => {
 
   const getStatus = () => {
     // Reports whether or not all of their ships have been sunk.
-    const flatBoard = board.flat().filter((item) => item);
-    return flatBoard.every((ship) => ship.isSunk());
+    const flatBoard = board.flat().filter((cell) => cell.ship !== null);
+    return flatBoard.every((cell) => cell.ship.isSunk());
   };
 
   return {

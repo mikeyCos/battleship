@@ -43,7 +43,7 @@ describe(`Tests human can attack computer`, () => {
   ];
   test(`Tests playerOne.attack, hits a ship on computer's board`, () => {
     playerOne.attack([3, 3]);
-    expect(playerTwo.board.hitShots).toContainEqual([3, 3]);
+    expect(playerTwo.board.board[playerTwo.board.board.length - 3][3 - 1].hit).toBeTruthy();
   });
 
   test(`Tests if player one sinks player two's ship`, () => {
@@ -53,6 +53,6 @@ describe(`Tests human can attack computer`, () => {
       [3, 1],
     ];
     attackCoordinates.forEach(playerOne.attack);
-    expect(playerTwo.board.board[7][2].isSunk()).toBeTruthy();
+    expect(playerTwo.board.board[7][2].ship.isSunk()).toBeTruthy();
   });
 });

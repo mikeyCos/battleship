@@ -32,7 +32,7 @@ describe(`Tests gameboard.placeShip`, () => {
       gameboard.board[7][5],
       gameboard.board[7][6],
     ];
-    expect(shipCoordinates_00.every((coordinate) => coordinate !== null)).toBeTruthy();
+    expect(shipCoordinates_00.every((cell) => cell.ship !== null)).toBeTruthy();
   });
 
   test(`A ship of length 3 is placed at [2, 8] horizontally: gameboard.placeShip([2, 8])`, () => {
@@ -41,7 +41,7 @@ describe(`Tests gameboard.placeShip`, () => {
       gameboard.board[3][1],
       gameboard.board[4][1],
     ];
-    expect(shipCoordinates_01.every((coordinate) => coordinate !== null)).toBeTruthy();
+    expect(shipCoordinates_01.every((cell) => cell.ship !== null)).toBeTruthy();
   });
 
   test(`There is already a ship at [5, 3] horizontally: gameboard.placeShip([5, 3])`, () => {
@@ -63,38 +63,44 @@ describe(`Tests gameboard.placeShip`, () => {
 
 describe(`Tests gameboard.receiveAttack`, () => {
   test(`gameboard.receiveAttack([5, 3]) will hit a ship`, () => {
-    expect(gameboard.hitShots).toContainEqual([5, 3]);
-    expect(gameboard.hitShots).toContainEqual([6, 3]);
+    expect(gameboard.board[gameboard.board.length - 3][5 - 1].hit).toBeTruthy();
+  });
+
+  test(`gameboard.receiveAttack([6, 3]) will hit a ship`, () => {
+    expect(gameboard.board[gameboard.board.length - 3][6 - 1].hit).toBeTruthy();
+  });
+
+  test(`gameboard.receiveAttack([2, 7]) will hit a ship`, () => {
+    expect(gameboard.board[gameboard.board.length - 7][2 - 1].hit).toBeTruthy();
   });
 
   test(`gameboard.receiveAttack([2, 8]) will hit a ship`, () => {
-    expect(gameboard.hitShots).toContainEqual([2, 8]);
-    expect(gameboard.hitShots).toContainEqual([2, 7]);
+    expect(gameboard.board[gameboard.board.length - 8][2 - 1].hit).toBeTruthy();
   });
 
   test(`gameboard.receiveAttack([1, 1]) will miss a ship`, () => {
     gameboard.receiveAttack([1, 1]);
-    expect(gameboard.missedShots).toContainEqual([1, 1]);
+    expect(gameboard.board[gameboard.board.length - 1][1 - 1].miss).toBeTruthy();
   });
 
   test(`gameboard.receiveAttack([10, 3]) will miss a ship`, () => {
     gameboard.receiveAttack([10, 3]);
-    expect(gameboard.missedShots).toContainEqual([10, 3]);
+    expect(gameboard.board[gameboard.board.length - 3][10 - 1].miss).toBeTruthy();
   });
 });
 
 describe(`Tests ship.isSunk`, () => {
   test(`Tests if ship at [5, 3] to [8, 3] is sunk`, () => {
-    expect(gameboard.board[7][4].isSunk()).toBeFalsy();
+    expect(gameboard.board[7][4].ship.isSunk()).toBeFalsy();
   });
 
   test(`Tests if ship at [5, 3] to [8, 3] is sunk`, () => {
     gameboard.receiveAttack([7, 3]);
-    expect(gameboard.board[7][4].isSunk()).toBeTruthy();
+    expect(gameboard.board[7][4].ship.isSunk()).toBeTruthy();
   });
 
   test(`Tests if ship at [2, 8] to [2, 6] is sunk`, () => {
-    expect(gameboard.board[2][1].isSunk()).toBeFalsy();
+    expect(gameboard.board[2][1].ship.isSunk()).toBeFalsy();
   });
 });
 
