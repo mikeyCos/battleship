@@ -1,5 +1,8 @@
 # Changelog
 ---
+### 13 MAR 2024
+- 
+---
 ### 12 MAR 2024
 - Only unique function/handlers can be subscribed to it's subscribers' array.
 - Created `renderShip`/`renderAttack`/`renderWait`/`getBoardCell` in the `screenController` module.

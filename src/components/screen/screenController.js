@@ -10,7 +10,6 @@ export default (mode) => {
   // Builds empty board for players to place their ships
   const screenController = {
     gameReady: false,
-    gamemode: mode,
     game: GameController(mode),
     init() {
       this.boards = {
@@ -33,7 +32,7 @@ export default (mode) => {
       this.startBtn = element.querySelector('.game_start_btn');
     },
     bindEvents() {
-      this.startBtn.addEventListener('click', this.start);
+      if (!this.gameReady) this.startBtn.addEventListener('click', this.start);
       this.playerOneBoard.addEventListener('click', this.boardHandler);
       this.playerTwoBoard.addEventListener('click', this.boardHandler);
     },
@@ -46,6 +45,8 @@ export default (mode) => {
       const boardContainer = createElement('div');
       const playerOneContainer = createElement('div');
       const playerTwoContainer = createElement('div');
+      const playerOneHeader = createElement('h4');
+      const playerTwoHeader = createElement('h4');
       const gameStartContainer = createElement('div');
       const gameStartBtn = createElement('button');
       const gameStartBtnText = createElement('span');
@@ -57,6 +58,9 @@ export default (mode) => {
       playerOneContainer.classList.add('player_one');
       playerTwoContainer.classList.add('player_two');
 
+      playerOneHeader.textContent = 'Player One';
+      playerTwoHeader.textContent = 'Player Two';
+
       if (this.gameReady) {
         // Put 'wait' class on the opponent's container
         if (this.game.activePlayer !== this.game.playerOne) {
@@ -66,7 +70,7 @@ export default (mode) => {
         }
       }
 
-      if (!this.gameReady) boardContainer.classList.add('wait');
+      if (!this.gameReady) playerTwoContainer.classList.add('wait');
       gameStartContainer.classList.add('game_start');
       gameStartBtn.classList.add('game_start_btn');
 
@@ -74,11 +78,13 @@ export default (mode) => {
       playerOneContainer.appendChild(this.renderBoard(this.boards.playerOne));
       playerTwoContainer.appendChild(this.renderBoard(this.boards.playerTwo));
 
+      playerOneContainer.appendChild(playerOneHeader);
+      playerTwoContainer.appendChild(playerTwoHeader);
       boardContainer.appendChild(playerOneContainer);
       boardContainer.appendChild(playerTwoContainer);
       gameStartBtn.appendChild(gameStartBtnText);
       gameStartContainer.appendChild(gameStartBtn);
-      playerTwoContainer.appendChild(gameStartContainer);
+      if (!this.gameReady) playerTwoContainer.appendChild(gameStartContainer);
       gameContainer.appendChild(boardContainer);
 
       if (this.gameReady) this.gameContainer.replaceWith(gameContainer);
@@ -173,7 +179,6 @@ export default (mode) => {
       // Set this.gameReady to true
       // Publish something...?
       // Reveal player two's board
-      this.startBtn.removeEventListener('click', this.start);
       this.boardContainer.classList.remove('wait');
       this.gameReady = true;
       this.render();
@@ -217,4 +222,8 @@ export default (mode) => {
   };
   screenController.init();
   return screenController.render();
+};
+
+const something = () => {
+  const somethingMore = {};
 };

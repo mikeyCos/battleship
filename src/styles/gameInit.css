@@ -4,17 +4,16 @@
   gap: 1rem;
 }
 
-#board_container.wait .player_two .game_start {
+.player_two.wait > .game_start {
   display: block;
   position: absolute;
   top: 20%;
 }
 
-#board_container.wait .player_two > .board {
-  opacity: 0.4;
-}
-
-#board_container > *.wait > .board {
+.player_one.wait > .board,
+.player_one.wait > h4,
+.player_two.wait > .board,
+.player_two.wait > h4 {
   opacity: 0.4;
 }
 
