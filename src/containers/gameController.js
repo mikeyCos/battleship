@@ -3,6 +3,7 @@ import Player from './player';
 import pipe from './pipe';
 import isHuman from './isHuman';
 import isComputer from './isComputer';
+import pubSub from './pubSub';
 // Module that controls the main game loop
 // For now just populate each Gameboard with predetermined coordinates.
 // You are going to implement a system for allowing players to place their ships later.

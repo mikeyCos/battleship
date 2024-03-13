@@ -1,5 +1,6 @@
 import GameController from '../../containers/gameController';
 import createElement from '../../helpers/createElement';
+import pubSub from '../../containers/pubSub';
 import '../../styles/gameInit.css';
 
 // Trying to decide whether or not it is a good idea to create a separate module
@@ -16,12 +17,14 @@ export default (mode) => {
         playerOne: this.game.playerOneBoard.board,
         playerTwo: this.game.playerTwoBoard.board,
       };
-      console.log(this.game.playerOneBoard);
-      console.log(this.game.playerTwoBoard);
-      this.game.playerOneBoard.placeShip([2, 2], false);
-      // this.game.playerTwoBoard.placeShip([6, 2], false);
+
+      this.start = this.start.bind(this);
+      this.boardHandler = this.boardHandler.bind(this);
+      this.renderShip = this.renderShip.bind(this);
+      this.renderAttack = this.renderAttack.bind(this);
     },
     cacheDOM(element) {
+      this.gameContainer = element;
       this.boardContainer = element.querySelector('#board_container');
       this.playerOneContainer = element.querySelector('.player_one');
       this.playerTwoContainer = element.querySelector('.player_two');
@@ -30,8 +33,6 @@ export default (mode) => {
       this.startBtn = element.querySelector('.game_start_btn');
     },
     bindEvents() {
-      this.start = this.start.bind(this);
-      this.boardHandler = this.boardHandler.bind(this);
       this.startBtn.addEventListener('click', this.start);
       this.playerOneBoard.addEventListener('click', this.boardHandler);
       this.playerTwoBoard.addEventListener('click', this.boardHandler);
@@ -56,15 +57,16 @@ export default (mode) => {
       playerOneContainer.classList.add('player_one');
       playerTwoContainer.classList.add('player_two');
 
-      if (this.game.playerOne !== this.game.activePlayer) {
-        playerOneContainer.classList.add('wait');
-      } else {
-        playerTwoContainer.classList.add('wait');
+      if (this.gameReady) {
+        // Put 'wait' class on the opponent's container
+        if (this.game.activePlayer !== this.game.playerOne) {
+          playerOneContainer.classList.add('wait');
+        } else {
+          playerTwoContainer.classList.add('wait');
+        }
       }
 
-      if (!this.gameReady) {
-        boardContainer.classList.add('wait');
-      }
+      if (!this.gameReady) boardContainer.classList.add('wait');
       gameStartContainer.classList.add('game_start');
       gameStartBtn.classList.add('game_start_btn');
 
@@ -77,11 +79,13 @@ export default (mode) => {
       gameStartBtn.appendChild(gameStartBtnText);
       gameStartContainer.appendChild(gameStartBtn);
       playerTwoContainer.appendChild(gameStartContainer);
-
       gameContainer.appendChild(boardContainer);
+
+      if (this.gameReady) this.gameContainer.replaceWith(gameContainer);
       this.cacheDOM(gameContainer);
       this.bindEvents();
-      return gameContainer;
+      if (!this.gameReady) return gameContainer;
+      // Does having this if statement matter?
     },
     renderBoard(board) {
       const playerBoard = createElement('div');
@@ -97,9 +101,9 @@ export default (mode) => {
 
           // Need to show only activePlayer's ships
           // Need to hide the opponent's ships when activePlayer changes
-          console.log(cell);
-          const cellSpan = createElement('span');
-          cellBtn.appendChild(cellSpan);
+          const cellContent = createElement('div');
+          cellContent.classList.add('cell_content');
+          cellBtn.appendChild(cellContent);
 
           // Need to check for left and top edges of board
           // To create row and column labels
@@ -125,6 +129,39 @@ export default (mode) => {
       });
       return playerBoard;
     },
+    renderShip(element) {
+      // This will append to the content div
+      console.log(element);
+      console.log(element.firstChild);
+    },
+    renderAttack(btn, cell) {
+      console.log(btn);
+      console.log(cell);
+      if (cell.miss) {
+        // Mark as miss
+        btn.classList.add('miss');
+      } else {
+        // Mark as hit
+        btn.classList.add('hit');
+      }
+      // Adds a class to the btn, miss or hit
+    },
+    renderWait() {
+      if (this.game.activePlayer !== this.game.playerOne) {
+        // Put 'wait' class on the opponent's container
+        console.log(`Player two attacks player one`);
+        this.playerTwoBoard.addEventListener('click', this.boardHandler);
+        this.playerOneContainer.classList.add('wait');
+        this.playerTwoContainer.classList.remove('wait');
+        this.playerOneBoard.removeEventListener('click', this.boardHandler);
+      } else {
+        console.log(`Player one attacks player two`);
+        this.playerOneBoard.addEventListener('click', this.boardHandler);
+        this.playerTwoContainer.classList.add('wait');
+        this.playerOneContainer.classList.remove('wait');
+        this.playerTwoBoard.removeEventListener('click', this.boardHandler);
+      }
+    },
     leave(e) {
       // Publish something...
       // Re-render home
@@ -139,12 +176,15 @@ export default (mode) => {
       this.startBtn.removeEventListener('click', this.start);
       this.boardContainer.classList.remove('wait');
       this.gameReady = true;
-      console.log(e.currentTarget);
+      this.render();
     },
     isGameReady() {
       // Returns true if all player's ships are placed
     },
     boardHandler(e) {
+      // e.stopImmediatePropagation();
+      console.log(e.target);
+      const btn = e.target;
       const x = parseInt(e.target.dataset.x);
       const y = parseInt(e.target.dataset.y);
       if (!isNaN(x) || !isNaN(y)) {
@@ -154,11 +194,25 @@ export default (mode) => {
           // How to prevent clicking own board?
           console.log(`Attacking coordinate [${x}, ${y}]`);
           this.game.playRound([x, y]);
+          const cell = this.getBoardCell([x, y]);
+          console.log(cell);
+          // this.renderAttack(btn, cell);
+          // Add a class to the button
+          // console.log(this.game.playerOneBoard.board);
+          // console.log(this.game.playerTwoBoard.board);
+          this.renderWait();
         } else {
           // Place ship
+          this.game.playerOneBoard.placeShip([2, 2], false);
+          this.game.playerTwoBoard.placeShip([6, 2], false);
+          // this.renderShip(btn);
+
           console.log(`Placing a ship starting at [${x}, ${y}]`);
         }
       }
+    },
+    getBoardCell([row, col]) {
+      return this.game.activePlayer.opponentBoard.board[10 - col][row - 1];
     },
   };
   screenController.init();

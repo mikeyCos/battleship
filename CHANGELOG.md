@@ -1,7 +1,10 @@
 # Changelog
 ---
 ### 12 MAR 2024
-- 
+- Only unique function/handlers can be subscribed to it's subscribers' array.
+- Created `renderShip`/`renderAttack`/`renderWait`/`getBoardCell` in the `screenController` module.
+- The `getBoardCell` method returns the active player's opponents' board cell based on where a user attacks.
+- The `renderWait` method adds/removes a class and adds/removes an event listener, so each player can only click their opponent's board.
 ---
 ### 11 MAR 2024
 - Created `Cell` factory function in the `gameboard` module to return a `Cell` object that is initialized with `ship`/`hit`/`miss` properties; this object will help accommodate when gameboards are rendered.

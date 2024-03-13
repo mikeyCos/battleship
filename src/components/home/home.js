@@ -1,5 +1,4 @@
 import createElement from '../../helpers/createElement';
-import screenController from '../screen_VOID/screenController_VOID';
 import homeConfig from './home.config';
 import pubSub from '../../containers/pubSub';
 export default () => {

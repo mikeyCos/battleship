@@ -1,14 +1,11 @@
 import Ship from '../containers/ship';
+import pubSub from './pubSub';
 
 export default () => {
   // Keep track of missed attacks so they can display them properly.
   // Be able to report whether or not all of their ships have been sunk.
-  const Cell = () => {
-    return {
-      ship: null,
-      hit: false,
-      miss: null,
-    };
+  const Cell = (ship) => {
+    return ship ? { ship, hit: false } : { miss: null };
   };
   const board = new Array(10).fill().map(() => new Array(10).fill().map(() => Cell()));
   // 10 x 10 grid
@@ -72,7 +69,7 @@ export default () => {
       // Need to check if a and b are within the board's size
       // The value of a and b can only be between from 0 to 9.
       // It is pointless to check if there is space when a ship is placed at the border of the board
-      return checkCoordinate(a, b) ? boolean && board[a][b].ship === null : boolean;
+      return checkCoordinate(a, b) ? boolean && board[a][b].ship === undefined : boolean;
     });
   };
 
@@ -103,13 +100,13 @@ export default () => {
       if (orientation) {
         // Vertical
         for (let i = x; i < x + newShip.length; i += 1) {
-          board[i][y].ship = newShip;
+          board[i][y] = Cell(newShip);
         }
       } else {
         // Horizontal
         // board[x].fill(newShip, y, y + newShip.length);
         for (let i = y; i < y + newShip.length; i += 1) {
-          board[x][i].ship = newShip;
+          board[x][i] = Cell(newShip);
         }
       }
     } else {
@@ -126,26 +123,30 @@ export default () => {
     // Can I store the missed shots directly on the board?
     const row = x - 1;
     const col = board.length - y;
+    console.log([x, y]);
+    console.log(`${x} => ${row}`);
+    console.log(`${y} => ${col}`);
     const cell = board[col][row];
     const isInMissedShots = missedShots.find(([a, b]) => a === x && b === y);
     const isInHitShots = hitShots.find(([a, b]) => a === x && b === y);
     if (!isInMissedShots && !isInHitShots) {
       if (cell.ship) {
         // target.hit();
-        // console.log(target.ship);
         cell.ship.hit();
         cell.hit = true;
         hitShots.push([x, y]);
+        // pubSub.publish('test', 'hit');
       } else {
         cell.miss = true;
         missedShots.push([x, y]);
+        // pubSub.publish('test', 'miss');
       }
     }
   };
 
   const getStatus = () => {
     // Reports whether or not all of their ships have been sunk.
-    const flatBoard = board.flat().filter((cell) => cell.ship !== null);
+    const flatBoard = board.flat().filter((cell) => cell.ship !== undefined);
     return flatBoard.every((cell) => cell.ship.isSunk());
   };
 
