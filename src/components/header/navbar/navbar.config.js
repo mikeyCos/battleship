@@ -1,4 +1,4 @@
-import IconGithub from '../../assets/icons/github_mark/github-mark-white.svg';
+import IconGithub from '../../../assets/icons/github_mark/github-mark-white.svg';
 
 export default [
   {

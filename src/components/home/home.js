@@ -33,7 +33,7 @@ export default () => {
     setGameMode(e) {
       const gamemode = !e.currentTarget.classList.value.includes('computer');
       console.log(gamemode);
-      pubSub.publish('initGame', gamemode);
+      pubSub.publish('main_render', gamemode);
     },
   };
 

@@ -1,5 +1,6 @@
-import createElement from '../../helpers/createElement';
+import createElement from '../../../helpers/createElement';
 import navbarConfig from './navbar.config';
+import '../../../styles/navbar.css';
 
 export default () => {
   const navbar = {

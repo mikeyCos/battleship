@@ -1,6 +1,7 @@
 import createElement from '../../helpers/createElement';
 import headerConfig from './header.config';
-import navbar from '../navbar/navbar';
+import navbar from './navbar/navbar';
+import notifications from './notifications/notifications';
 
 export default () => {
   const header = {
@@ -13,6 +14,7 @@ export default () => {
       const headerElement = createElement('header');
       headerElement.id = 'header';
       headerElement.appendChild(navbar());
+      headerElement.appendChild(notifications());
       this.cacheDOM(headerElement);
 
       return headerElement;

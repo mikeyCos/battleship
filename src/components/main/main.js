@@ -18,7 +18,7 @@ export default () => {
     },
     bindEvents() {
       this.render = this.render.bind(this);
-      pubSub.subscribe('initGame', this.render);
+      pubSub.subscribe('main_render', this.render);
     },
     render(mode) {
       if (mode === undefined) {

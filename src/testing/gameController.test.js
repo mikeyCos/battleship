@@ -3,7 +3,7 @@ import GameController from '../containers/gameController';
 let battleship;
 
 beforeEach(() => {
-  battleship = GameController();
+  battleship = GameController(true);
   battleship.playerOneBoard.placeShip([2, 2], false);
   battleship.playerTwoBoard.placeShip([6, 2], false);
 });
@@ -74,7 +74,7 @@ describe(`Tests if a round can be played`, () => {
 describe(`Tests if a game is over or not`, () => {
   test(`Player one attacks once, game is not over`, () => {
     battleship.playRound([2, 2]);
-    expect(battleship.getGameStatus()).toBeFalsy();
+    expect(battleship.getGameStatus().status).toBeFalsy();
   });
 
   test(`All of player two ships are sunk, game over`, () => {

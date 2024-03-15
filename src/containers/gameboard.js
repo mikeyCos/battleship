@@ -121,19 +121,19 @@ export default () => {
     // Determines whether or not the attack hit a ship
     // Then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot.
     // Can I store the missed shots directly on the board?
-    const row = x - 1;
-    const col = board.length - y;
-    console.log([x, y]);
-    console.log(`${x} => ${row}`);
-    console.log(`${y} => ${col}`);
-    const cell = board[col][row];
+
+    const cell = getBoardCell([x, y]);
     const isInMissedShots = missedShots.find(([a, b]) => a === x && b === y);
     const isInHitShots = hitShots.find(([a, b]) => a === x && b === y);
+
     if (!isInMissedShots && !isInHitShots) {
+      // console.log('!isInMissedShots && !isInHitShots is true');
+      // if (cell.miss !== true || cell.hit !== false) {
       if (cell.ship) {
         // target.hit();
         cell.ship.hit();
         cell.hit = true;
+
         hitShots.push([x, y]);
         // pubSub.publish('test', 'hit');
       } else {
@@ -150,10 +150,15 @@ export default () => {
     return flatBoard.every((cell) => cell.ship.isSunk());
   };
 
+  const getBoardCell = ([x, y]) => {
+    return board[board.length - y][x - 1];
+  };
+
   return {
     receiveAttack,
     placeShip,
     getStatus,
+    getBoardCell,
     get board() {
       return board;
     },

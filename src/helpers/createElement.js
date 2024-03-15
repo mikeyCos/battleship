@@ -2,11 +2,18 @@ const BuildElement = (state) => ({
   setAttributes: (attributes) => {
     Object.entries(attributes).forEach(([key, value]) => {
       if (key !== 'textContent') {
-        state.setAttribute(key, value);
+        if (key === 'class') {
+          state.setClassName(value.split(/\s/));
+        } else {
+          state.setAttribute(key, value);
+        }
       } else {
         state.setTextContent(value);
       }
     });
+  },
+  setClassName: (arrClass) => {
+    arrClass.forEach((className) => state.classList.add(className));
   },
   setTextContent: (text) => {
     state.textContent = text;

@@ -1,0 +1,94 @@
+#board_container {
+  display: flex;
+  justify-content: center;
+  gap: 4rem;
+}
+
+.player_two.wait > .game_start {
+  display: block;
+  position: absolute;
+  top: 20%;
+}
+
+.player_one.wait > .board,
+.player_one.wait > h4,
+.player_two.wait > .board,
+.player_two.wait > h4 {
+  opacity: 0.4;
+}
+
+.player_one,
+.player_two {
+  position: relative;
+  font-size: 2rem;
+}
+
+#board_container > * > .board {
+  display: grid;
+  grid-template-columns: repeat(10, 2em);
+  grid-auto-rows: 2em;
+}
+
+#board_container > *:not(.wait) > .board > .cell > .cell_content > .ship {
+  background-color: transparent;
+}
+
+.player_two > .game_start {
+  display: none;
+}
+
+.game_start > button {
+  width: 150px;
+  height: 150px;
+  font-size: 4rem;
+}
+
+.cell {
+  /* width: 16px;
+  height: 16px; */
+  background-color: white;
+  border: 0.5px solid black;
+  position: relative;
+  cursor: pointer;
+}
+
+.cell > * {
+  pointer-events: none;
+}
+
+.cell > .cell_content {
+  height: 100%;
+}
+
+.cell > .cell_content > .ship {
+  /*
+  Show ship during placing ships phase
+  Show only active player's ship when game is in play
+  */
+  height: inherit;
+  background-color: cornflowerblue;
+}
+
+#board_container > * .board > .cell.hit > .cell_content > .ship {
+  background-color: red;
+}
+
+#board_container > * > .board > .cell.miss {
+  background-color: grey;
+}
+
+.cell > .row_marker {
+  position: absolute;
+  height: 100%;
+  display: flex;
+  left: -2em;
+  top: 0;
+  align-items: center;
+}
+
+.cell > .col_marker {
+  position: absolute;
+  top: -2em;
+  text-align: center;
+  width: 100%;
+}

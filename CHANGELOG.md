@@ -1,7 +1,14 @@
 # Changelog
 ---
+### 14 MAR 2024
+- A player's own ship can be seen when it is their turn.
+- Miss shots and hits are now shown on each board.
+- Removed shots array from `Player` factory function.
+- Fixed test for `Player` object by flattening player one's board and checking if the miss property of every array element is `true`.
+---
 ### 13 MAR 2024
-- 
+- New branch, `screenController`, created.
+- A game starts when the `game_start_btn` is clicked; player two's board becomes the opponent's grid when it is player one's turn, and player one's board becomes the opponent's grid when it is player two's turn.
 ---
 ### 12 MAR 2024
 - Only unique function/handlers can be subscribed to it's subscribers' array.

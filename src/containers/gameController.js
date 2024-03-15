@@ -36,11 +36,18 @@ export default (mode) => {
     // Allow a player to attack again if the initial attack hits a ship
     activePlayer.attack(coordinate);
     // If game is not over, switch players
-    if (!getGameStatus()) switchPlayers(activePlayer);
+    if (!getGameStatus().status) switchPlayers(activePlayer);
   };
 
   const getGameStatus = () => {
-    return playerOneBoard.getStatus() || playerTwoBoard.getStatus();
+    // return playerOneBoard.getStatus() || playerTwoBoard.getStatus();
+    const status = playerOneBoard.getStatus() || playerTwoBoard.getStatus();
+    if (status) {
+      // Game is over
+      const message = playerOneBoard.getStatus() ? 'Player one won!' : 'Player two won!';
+      return { status, message };
+    }
+    return { status };
   };
 
   switchPlayers();

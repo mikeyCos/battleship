@@ -16,22 +16,15 @@ beforeEach(() => {
 });
 
 describe(`Tests computer can attack any coordinate on a 10x10 grid`, () => {
-  const allCoordinates = [];
-  for (let i = 1; i <= 10; i += 1) {
-    for (let j = 1; j <= 10; j += 1) {
-      allCoordinates.push([i, j]);
-    }
-  }
-
   test(`Tests playerTwo.attack`, () => {
-    const computerGeneratedCoordinates = [];
     let i = 0;
     while (i < 100) {
-      const coordinate = playerTwo.attack();
-      expect(allCoordinates).toContainEqual(coordinate);
-      computerGeneratedCoordinates.push(coordinate);
+      playerTwo.attack();
       i += 1;
     }
+
+    const flatPlayerOneBoard = playerOne.board.board.flat();
+    expect(flatPlayerOneBoard.every((cell) => cell.miss === true)).toBeTruthy();
   });
 });
 

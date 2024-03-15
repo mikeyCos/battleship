@@ -4,7 +4,6 @@ export default {
     // When would you want to subscribe a single function in the same subscriber more than once?
     this.subscribers[subscriber] = this.subscribers[subscriber] || [];
     if (!this.subscribers[subscriber].find((handler) => handler.name === fn.name)) {
-      console.log(fn.name);
       this.subscribers[subscriber].push(fn);
     }
 
@@ -18,7 +17,6 @@ export default {
   },
   publish(subscriber, value) {
     if (this.subscribers[subscriber]) {
-      console.log(this.subscribers[subscriber]);
       this.subscribers[subscriber].forEach((fn) => fn(value));
     }
   },
