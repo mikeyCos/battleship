@@ -33,5 +33,10 @@
     "webpack-cli": "^5.1.4",
     "webpack-dev-middleware": "^6.1.1",
     "webpack-dev-server": "^4.15.1"
+  },
+  "dependencies": {
+    "add": "^2.0.6",
+    "dist": "^0.1.2",
+    "git": "^0.1.5"
   }
 }
