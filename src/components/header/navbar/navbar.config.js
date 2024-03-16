@@ -69,18 +69,37 @@ export default [
         ],
       },
       {
-        element: 'a',
-        attributes: {
-          href: 'https://github.com/mikeyCos/battleship/tree/main',
-          target: '_blank',
-          class: 'nav_item',
-        },
+        element: 'li',
         children: [
           {
-            element: 'img',
+            element: 'a',
             attributes: {
-              src: IconGithub,
-              onload: 'SVGInject(this)',
+              href: 'https://github.com/mikeyCos/battleship/tree/main',
+              target: '_blank',
+              class: 'nav_item',
+            },
+            children: [
+              {
+                element: 'img',
+                attributes: {
+                  src: IconGithub,
+                  onload: 'SVGInject(this)',
+                },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        element: 'li',
+        children: [
+          {
+            element: 'a',
+            attributes: {
+              href: '#',
+              // href: '../../../../dist/',
+              class: 'nav_item leave_game',
+              textContent: 'Leave game',
             },
           },
         ],

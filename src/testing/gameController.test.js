@@ -86,8 +86,8 @@ describe(`Tests if a game is over or not`, () => {
     ];
     const dummyCoordinates = [
       [2, 1],
-      [2, 1],
-      [2, 1],
+      [2, 2],
+      [2, 3],
     ];
 
     while (!battleship.getGameStatus()) {

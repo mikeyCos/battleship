@@ -1,3 +1,25 @@
 #navbar {
   display: flex;
+  justify-content: space-between;
+}
+
+#navbar > * {
+  display: flex;
+  list-style: none;
+}
+
+.nav_right {
+  position: relative;
+}
+
+.nav_right > :last-child {
+  /* Experimenting */
+  position: absolute;
+  right: 0;
+  top: 1em;
+  padding: 1rem;
+}
+
+.nav_item.nav_logo {
+  display: flex;
 }

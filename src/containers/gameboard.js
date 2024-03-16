@@ -5,7 +5,14 @@ export default () => {
   // Keep track of missed attacks so they can display them properly.
   // Be able to report whether or not all of their ships have been sunk.
   const Cell = (ship) => {
-    return ship ? { ship, hit: false } : { miss: null };
+    return ship
+      ? {
+          ship,
+          hit: false,
+        }
+      : {
+          miss: false,
+        };
   };
   const board = new Array(10).fill().map(() => new Array(10).fill().map(() => Cell()));
   // 10 x 10 grid
@@ -26,6 +33,14 @@ export default () => {
         0     1      2    3     4     5     6     7     8     9
   ]
   */
+
+  const parseCoordinate = ([x, y]) => {
+    // Parses coordinate inputted by user such that
+    // the value pairs can be used for accessing elements
+    // in the two dimensional array
+    return [board.length - y, x - 1];
+  };
+
   const generateShipCoordinates = ([x, y], orientation, shipLength) => {
     const coordinates = [[x, y]];
 
@@ -46,15 +61,15 @@ export default () => {
     return coordinates;
   };
 
-  const checkCoordinate = (x, y) => {
+  const validateCoordinate = (x, y) => {
     return x >= 0 && x < 10 && y >= 0 && y < 10;
   };
 
-  const checkBoard = (x, y) => {
+  const checkBoard = ([x, y]) => {
     // Check if there is a ship at x and y
     // Check if all surrounding coordinates are undefined
     // Return true if ship can be place
-    const boolean = checkCoordinate(x, y);
+    const boolean = validateCoordinate(x, y);
     const check = [
       [x, y + 1],
       [x, y - 1],
@@ -69,7 +84,7 @@ export default () => {
       // Need to check if a and b are within the board's size
       // The value of a and b can only be between from 0 to 9.
       // It is pointless to check if there is space when a ship is placed at the border of the board
-      return checkCoordinate(a, b) ? boolean && board[a][b].ship === undefined : boolean;
+      return validateCoordinate(a, b) ? boolean && board[a][b].ship === undefined : boolean;
     });
   };
 
@@ -90,11 +105,12 @@ export default () => {
     //  How to handle if the ship does not fit on the board?
     // What if there is a ship already at given coordinates?
     // A ship MUST be 1 coordinate away from another ship
-    const x = board.length - coordinates[1];
-    const y = coordinates[0] - 1;
+    // const x = board.length - coordinates[1];
+    // const y = coordinates[0] - 1;
+    const [x, y] = parseCoordinate(coordinates);
     const newShip = Ship(3);
     const shipCoordinates = generateShipCoordinates([x, y], orientation, newShip.length);
-    if (shipCoordinates.every(([a, b]) => checkBoard(a, b))) {
+    if (shipCoordinates.every(checkBoard)) {
       // Check if x and y are within the board's size
       // Check if there is a ship at x and y
       if (orientation) {
@@ -114,33 +130,36 @@ export default () => {
     }
   };
 
-  const missedShots = [];
-  const hitShots = [];
+  const shots = [];
+  const validateAttack = (x, y) => {
+    // Checks if coordinate is with the board size and has not been attacked
+    const [a, b] = parseCoordinate([x, y]);
+    return !shots.find(([a, b]) => a === x && b === y) && validateCoordinate(a, b);
+  };
+
   const receiveAttack = ([x, y]) => {
     // Have a receiveAttack function that takes a pair of coordinates
     // Determines whether or not the attack hit a ship
     // Then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot.
     // Can I store the missed shots directly on the board?
+    // How to handle if a coordinate has already been attacked?
+    //  Throw an error?
 
     const cell = getBoardCell([x, y]);
-    const isInMissedShots = missedShots.find(([a, b]) => a === x && b === y);
-    const isInHitShots = hitShots.find(([a, b]) => a === x && b === y);
+    const isValidAttack = validateAttack(x, y);
 
-    if (!isInMissedShots && !isInHitShots) {
-      // console.log('!isInMissedShots && !isInHitShots is true');
+    // if (!isInShots) {
+    if (isValidAttack) {
       // if (cell.miss !== true || cell.hit !== false) {
       if (cell.ship) {
-        // target.hit();
         cell.ship.hit();
         cell.hit = true;
-
-        hitShots.push([x, y]);
-        // pubSub.publish('test', 'hit');
+        // cell.attack();
       } else {
+        // cell.attack();
         cell.miss = true;
-        missedShots.push([x, y]);
-        // pubSub.publish('test', 'miss');
       }
+      shots.push([x, y]);
     }
   };
 
@@ -151,7 +170,8 @@ export default () => {
   };
 
   const getBoardCell = ([x, y]) => {
-    return board[board.length - y][x - 1];
+    const [a, b] = parseCoordinate([x, y]);
+    return board[a][b];
   };
 
   return {
@@ -161,12 +181,6 @@ export default () => {
     getBoardCell,
     get board() {
       return board;
-    },
-    get missedShots() {
-      return missedShots;
-    },
-    get hitShots() {
-      return hitShots;
     },
   };
 };

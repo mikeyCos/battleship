@@ -50,6 +50,7 @@ export default (player) => {
       if (!shots.find(([a, b]) => a === x && b === y)) {
         player.opponentBoard.receiveAttack([x, y]);
         shots.push([x, y]);
+        break;
       }
     }
   };

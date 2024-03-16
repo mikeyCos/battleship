@@ -8,7 +8,6 @@ export default ([playerBoard, opponentBoard]) => {
   // const board = playerBoard;
   // Do I need to declare the const variable?
   const state = {
-    shots: [],
     get opponentBoard() {
       return opponentBoard;
     },

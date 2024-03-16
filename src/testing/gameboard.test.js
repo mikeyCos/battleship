@@ -63,30 +63,42 @@ describe(`Tests gameboard.placeShip`, () => {
 
 describe(`Tests gameboard.receiveAttack`, () => {
   test(`gameboard.receiveAttack([5, 3]) will hit a ship`, () => {
-    expect(gameboard.board[gameboard.board.length - 3][5 - 1].hit).toBeTruthy();
+    expect(gameboard.getBoardCell([5, 3]).hit).toBeTruthy();
   });
 
   test(`gameboard.receiveAttack([6, 3]) will hit a ship`, () => {
-    expect(gameboard.board[gameboard.board.length - 3][6 - 1].hit).toBeTruthy();
+    expect(gameboard.getBoardCell([6, 3]).hit).toBeTruthy();
   });
 
   test(`gameboard.receiveAttack([2, 7]) will hit a ship`, () => {
-    expect(gameboard.board[gameboard.board.length - 7][2 - 1].hit).toBeTruthy();
+    expect(gameboard.getBoardCell([2, 7]).hit).toBeTruthy();
   });
 
   test(`gameboard.receiveAttack([2, 8]) will hit a ship`, () => {
-    expect(gameboard.board[gameboard.board.length - 8][2 - 1].hit).toBeTruthy();
+    expect(gameboard.getBoardCell([2, 8]).hit).toBeTruthy();
   });
 
   test(`gameboard.receiveAttack([1, 1]) will miss a ship`, () => {
     gameboard.receiveAttack([1, 1]);
-    expect(gameboard.board[gameboard.board.length - 1][1 - 1].miss).toBeTruthy();
+    expect(gameboard.getBoardCell([1, 1]).miss).toBeTruthy();
   });
 
   test(`gameboard.receiveAttack([10, 3]) will miss a ship`, () => {
     gameboard.receiveAttack([10, 3]);
-    expect(gameboard.board[gameboard.board.length - 3][10 - 1].miss).toBeTruthy();
+    expect(gameboard.getBoardCell([10, 3]).miss).toBeTruthy();
   });
+
+  // test(`gameboard.receiveAttack([10, 3]) will throw an error, [10, 3] cannot be attacked again`, () => {
+  //   gameboard.receiveAttack([10, 3]);
+  //   expect(() => gameboard.receiveAttack([10, 3])).toThrow(Error);
+  // });
+
+  // test(`Tests if gameboard.receiveAttack() can be called again after error thrown`, () => {
+  //   gameboard.receiveAttack([10, 3]);
+  //   expect(() => gameboard.receiveAttack([10, 3])).toThrow(Error);
+  //   gameboard.receiveAttack([1, 1]);
+  //   expect(gameboard.getBoardCell([1, 1]).miss).toBeTruthy();
+  // });
 });
 
 describe(`Tests ship.isSunk`, () => {

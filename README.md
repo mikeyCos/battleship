@@ -18,6 +18,7 @@ const Player = () => {
   ...other code
 };
 ```
+2. 
 ---
 ### About
 Project: Battleship

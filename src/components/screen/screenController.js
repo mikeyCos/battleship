@@ -41,16 +41,12 @@ export default (mode) => {
       if (!this.gameReady) this.startBtn.addEventListener('click', this.start);
       this.playerOneBoard.addEventListener('click', this.boardHandler);
       this.playerTwoBoard.addEventListener('click', this.boardHandler);
-      // this.playerOneCells.forEach((cell) => cell.addEventListener('click', this.boardHandler));
     },
     unbindEvents() {
       this.playerOneBoard.removeEventListener('click', this.boardHandler);
       this.playerTwoBoard.removeEventListener('click', this.boardHandler);
     },
     render() {
-      // For now, render game for human against computer
-      // If this.gamemode === true, human vs human
-      // If this.gamemode === false, human vs computer
       const gameContainer = createElement('section');
       const boardContainer = createElement('div');
       const playerOneContainer = createElement('div');
@@ -204,38 +200,32 @@ export default (mode) => {
       // Returns true if all player's ships are placed
     },
     boardHandler(e) {
-      console.log(e.target);
-      // console.log(e.target.matches('button > *'));
       const btn = e.target;
       const x = parseInt(e.target.dataset.x);
       const y = parseInt(e.target.dataset.y);
       if (!isNaN(x) || !isNaN(y)) {
         if (this.gameReady) {
-          // If this.gameReady is true
-          // Play a round
-          // How to prevent clicking own board?
-
           const cell = this.game.activePlayer.opponentBoard.getBoardCell([x, y]);
-          // Check if cell has been missed or hit
-          console.log(`Attacking coordinate [${x}, ${y}]`);
-          this.game.playRound([x, y]);
-          console.log(cell);
-          this.renderAttack(btn, cell);
-          const gameStatus = this.game.getGameStatus();
-          if (gameStatus.status) {
-            // Game is over
-            this.unbindEvents();
-            this.renderGameOver(gameStatus.message);
-          } else {
-            this.renderWait();
+
+          if (cell.miss === false || cell.hit === false) {
+            this.game.playRound([x, y]);
+            this.renderAttack(btn, cell);
+            const gameStatus = this.game.getGameStatus();
+
+            if (gameStatus.status) {
+              // Game is over
+              this.unbindEvents();
+              this.renderGameOver(gameStatus.message);
+            } else {
+              this.renderWait();
+            }
           }
         } else {
           // Place ship
+          console.log(`Placing a ship starting at [${x}, ${y}]`);
           this.game.playerOneBoard.placeShip([2, 2], false);
           this.game.playerTwoBoard.placeShip([6, 2], false);
           this.renderShip(btn);
-
-          console.log(`Placing a ship starting at [${x}, ${y}]`);
         }
       }
     },

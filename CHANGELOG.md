@@ -1,5 +1,14 @@
 # Changelog
 ---
+### 16 MAR 2024
+- 
+---
+### 15 MAR 2024
+- Created `parseCoordinate` and `validateAttack` methods for the `Gameboard` object; `parseCoordinate` returns a new array with values representing indexes for the two dimensional array, and `validateAttack` parses and validates whether or not the coordinate to be attacked has already been attacked or is within the game board size.
+- The `boardHandler` method in `screenController` now checks if a cell has ever been clicked by calling the active players' gameboard's `getBoardCell` to check if the cell properties,`.hit`/`.miss`,  are false; if either property's value is true, then nothing will happen.
+- Added another navbar item with the intent to go to the home page.
+- Commit before merging `screenController` branch to `main`.
+---
 ### 14 MAR 2024
 - A player's own ship can be seen when it is their turn.
 - Miss shots and hits are now shown on each board.

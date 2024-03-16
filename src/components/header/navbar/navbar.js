@@ -15,6 +15,7 @@ export default () => {
 
       navbarConfig.forEach((item) => {
         const navChild = createElement(item.element);
+        navChild.setAttributes(item.attributes);
         navChild.setChildren(item.children);
         navElement.appendChild(navChild);
       });

@@ -40,14 +40,13 @@ export default (mode) => {
   };
 
   const getGameStatus = () => {
-    // return playerOneBoard.getStatus() || playerTwoBoard.getStatus();
-    const status = playerOneBoard.getStatus() || playerTwoBoard.getStatus();
+    const status = { status: playerOneBoard.getStatus() || playerTwoBoard.getStatus() };
     if (status) {
       // Game is over
       const message = playerOneBoard.getStatus() ? 'Player one won!' : 'Player two won!';
-      return { status, message };
+      Object.assign(status, { message });
     }
-    return { status };
+    return status;
   };
 
   switchPlayers();
