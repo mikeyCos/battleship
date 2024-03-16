@@ -51,6 +51,7 @@ export default (mode) => {
       const boardContainer = createElement('div');
       const playerOneContainer = createElement('div');
       const playerTwoContainer = createElement('div');
+
       const playerOneHeader = createElement('h4');
       const playerTwoHeader = createElement('h4');
       const gameStartContainer = createElement('div');
@@ -63,6 +64,7 @@ export default (mode) => {
 
       playerOneContainer.classList.add('player_one');
       playerTwoContainer.classList.add('player_two');
+      playerOnePort.classList.add('player_one_port');
 
       playerOneHeader.textContent = 'Your grid';
       playerTwoHeader.textContent = `Opponent's grid`;
@@ -108,7 +110,6 @@ export default (mode) => {
           if (cell.ship) {
             const cellShip = createElement('div');
             cellShip.classList.add('ship');
-
             cellContent.appendChild(cellShip);
           }
           cellContent.classList.add('cell_content');
@@ -223,8 +224,8 @@ export default (mode) => {
         } else {
           // Place ship
           console.log(`Placing a ship starting at [${x}, ${y}]`);
-          this.game.playerOneBoard.placeShip([2, 2], false);
-          this.game.playerTwoBoard.placeShip([6, 2], false);
+          this.game.playerOneBoard.placeShip([2, 2], 3, false);
+          this.game.playerTwoBoard.placeShip([6, 2], 3, false);
           this.renderShip(btn);
         }
       }
@@ -235,8 +236,10 @@ export default (mode) => {
   return screenController.render();
 };
 
-const setUpGame = () => {
+const setGame = () => {
   const somethingMore = {};
 };
 
-const playGame = () => {};
+const playGame = () => {
+  const somethingMore = {};
+};

@@ -12,7 +12,7 @@ beforeEach(() => {
   const playerTwoBoard = GameBoard();
   playerOne = pipe(Player, isHuman)(playerOneBoard, playerTwoBoard);
   playerTwo = pipe(Player, isComputer)(playerTwoBoard, playerOneBoard);
-  playerTwo.board.placeShip([3, 3], true);
+  playerTwo.board.placeShip([3, 3], 3, true);
 });
 
 describe(`Tests computer can attack any coordinate on a 10x10 grid`, () => {

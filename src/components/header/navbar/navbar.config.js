@@ -96,8 +96,8 @@ export default [
           {
             element: 'a',
             attributes: {
-              href: '#',
-              // href: '../../../../dist/',
+              href: 'index.html',
+              target: '_self',
               class: 'nav_item leave_game',
               textContent: 'Leave game',
             },

@@ -5,8 +5,8 @@ let gameboard;
 
 beforeEach(() => {
   gameboard = Gameboard();
-  gameboard.placeShip([5, 3], false);
-  gameboard.placeShip([2, 8], true);
+  gameboard.placeShip([5, 3], 3, false);
+  gameboard.placeShip([2, 8], 3, true);
 
   gameboard.receiveAttack([5, 3]);
   gameboard.receiveAttack([6, 3]);
@@ -45,19 +45,19 @@ describe(`Tests gameboard.placeShip`, () => {
   });
 
   test(`There is already a ship at [5, 3] horizontally: gameboard.placeShip([5, 3])`, () => {
-    expect(() => gameboard.placeShip([5, 3], false)).toThrow(Error);
+    expect(() => gameboard.placeShip([5, 3], 3, false)).toThrow(Error);
   });
 
   test(`There must be at least 1 empty coordinate between ships`, () => {
-    expect(() => gameboard.placeShip([5, 2], false)).toThrow(Error);
+    expect(() => gameboard.placeShip([5, 2], 3, false)).toThrow(Error);
   });
 
   test(`There must be at least 1 empty coordinate between ships`, () => {
-    expect(() => gameboard.placeShip([4, 4], false)).toThrow(Error);
+    expect(() => gameboard.placeShip([4, 4], 3, false)).toThrow(Error);
   });
 
   test(`There must be at least 1 empty coordinate between ships`, () => {
-    expect(() => gameboard.placeShip([3, 2], false)).toThrow(Error);
+    expect(() => gameboard.placeShip([3, 2], 3, false)).toThrow(Error);
   });
 });
 

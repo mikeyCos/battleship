@@ -4,8 +4,8 @@ let battleship;
 
 beforeEach(() => {
   battleship = GameController(true);
-  battleship.playerOneBoard.placeShip([2, 2], false);
-  battleship.playerTwoBoard.placeShip([6, 2], false);
+  battleship.playerOneBoard.placeShip([2, 2], 3, false);
+  battleship.playerTwoBoard.placeShip([6, 2], 3, false);
 });
 
 const playerOneShipCoordinates = [

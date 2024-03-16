@@ -88,7 +88,7 @@ export default () => {
     });
   };
 
-  const placeShip = (coordinates, orientation) => {
+  const placeShip = (coordinates, shipLength, orientation) => {
     // Be able to place ships at specific coordinates by calling the ship factory function.
     // Ship must fit on board based on coordinates
     //  What if ship can be rotated?
@@ -108,7 +108,7 @@ export default () => {
     // const x = board.length - coordinates[1];
     // const y = coordinates[0] - 1;
     const [x, y] = parseCoordinate(coordinates);
-    const newShip = Ship(3);
+    const newShip = Ship(shipLength);
     const shipCoordinates = generateShipCoordinates([x, y], orientation, newShip.length);
     if (shipCoordinates.every(checkBoard)) {
       // Check if x and y are within the board's size
