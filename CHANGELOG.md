@@ -1,7 +1,13 @@
 # Changelog
 ---
+### 18 MAR 2024
+- Created `attack` method for `Cell` objects; this will set `hit`/`miss` properties to true.
+- Attempted to create different 'states' of a `screenController` object to have specific methods or properties during specific 'states'.
+- The `receiveAttack` method for a `Gameboard` object will publish to a subscriber `renderAttack`.
+---
 ### 16 MAR 2024
-- 
+- Created the `updateGameState` method to assign the `screenController` object properties from `composeGame` or `playGame` returned objects.
+- Created `composeGame` and `playGame` modules; `composeGame` returns an object with the following methods `renderShip`/`reset`/`start`/`boardHandler` and `playGame` returns an object with the following methods `unbindEvents`/`renderAttack`/`renderWait`/`renderGameOver`/`boardHandler`.
 ---
 ### 15 MAR 2024
 - Created `parseCoordinate` and `validateAttack` methods for the `Gameboard` object; `parseCoordinate` returns a new array with values representing indexes for the two dimensional array, and `validateAttack` parses and validates whether or not the coordinate to be attacked has already been attacked or is within the game board size.

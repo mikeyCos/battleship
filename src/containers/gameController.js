@@ -30,6 +30,10 @@ export default (mode) => {
       const players = [playerOne, playerTwo];
       activePlayer = players[Math.floor(Math.random() * 2)];
     }
+
+    // If activePlayer is a computer...
+    // Do something different here?
+    // Call playRound()?
   };
 
   const playRound = (coordinate) => {
@@ -41,9 +45,9 @@ export default (mode) => {
 
   const getGameStatus = () => {
     const status = { status: playerOneBoard.getStatus() || playerTwoBoard.getStatus() };
-    if (status) {
+    if (status.status) {
       // Game is over
-      const message = playerOneBoard.getStatus() ? 'Player one won!' : 'Player two won!';
+      const message = playerOneBoard.getStatus() ? 'Player two won!' : 'Player one won!';
       Object.assign(status, { message });
     }
     return status;

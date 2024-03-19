@@ -15,9 +15,9 @@ export default {
       if (this.subscribers[subscriber].length === 0) delete this.subscribers[subscriber];
     }
   },
-  publish(subscriber, value) {
+  publish(subscriber, ...args) {
     if (this.subscribers[subscriber]) {
-      this.subscribers[subscriber].forEach((fn) => fn(value));
+      this.subscribers[subscriber].forEach((fn) => fn(...args));
     }
   },
 };

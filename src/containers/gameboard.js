@@ -9,9 +9,16 @@ export default () => {
       ? {
           ship,
           hit: false,
+          attack() {
+            this.hit = true;
+            this.ship.hit();
+          },
         }
       : {
           miss: false,
+          attack() {
+            this.miss = true;
+          },
         };
   };
   const board = new Array(10).fill().map(() => new Array(10).fill().map(() => Cell()));
@@ -148,18 +155,12 @@ export default () => {
     const cell = getBoardCell([x, y]);
     const isValidAttack = validateAttack(x, y);
 
-    // if (!isInShots) {
     if (isValidAttack) {
-      // if (cell.miss !== true || cell.hit !== false) {
-      if (cell.ship) {
-        cell.ship.hit();
-        cell.hit = true;
-        // cell.attack();
-      } else {
-        // cell.attack();
-        cell.miss = true;
-      }
+      cell.attack();
       shots.push([x, y]);
+      // Publish to the screenController.renderAttack method?
+      console.log([x, y]);
+      pubSub.publish('renderAttack', cell, [x, y]);
     }
   };
 

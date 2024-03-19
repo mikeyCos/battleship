@@ -1,6 +1,6 @@
 # Readme
 ---
-## Live preview: [Battleship](https://mikeycos.github.io/battleship/dist)
+## Live preview: [Battleship](https://mikeycos.github.io/battleship/)
 ---
 ### Ideas
 1. Placeholder

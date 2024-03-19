@@ -97,7 +97,7 @@ describe(`Tests if a game is over or not`, () => {
         battleship.playRound(dummyCoordinates.shift());
       }
     }
-    // shipCoordinates.forEach(battleship.playerOne.attack);
+
     expect(battleship.getGameStatus()).toBeTruthy();
   });
 });
