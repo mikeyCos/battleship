@@ -10,6 +10,23 @@ export default (state) => ({
     // This will append to the content div
     console.log(element);
   },
+  dragStartHandler(e) {
+    console.log('drag start');
+    // e.target.style.display = 'none';
+    // e.dataTransfer.setData('text/plain', e.target.className);
+    e.dataTransfer.dropEffect = 'move';
+  },
+  dragOverHandler(e) {
+    // e.preventDefault();
+    // e.dataTransfer.dropEffect = 'move';
+    console.log('drag over');
+  },
+  dropHandler(e) {
+    e.preventDefault();
+    const data = e.dataTransfer.getData('text/plain');
+    // e.target.appendChild(document.getElementsByClassName(data));
+    console.log('drop');
+  },
   reset(e) {
     // Clears board
   },

@@ -1,6 +1,8 @@
 import createElement from '../../helpers/createElement';
 import homeConfig from './home.config';
 import pubSub from '../../containers/pubSub';
+import '../../styles/home.css';
+
 export default () => {
   const home = {
     init() {},

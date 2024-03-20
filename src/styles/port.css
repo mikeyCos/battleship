@@ -1,0 +1,10 @@
+.port_ship {
+  position: relative;
+  border: 1px dotted #b2b2b9;
+}
+
+.ship_box {
+  position: absolute;
+  background: rgba(0, 0, 255, 0.05);
+  border: 2px solid #00f;
+}

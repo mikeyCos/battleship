@@ -1,0 +1,17 @@
+#home {
+}
+
+.gamemode_btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2em;
+}
+
+.gamemode_btns > * {
+  padding: 2em;
+}
+
+.gamemode_btns > * > span {
+  font-size: 2em;
+}

@@ -13,34 +13,36 @@ export default (mode) => {
   // 1. Create gameboards
   // 2. Create players and pass in their gameboard and the opponent's gameboard.
   //  Do I only need to pass the opponent's board?
-  let activePlayer;
+  // let activePlayer;
   const playerOneBoard = Gameboard();
   const playerTwoBoard = Gameboard();
 
   const playerOne = pipe(Player, isHuman)(playerOneBoard, playerTwoBoard);
   const playerTwo = pipe(Player, mode ? isHuman : isComputer)(playerTwoBoard, playerOneBoard);
 
+  const players = [playerOne, playerTwo];
+  let activePlayer = players[Math.floor(Math.random() * 2)];
+
   const switchPlayers = (player) => {
     if (player) {
       // Looking into Lodash _.isEqual()
       // Could add a turn property to player object that takes a boolean
       activePlayer = player === playerOne ? playerTwo : playerOne;
-    } else {
-      // Initially set a random player as the active player
-      const players = [playerOne, playerTwo];
-      activePlayer = players[Math.floor(Math.random() * 2)];
     }
-
-    // If activePlayer is a computer...
-    // Do something different here?
-    // Call playRound()?
   };
 
   const playRound = (coordinate) => {
     // Allow a player to attack again if the initial attack hits a ship
     activePlayer.attack(coordinate);
-    // If game is not over, switch players
-    if (!getGameStatus().status) switchPlayers(activePlayer);
+
+    const status = getGameStatus();
+    if (!status.status) {
+      // If game is not over, switch players
+      switchPlayers(activePlayer);
+      pubSub.publish('renderWait');
+    } else {
+      pubSub.publish('endGame', status.message);
+    }
   };
 
   const getGameStatus = () => {
@@ -53,7 +55,6 @@ export default (mode) => {
     return status;
   };
 
-  switchPlayers();
   return {
     switchPlayers,
     playRound,

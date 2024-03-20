@@ -1,5 +1,6 @@
 import createElement from '../../../helpers/createElement';
 import pubSub from '../../../containers/pubSub';
+import '../../../styles/notifications.css';
 
 export default () => {
   const notifications = {

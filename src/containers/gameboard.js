@@ -159,7 +159,6 @@ export default () => {
       cell.attack();
       shots.push([x, y]);
       // Publish to the screenController.renderAttack method?
-      console.log([x, y]);
       pubSub.publish('renderAttack', cell, [x, y]);
     }
   };

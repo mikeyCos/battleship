@@ -1,5 +1,17 @@
 # Changelog
 ---
+### 20 MAR 2024
+- 
+---
+### 19 MAR 2024
+- The `renderWait` gets subscribed and published when `switchPlayers` is called from the `gameController`.
+- Renamed `renderGameOver` to `endGame` and is subscribed and published when a game is over.
+- If player two is a computer, the board will be marked when they attack.
+- Initialized a port for player one and started experimenting with the HTML Drag and Drop API.
+- The drop over event currently fires near and inside the drop zone.
+- Created `header`/`home`/`notification`/`port` CSS files.
+- Applied basic CSS properties.
+---
 ### 18 MAR 2024
 - Created `attack` method for `Cell` objects; this will set `hit`/`miss` properties to true.
 - Attempted to create different 'states' of a `screenController` object to have specific methods or properties during specific 'states'.

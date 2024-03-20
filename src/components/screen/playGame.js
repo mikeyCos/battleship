@@ -6,28 +6,16 @@ export default (state) => ({
     this.playerOneBoard.removeEventListener('click', this.boardHandler);
     this.playerTwoBoard.removeEventListener('click', this.boardHandler);
   },
-  renderAttack(cell, coordinate) {
+  getButton([x, y]) {
     // Find button on this.game.activePlayer's board
     // for which it's dataset.x === x and dataset.y === y
-
-    console.log(cell);
-    console.log(coordinate);
-
-    if (this.game.activePlayer === this.game.playerOne) {
-      console.log(this.playerTwoBoard);
-      console.log(this.playerTwoBoard.children);
-    } else {
-      console.log(this.playerOneBoard);
-      console.log(this.playerOneBoard.children);
-    }
-    // if (cell.miss) {
-    //   // Mark as miss
-    //   btn.classList.add('miss');
-    // } else {
-    //   // Mark as hit
-    //   btn.classList.add('hit');
-    // }
-    // Adds a class to the btn, miss or hit
+    const board =
+      this.game.activePlayer === this.game.playerOne ? this.playerTwoBoard : this.playerOneBoard;
+    return [...board.children].find((btn) => btn.dataset.x == x && btn.dataset.y == y);
+  },
+  renderAttack(cell, coordinate) {
+    const button = this.getButton(coordinate);
+    button.classList.add(cell.miss ? 'miss' : 'hit');
   },
   renderWait() {
     let notificationMessage = `Player one's turn.`;
@@ -53,8 +41,13 @@ export default (state) => ({
     }
 
     pubSub.publish('notify', notificationMessage);
+
+    if (!this.mode && this.game.activePlayer === this.game.playerTwo) {
+      this.game.playRound();
+    }
   },
-  renderGameOver(message) {
+  endGame(message) {
+    this.unbindEvents();
     pubSub.publish('notify', message);
     console.log(`game is over`);
   },
@@ -66,15 +59,6 @@ export default (state) => ({
       const cell = this.game.activePlayer.opponentBoard.getBoardCell([x, y]);
       if (cell.miss === false || cell.hit === false) {
         this.game.playRound([x, y]);
-        // this.renderAttack(btn, cell);
-        const gameStatus = this.game.getGameStatus();
-        if (gameStatus.status) {
-          // Game is over
-          this.unbindEvents();
-          this.renderGameOver(gameStatus.message);
-        } else {
-          this.renderWait();
-        }
       }
     }
   },

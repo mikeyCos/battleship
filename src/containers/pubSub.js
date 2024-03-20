@@ -6,8 +6,6 @@ export default {
     if (!this.subscribers[subscriber].find((handler) => handler.name === fn.name)) {
       this.subscribers[subscriber].push(fn);
     }
-
-    // console.log(this.subscribers[subscriber]);
   },
   unsubscribe(subscriber, fn) {
     if (this.subscribers[subscriber]) {

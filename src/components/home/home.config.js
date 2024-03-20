@@ -1,10 +1,10 @@
 export default [
-  {
-    element: 'h2',
-    attributes: {
-      textContent: 'Battleship',
-    },
-  },
+  // {
+  //   element: 'h2',
+  //   attributes: {
+  //     textContent: 'Battleship',
+  //   },
+  // },
   {
     element: 'section',
     attributes: {

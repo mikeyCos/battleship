@@ -21,3 +21,20 @@ body {
   font-family: 'Roboto Condensed';
   font-family: Arial;
 }
+
+#battleship_app {
+  min-height: inherit;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+}
+
+#main_content {
+  /* Temporary */
+  /* margin-top: 4em; */
+}
+
+#main_content > :first-child {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}

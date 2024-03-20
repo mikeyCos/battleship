@@ -2,6 +2,7 @@ import createElement from '../../helpers/createElement';
 import headerConfig from './header.config';
 import navbar from './navbar/navbar';
 import notifications from './notifications/notifications';
+import '../../styles/header.css';
 
 export default () => {
   const header = {
