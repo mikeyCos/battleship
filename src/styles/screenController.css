@@ -2,6 +2,34 @@
   margin-top: 4em;
   display: flex;
   gap: 8rem;
+  user-select: none;
+}
+
+#board_container > * > .board > * {
+  display: flex;
+}
+
+#board_container > *.wait > *:not(.game_start) {
+  opacity: 0.4;
+}
+
+#board_container > * > .board > * > button {
+  cursor: pointer;
+  border: none;
+}
+
+#board_container > *:not(.wait) > * > * > .cell > .cell_content > .ship {
+  background-color: transparent;
+}
+
+.player_one,
+.player_two {
+  position: relative;
+  width: min-content;
+}
+
+.player_two > .game_start {
+  display: none;
 }
 
 .player_two.wait > .game_start {
@@ -10,57 +38,18 @@
   top: 20%;
 }
 
-.player_one.wait > .board,
-.player_one.wait > h4,
-.player_two.wait > .board,
-.player_two.wait > h4 {
-  opacity: 0.4;
-}
-
-.player_one,
-.player_two {
-  position: relative;
-  font-size: 2rem;
-  display: grid;
-  grid-template-columns: min-content;
-  grid-auto-rows: min-content;
-}
-
-#board_container > * > .board {
-  display: grid;
-  grid-template-columns: repeat(10, 1.5em);
-  grid-auto-rows: 1.5em;
-}
-
-#board_container > *:not(.wait) > .board > .cell > .cell_content > .ship {
-  background-color: transparent;
-}
-
-.player_two > .game_start {
-  display: none;
-}
-
 .game_start > button {
-  width: 150px;
-  height: 150px;
   font-size: 4rem;
 }
 
-.cell {
-  /* width: 16px;
-  height: 16px; */
-  background-color: white;
-  border: 0.5px solid black;
-  position: relative;
-  cursor: pointer;
-}
-
 .cell > * {
-  pointer-events: none;
-}
-
-.cell > .cell_content {
-  height: 100%;
+  width: 2em;
+  height: 2em;
+  position: relative;
+  background-color: white;
+  /* pointer-events: none; */
+  border: 1px solid black;
+  /* box-sizing: content-box; */
 }
 
 .cell > .cell_content > .ship {
@@ -68,30 +57,34 @@
   Show ship during placing ships phase
   Show only active player's ship when game is in play
   */
+  pointer-events: none;
   height: inherit;
   background-color: cornflowerblue;
 }
 
-#board_container > * .board > .cell.hit > .cell_content > .ship {
+/* #board_container > *:not(.wait) > .board > .board_row > .cell.hit > .cell_content > .ship, */
+#board_container > * > .board > * > .cell.hit > .cell_content > .ship {
   background-color: red;
 }
 
-#board_container > * > .board > .cell.miss {
+#board_container > * > .board > * > .cell.miss > .cell_content {
   background-color: grey;
 }
 
-.cell > .row_marker {
+.cell_content > .row_marker {
   position: absolute;
   height: 100%;
   display: flex;
   left: -2em;
   top: 0;
   align-items: center;
+  z-index: -1;
 }
 
-.cell > .col_marker {
+.cell_content > .col_marker {
   position: absolute;
   top: -2em;
   text-align: center;
   width: 100%;
+  z-index: -1;
 }

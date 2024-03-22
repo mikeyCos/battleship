@@ -1,7 +1,23 @@
 # Changelog
 ---
-### 20 MAR 2024
+### 23 MAR 2024
 - 
+---
+### 22 MAR 2024
+- Added row containers to each player's board.
+- Attempted to create custom drag and drop behavior.
+- Applied a font-size of 16px to the all selector in the `app` stylesheet.
+- Created `setStyle` method for the `createElement` helper; this will be called if a style property of attributes exists and sets an element's `.style.cssText` property to a given text. For example:
+```js
+attributes: {
+              class: 'box',
+              style: 'width: 2px; height: 2px;',
+            }
+```
+- Commit before creating `drag_drop` branch.
+---
+### 21 MAR 2024
+- Created `port.config` file.
 ---
 ### 19 MAR 2024
 - The `renderWait` gets subscribed and published when `switchPlayers` is called from the `gameController`.

@@ -1,10 +1,28 @@
+.port_lines {
+  display: flex;
+}
+
 .port_ship {
   position: relative;
   border: 1px dotted #b2b2b9;
+  margin: 0.5em;
+  /* box-sizing: content-box; */
 }
 
 .ship_box {
+  z-index: 2;
   position: absolute;
   background: rgba(0, 0, 255, 0.05);
   border: 2px solid #00f;
+  /* box-sizing: content-box; */
+}
+
+.ship_box:hover {
+  cursor: move;
+}
+
+.cell_content > .ship_box {
+  /* Comment out if using box-sizing: content */
+  left: -4%;
+  top: -4%;
 }

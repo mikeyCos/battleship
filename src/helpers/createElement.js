@@ -4,6 +4,8 @@ const BuildElement = (state) => ({
       if (key !== 'textContent') {
         if (key === 'class') {
           state.setClassName(value.split(/\s/));
+        } else if (key === 'style') {
+          state.setStyle(value);
         } else {
           state.setAttribute(key, value);
         }
@@ -11,6 +13,9 @@ const BuildElement = (state) => ({
         state.setTextContent(value);
       }
     });
+  },
+  setStyle: (text) => {
+    state.style.cssText = text;
   },
   setClassName: (arrClass) => {
     arrClass.forEach((className) => state.classList.add(className));

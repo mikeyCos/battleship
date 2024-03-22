@@ -9,9 +9,13 @@ export default (state) => ({
   getButton([x, y]) {
     // Find button on this.game.activePlayer's board
     // for which it's dataset.x === x and dataset.y === y
-    const board =
-      this.game.activePlayer === this.game.playerOne ? this.playerTwoBoard : this.playerOneBoard;
-    return [...board.children].find((btn) => btn.dataset.x == x && btn.dataset.y == y);
+    const board = [
+      ...(this.game.activePlayer === this.game.playerOne
+        ? this.playerTwoBoard
+        : this.playerOneBoard
+      ).children,
+    ].flatMap((row) => [...row.children]);
+    return board.find((btn) => btn.dataset.x == x && btn.dataset.y == y);
   },
   renderAttack(cell, coordinate) {
     const button = this.getButton(coordinate);
@@ -43,6 +47,7 @@ export default (state) => ({
     pubSub.publish('notify', notificationMessage);
 
     if (!this.mode && this.game.activePlayer === this.game.playerTwo) {
+      // Optional, put a setTimeout()
       this.game.playRound();
     }
   },
@@ -52,7 +57,7 @@ export default (state) => ({
     console.log(`game is over`);
   },
   boardHandler(e) {
-    const btn = e.target;
+    const btn = e.target.parentElement;
     const x = parseInt(btn.dataset.x);
     const y = parseInt(btn.dataset.y);
     if (!isNaN(x) || !isNaN(y)) {

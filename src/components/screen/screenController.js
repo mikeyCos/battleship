@@ -3,6 +3,7 @@ import createElement from '../../helpers/createElement';
 import pubSub from '../../containers/pubSub';
 import composeGame from './composeGame';
 import playGame from './playGame';
+import portConfig from './port.config';
 import '../../styles/screenController.css';
 import '../../styles/port.css';
 
@@ -44,19 +45,28 @@ export default (mode) => {
       this.playerOneCells = element.querySelectorAll('.player_one > .board > .cell');
       this.playerTwoCells = element.querySelectorAll('.player_two > .board > .cell');
 
-      this.shipBox = element.querySelector('.ship_box');
+      this.ships = element.querySelectorAll('.ship_box');
     },
     bindEvents() {
       if (!this.gameReady) {
         this.dragStartHandler = this.dragStartHandler.bind(this);
+        this.dragMoveHandler = this.dragMoveHandler.bind(this);
+        this.dragEndHandler = this.dragEndHandler.bind(this);
         this.dragOverHandler = this.dragOverHandler.bind(this);
-        this.dropHandler = this.dropHandler.bind(this);
+        // this.dragEnterHandler = this.dragEnterHandler.bind(this);
+        // this.dragLeaveHandler = this.dragLeaveHandler.bind(this);
+        // this.dropHandler = this.dropHandler.bind(this);
         this.startBtn.addEventListener('click', this.start);
 
-        console.log(this.playerOneBoard);
-        this.shipBox.addEventListener('dragstart', this.dragStartHandler);
-        this.playerOneBoard.addEventListener('drop', this.dropHandler);
-        this.playerOneBoard.addEventListener('dragover', this.dragOverHandler);
+        this.ships.forEach((ship) => {
+          ship.addEventListener('mousedown', this.dragStartHandler);
+          // ship.addEventListener('mouseup', this.dragEndHandler);
+        });
+
+        // this.playerOneBoard.addEventListener('drop', this.dropHandler);
+        // this.playerOneBoard.addEventListener('dragover', this.dragOverHandler);
+        // this.playerOneBoard.addEventListener('dragenter', this.dragEnterHandler);
+        // this.playerOneBoard.addEventListener('dragleave', this.dragLeaveHandler);
       }
       if (this.gameReady) {
         this.updateGameState(playGame);
@@ -103,40 +113,19 @@ export default (mode) => {
         playerTwoContainer.classList.add('wait');
         playerTwoContainer.appendChild(gameStartContainer);
 
-        // Player's ports
-        const playerOnePort = createElement('div');
-        const playerTwoPort = createElement('div');
-
-        playerOnePort.classList.add('port');
-        playerTwoPort.classList.add('port');
-
-        const portInstructions = createElement('div');
-        portInstructions.textContent = 'Drag the ships to the grid, and then click to rotate:';
-
-        const portLines = createElement('div');
-        portLines.classList.add('port_lines');
-
-        const portShip = createElement('div');
-        portShip.classList.add('port_ship');
-        const ship = createElement('div');
-
-        portShip.style.cssText = 'width: 6em; height: 1.5em;';
-        ship.style.cssText = 'width: 6em; height: 1.5em; padding-right: 3px; padding-bottom: 0px;';
-        ship.setAttributes({
-          class: 'ship_box',
-          draggable: 'true',
-          ['data-length']: 4,
-          ['data-orientation']: 'h',
+        portConfig.forEach((port) => {
+          const playerOnePort = createElement(port.element);
+          playerOnePort.setAttributes(port.attributes);
+          playerOnePort.setChildren(port.children);
+          playerOneContainer.appendChild(playerOnePort);
         });
 
-        playerOnePort.appendChild(portInstructions);
-        playerOnePort.appendChild(portLines);
-        portShip.appendChild(ship);
-        portLines.appendChild(portShip);
-        playerOneContainer.appendChild(playerOnePort);
-
-        // playerOneContainer
-        // playerTwoContainer
+        portConfig.forEach((port) => {
+          const playerTwoPort = createElement(port.element);
+          playerTwoPort.setAttributes(port.attributes);
+          playerTwoPort.setChildren(port.children);
+          playerTwoContainer.appendChild(playerTwoPort);
+        });
       }
       gameContainer.appendChild(boardContainer);
       if (this.gameReady) this.gameContainer.replaceWith(gameContainer);
@@ -149,6 +138,8 @@ export default (mode) => {
       const playerBoard = createElement('div');
       playerBoard.classList.add('board');
       board.forEach((row, y) => {
+        const boardRow = createElement('div');
+        boardRow.classList.add('board_row');
         row.forEach((cell, x) => {
           const cellBtn = createElement('button');
           cellBtn.setAttributes({
@@ -174,18 +165,21 @@ export default (mode) => {
             const colMarker = createElement('div');
             if (x === 0) {
               rowMarker.setAttributes({ class: 'row_marker', textContent: `${y + 1}` });
-              cellBtn.appendChild(rowMarker);
+              cellContent.appendChild(rowMarker);
             }
+
             if (y === 0) {
               colMarker.setAttributes({
                 class: 'col_marker',
                 textContent: `${String.fromCharCode(65 + x)}`,
               });
-              cellBtn.appendChild(colMarker);
+              cellContent.appendChild(colMarker);
             }
           }
-          playerBoard.appendChild(cellBtn);
+          boardRow.appendChild(cellBtn);
+          // playerBoard.appendChild(cellBtn);
         });
+        playerBoard.appendChild(boardRow);
       });
       return playerBoard;
     },
