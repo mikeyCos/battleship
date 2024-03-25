@@ -15,29 +15,30 @@ export default (state) => ({
   dragStartHandler(e) {
     console.log('drag start');
     const draggable = e.target;
+    const dragStart = e.target.parentElement;
+    dragStart.classList.add('dragstart');
     draggable.classList.add('dragging');
-    this.offSetX = e.clientX - draggable.offsetLeft;
-    this.offSetY = e.clientY - draggable.offsetTop;
-    document.addEventListener('mousemove', this.dragMoveHandler);
-    document.addEventListener('mouseup', this.dragEndHandler);
+    // this.offSetX = e.clientX - draggable.offsetLeft;
+    // this.offSetY = e.clientY - draggable.offsetTop;
+    // document.addEventListener('mousemove', this.dragMoveHandler);
   },
   dragMoveHandler(e) {
     console.log('drag move');
     console.log(`x: ${e.clientX}, y: ${e.clientY}`);
     console.log(e.target);
-    console.log(document.elementsFromPoint(e.clientX, e.clientY));
-    const draggable = document.querySelector('.dragging');
-    draggable.style.left = `${e.clientX - this.offSetX}px`;
-    draggable.style.top = `${e.clientY - this.offSetY}px`;
+    // const draggable = document.querySelector('.dragging');
+    // draggable.style.left = `${e.clientX - this.offSetX}px`;
+    // draggable.style.top = `${e.clientY - this.offSetY}px`;
   },
   dragEndHandler(e) {
     console.log('drag end');
-    const draggable = document.querySelector('.dragging');
-    draggable.style.left = `0px`;
-    draggable.style.top = `0px`;
-    draggable.classList.remove('dragging');
-    document.removeEventListener('mousemove', this.dragMoveHandler);
-    document.removeEventListener('mouseup', this.dragEndHandler);
+    const dragStart = document.querySelector('.dragstart');
+    e.target.classList.remove('dragging');
+    dragStart.appendChild(e.target);
+    // draggable.style.left = `0px`;
+    // draggable.style.top = `0px`;
+    // document.removeEventListener('mousemove', this.dragMoveHandler);
+    // document.removeEventListener('mouseup', this.dragEndHandler);
   },
   dragOverHandler(e) {
     e.preventDefault();
@@ -46,11 +47,23 @@ export default (state) => ({
     //  Do content.appendChild(draggable)
     // content.appendChild(draggable);
     console.log('drag over');
+    // const draggable = document.querySelector('.dragging');
+    // if (!e.target.contains(draggable)) {
+    //   e.target.appendChild(draggable);
+    // }
   },
   dragEnterHandler(e) {
     console.log('drag enter');
+    console.log(e.target);
+    const draggable = document.querySelector('.dragging');
+    if (!e.target.contains(draggable)) {
+      e.target.appendChild(draggable);
+    }
   },
   dragLeaveHandler(e) {
+    e.preventDefault();
+    const draggable = document.querySelector('.dragging');
+
     // If draggable has NOT been dropped then it leaves the drop zone and is dropped outside the drop zone
     //  It needs to return to it's original draggable starting location(?)
     // If draggable has been dropped in the drop zone then dragged again and dropped outside the drop zone
@@ -60,6 +73,10 @@ export default (state) => ({
   dropHandler(e) {
     e.preventDefault();
     console.log('drag drop');
+    const draggable = document.querySelector('.dragging');
+    if (!e.target.contains(draggable)) {
+      e.target.appendChild(draggable);
+    }
   },
   reset(e) {
     // Clears board

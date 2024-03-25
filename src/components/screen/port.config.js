@@ -223,7 +223,7 @@ export default [
                 element: 'div',
                 attributes: {
                   class: 'ship_box',
-                  // draggable: 'true',
+                  draggable: 'true',
                   ['data-length']: '1',
                   ['data-orientation']: 'h',
                   style: 'width: 2em; height: 2em;',
