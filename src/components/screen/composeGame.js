@@ -8,44 +8,76 @@ export default (state) => ({
   // },
   offSetX: 0,
   offSetY: 0,
+  init() {
+    console.log('init running from composeGame');
+  },
   renderShip(element) {
     // This will append to the content div
     console.log(element);
   },
   dragStartHandler(e) {
     console.log('drag start');
-    const draggable = e.target;
-    draggable.classList.add('dragging');
-    this.offSetX = e.clientX - draggable.offsetLeft;
-    this.offSetY = e.clientY - draggable.offsetTop;
+    // When mousedown happens
+    this.draggable = e.target;
+    this.dragStart = e.target.parentElement;
+    this.draggable.classList.add('dragging');
+    this.dragStart.classList.add('dragstart');
+    this.offSetX = e.clientX;
+    this.offSetY = e.clientY;
     document.addEventListener('mousemove', this.dragMoveHandler);
     document.addEventListener('mouseup', this.dragEndHandler);
   },
   dragMoveHandler(e) {
+    // console.clear();
     console.log('drag move');
-    console.log(`x: ${e.clientX}, y: ${e.clientY}`);
-    console.log(e.target);
-    console.log(document.elementsFromPoint(e.clientX, e.clientY));
-    const draggable = document.querySelector('.dragging');
-    draggable.style.left = `${e.clientX - this.offSetX}px`;
-    draggable.style.top = `${e.clientY - this.offSetY}px`;
+    this.draggable.style.left = `${e.clientX - this.offSetX}px`;
+    this.draggable.style.top = `${e.clientY - this.offSetY}px`;
+    // If draggable is over drop zone AND if draggable is more than 50% over it's 'last' cell
+    //  Append the draggable to the cell content container
+    const draggableRect = this.draggable.getBoundingClientRect();
+    const draggableLeft = draggableRect.left;
+    const draggableTop = draggableRect.top;
+    const draggableWidth = draggableRect.width;
+    const shipLength = this.draggable.dataset.length;
+    let offSet = (draggableWidth / shipLength) * 0.5;
+    let newCell;
+    const cell = document
+      .elementsFromPoint(draggableLeft + offSet, draggableTop + offSet)
+      .find((element) => element.classList.contains('cell'));
+    if (newCell !== cell && cell) {
+      newCell = cell;
+      console.log(typeof cell);
+      console.log(cell.firstChild);
+      cell.firstChild.appendChild(this.draggable);
+      this.draggable.classList.add('ship_box_transparent');
+      this.offSetX = e.clientX;
+      this.offSetY = e.clientY;
+    }
   },
   dragEndHandler(e) {
     console.log('drag end');
-    const draggable = document.querySelector('.dragging');
-    draggable.style.left = `0px`;
-    draggable.style.top = `0px`;
-    draggable.classList.remove('dragging');
+    // When mouseup happens
+    this.draggable.style.left = `0px`;
+    this.draggable.style.top = `0px`;
+
+    // this.dragStart.appendChild(this.draggable);
+
+    this.draggable.classList.remove('dragging');
+    this.draggable.classList.remove('ship_box_transparent');
+    this.dragStart.classList.remove('dragstart');
+
     document.removeEventListener('mousemove', this.dragMoveHandler);
     document.removeEventListener('mouseup', this.dragEndHandler);
   },
   dragOverHandler(e) {
-    e.preventDefault();
+    console.log('drag over');
+    // e.preventDefault();
     // Need to check if the content container has the draggable
     // If content container does NOT have draggable element
     //  Do content.appendChild(draggable)
     // content.appendChild(draggable);
-    console.log('drag over');
+    // console.log(e.target);
+    // console.log(e.currentTarget);
   },
   dragEnterHandler(e) {
     console.log('drag enter');

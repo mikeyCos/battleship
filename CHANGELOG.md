@@ -1,7 +1,8 @@
 # Changelog
 ---
-### 23 MAR 2024
-- 
+### 25 MAR 2024
+- Attempted to mimic the HTML Drag and Drop API with vanilla JavaScript.
+- Draggable elements currently jump around and an offset keeps adding to the current dragging element; space between the cursor and dragging element keeps increasing.
 ---
 ### 22 MAR 2024
 - Added row containers to each player's board.
