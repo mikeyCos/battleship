@@ -14,6 +14,8 @@
   position: absolute;
   background: rgba(0, 0, 255, 0.05);
   border: 2px solid #00f;
+  left: 0;
+  top: 0;
   /* box-sizing: content-box; */
 }
 
@@ -25,4 +27,9 @@
   /* Comment out if using box-sizing: content */
   left: -4%;
   top: -4%;
+}
+
+.ship_box.dragging.ship_box_transparent {
+  background: transparent;
+  border: transparent;
 }

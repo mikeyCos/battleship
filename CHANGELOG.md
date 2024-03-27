@@ -1,5 +1,11 @@
 # Changelog
 ---
+### 26 MAR 2024
+- Ships can now successfully drag and drop onto the grid.
+- Ships 'snap' to a new cell's content container when the ship is more than 50% over it's 'last' grid cell; for example, if a ship's length is 3, then the ship will 'snap' on the grid when the ship is 50%+ over the third cell from the left of where the ship can be placed.
+- A placeholder ship is appended to a cell when dragging a ship over a 'new' cell (a cell that has not been visited).
+- When `dragEndHandler` is called, the placeholder ship is replaced with the draggable ship. 
+---
 ### 25 MAR 2024
 - Attempted to mimic the HTML Drag and Drop API with vanilla JavaScript.
 - Draggable elements currently jump around and an offset keeps adding to the current dragging element; space between the cursor and dragging element keeps increasing.

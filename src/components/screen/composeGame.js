@@ -18,10 +18,12 @@ export default (state) => ({
   dragStartHandler(e) {
     console.log('drag start');
     // When mousedown happens
-    this.draggable = e.target;
+    this.draggable = e.currentTarget;
     this.dragStart = e.target.parentElement;
+    this.dropPlaceholder = this.draggable.cloneNode();
     this.draggable.classList.add('dragging');
     this.dragStart.classList.add('dragstart');
+    this.dropPlaceholder.classList.add('ship_box_placeholder');
     this.offSetX = e.clientX;
     this.offSetY = e.clientY;
     document.addEventListener('mousemove', this.dragMoveHandler);
@@ -32,26 +34,29 @@ export default (state) => ({
     console.log('drag move');
     this.draggable.style.left = `${e.clientX - this.offSetX}px`;
     this.draggable.style.top = `${e.clientY - this.offSetY}px`;
-    // If draggable is over drop zone AND if draggable is more than 50% over it's 'last' cell
-    //  Append the draggable to the cell content container
-    const draggableRect = this.draggable.getBoundingClientRect();
-    const draggableLeft = draggableRect.left;
-    const draggableTop = draggableRect.top;
-    const draggableWidth = draggableRect.width;
+
+    const { left, top, width } = this.draggable.getBoundingClientRect();
     const shipLength = this.draggable.dataset.length;
-    let offSet = (draggableWidth / shipLength) * 0.5;
-    let newCell;
+    const offSet = (width / shipLength) * 0.5;
+
     const cell = document
-      .elementsFromPoint(draggableLeft + offSet, draggableTop + offSet)
+      .elementsFromPoint(left + offSet, top + offSet)
       .find((element) => element.classList.contains('cell'));
-    if (newCell !== cell && cell) {
-      newCell = cell;
-      console.log(typeof cell);
-      console.log(cell.firstChild);
-      cell.firstChild.appendChild(this.draggable);
+    if (cell) {
+      // If draggable is over drop zone AND if draggable is more than 50% over it's 'last' cell
+      //  Append the draggable to the cell content container
+      console.log('dragging over drop zone');
+      this.cell = cell;
+      const cellContent = cell.firstChild;
+      cellContent.appendChild(this.dropPlaceholder);
       this.draggable.classList.add('ship_box_transparent');
-      this.offSetX = e.clientX;
-      this.offSetY = e.clientY;
+    } else {
+      if (this.draggable.classList.contains('ship_box_transparent')) {
+        this.cell.firstChild.lastChild.remove();
+        this.cell = null;
+        this.draggable.classList.remove('ship_box_transparent');
+      }
+      console.log('dragging over a non drop zone');
     }
   },
   dragEndHandler(e) {
@@ -60,24 +65,22 @@ export default (state) => ({
     this.draggable.style.left = `0px`;
     this.draggable.style.top = `0px`;
 
-    // this.dragStart.appendChild(this.draggable);
-
     this.draggable.classList.remove('dragging');
     this.draggable.classList.remove('ship_box_transparent');
     this.dragStart.classList.remove('dragstart');
+
+    this.dropHandler();
 
     document.removeEventListener('mousemove', this.dragMoveHandler);
     document.removeEventListener('mouseup', this.dragEndHandler);
   },
   dragOverHandler(e) {
     console.log('drag over');
+    console.log(e.target);
     // e.preventDefault();
     // Need to check if the content container has the draggable
     // If content container does NOT have draggable element
     //  Do content.appendChild(draggable)
-    // content.appendChild(draggable);
-    // console.log(e.target);
-    // console.log(e.currentTarget);
   },
   dragEnterHandler(e) {
     console.log('drag enter');
@@ -89,9 +92,24 @@ export default (state) => ({
     //  It needs to return to where it was dropped in the drop zone(?)
     console.log('drag leave');
   },
-  dropHandler(e) {
-    e.preventDefault();
+  dropHandler() {
     console.log('drag drop');
+    if (this.cell || this.dragStart.isEqualNode(this.cell)) {
+      console.log('this.dragStart is a cell');
+    }
+
+    if (this.cell) {
+      this.cell.firstChild.replaceChild(this.draggable, this.dropPlaceholder);
+      this.draggable.style.left = `-4%`;
+      this.draggable.style.top = `-4%`;
+      const x = parseInt(this.cell.dataset.x);
+      const y = parseInt(this.cell.dataset.y);
+
+      const shipLength = parseInt(this.draggable.dataset.length);
+
+      // this.game.playerOneBoard.placeShip([x, y], shipLength, false);
+      this.cell = null;
+    }
   },
   reset(e) {
     // Clears board
