@@ -1,4 +1,4 @@
-export default (shipLength) => {
+export default (shipLength, shipID) => {
   // Properties:
   //  Length
   //  Numbers of times hit
@@ -16,6 +16,7 @@ export default (shipLength) => {
   // How or when to initialize a ship's length
   // What determines a ships length?
   const length = shipLength;
+  const id = shipID;
   let numHits = 0;
   let sunk = false;
   const hit = () => {
@@ -31,6 +32,9 @@ export default (shipLength) => {
     isSunk,
     get length() {
       return length;
+    },
+    get id() {
+      return id;
     },
   };
 };

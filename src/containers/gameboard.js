@@ -78,6 +78,7 @@ export default () => {
     // Return true if ship can be place
     const boolean = validateCoordinate(x, y);
     const check = [
+      [x, y],
       [x, y + 1],
       [x, y - 1],
       [x + 1, y],
@@ -95,7 +96,7 @@ export default () => {
     });
   };
 
-  const placeShip = (coordinates, shipLength, orientation) => {
+  const placeShip = (coordinates, shipLength, orientation, id) => {
     // Be able to place ships at specific coordinates by calling the ship factory function.
     // Ship must fit on board based on coordinates
     //  What if ship can be rotated?
@@ -112,10 +113,22 @@ export default () => {
     //  How to handle if the ship does not fit on the board?
     // What if there is a ship already at given coordinates?
     // A ship MUST be 1 coordinate away from another ship
-    // const x = board.length - coordinates[1];
-    // const y = coordinates[0] - 1;
+
+    // If id exists on board
+    //  Find the cells with ship.id === id
+    //  Replace cells with Cell()
+    const tmpBoard = board.flat().filter((item) => (item.ship ? item.ship.id === id : false));
+    if (tmpBoard.length > 0) {
+      console.log(tmpBoard);
+      tmpBoard.forEach((cell) => {
+        cell = Cell();
+      });
+      console.log(tmpBoard);
+      console.log(board);
+    }
+
     const [x, y] = parseCoordinate(coordinates);
-    const newShip = Ship(shipLength);
+    const newShip = Ship(shipLength, id);
     const shipCoordinates = generateShipCoordinates([x, y], orientation, newShip.length);
     if (shipCoordinates.every(checkBoard)) {
       // Check if x and y are within the board's size
@@ -132,9 +145,11 @@ export default () => {
           board[x][i] = Cell(newShip);
         }
       }
-    } else {
+      pubSub.publish('drop', false);
+      // Pubsub publish something...(?)
+    } /*else {
       throw new Error('There is a ship at or near coordinates');
-    }
+    } */
   };
 
   const shots = [];
@@ -184,3 +199,42 @@ export default () => {
     },
   };
 };
+
+const numbers = [
+  [
+    {
+      num: {
+        value: 1,
+      },
+    },
+    {
+      num: {
+        value: 2,
+      },
+    },
+    {
+      num: {
+        value: 3,
+      },
+    },
+    {
+      num: {
+        value: 1,
+      },
+    },
+  ],
+  [
+    {
+      num: {
+        value: 8,
+      },
+    },
+    {
+      num: {
+        value: 1,
+      },
+    },
+  ],
+];
+
+const foo = numbers.flat().filter((item) => item.num.value === 1);

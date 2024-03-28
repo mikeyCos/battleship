@@ -1,3 +1,5 @@
+import generateUUID from './generateUUID';
+
 const BuildElement = (state) => ({
   setAttributes: (attributes) => {
     Object.entries(attributes).forEach(([key, value]) => {
@@ -6,6 +8,8 @@ const BuildElement = (state) => ({
           state.setClassName(value.split(/\s/));
         } else if (key === 'style') {
           state.setStyle(value);
+        } else if (key === 'data-id') {
+          state.setAttribute(key, generateUUID());
         } else {
           state.setAttribute(key, value);
         }

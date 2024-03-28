@@ -1,5 +1,10 @@
 # Changelog
 ---
+### 27 MAR 2024
+- The `dropHandler` is called in the `dragEndHandler` and `dragMoveHandler`.
+- The `dropHandler` method now has a `dragStop` parameter.
+- Attempted to filter the board when placing a ship with an existing ship ID on the board and creates an 'empty' cell (in progress).
+---
 ### 26 MAR 2024
 - Ships can now successfully drag and drop onto the grid.
 - Ships 'snap' to a new cell's content container when the ship is more than 50% over it's 'last' grid cell; for example, if a ship's length is 3, then the ship will 'snap' on the grid when the ship is 50%+ over the third cell from the left of where the ship can be placed.

@@ -29,6 +29,7 @@ export default [
                 attributes: {
                   class: 'ship_box',
                   // draggable: 'true',
+                  ['data-id']: '',
                   ['data-length']: '4',
                   ['data-orientation']: 'h',
                   style: 'width: 8em; height: 2em;',
@@ -56,6 +57,7 @@ export default [
                 attributes: {
                   class: 'ship_box',
                   // draggable: 'true',
+                  ['data-id']: '',
                   ['data-length']: '3',
                   ['data-orientation']: 'h',
                   style: 'width: 6em; height: 2em;',
@@ -75,6 +77,7 @@ export default [
                 attributes: {
                   class: 'ship_box',
                   // draggable: 'true',
+                  ['data-id']: '',
                   ['data-length']: '3',
                   ['data-orientation']: 'h',
                   style: 'width: 6em; height: 2em;',
@@ -102,6 +105,7 @@ export default [
                 attributes: {
                   class: 'ship_box',
                   // draggable: 'true',
+                  ['data-id']: '',
                   ['data-length']: '2',
                   ['data-orientation']: 'h',
                   style: 'width: 4em; height: 2em;',
@@ -121,6 +125,7 @@ export default [
                 attributes: {
                   class: 'ship_box',
                   // draggable: 'true',
+                  ['data-id']: '',
                   ['data-length']: '2',
                   ['data-orientation']: 'h',
                   style: 'width: 4em; height: 2em;',
@@ -140,6 +145,7 @@ export default [
                 attributes: {
                   class: 'ship_box',
                   // draggable: 'true',
+                  ['data-id']: '',
                   ['data-length']: '2',
                   ['data-orientation']: 'h',
                   style: 'width: 4em; height: 2em;',
@@ -167,6 +173,7 @@ export default [
                 attributes: {
                   class: 'ship_box',
                   // draggable: 'true',
+                  ['data-id']: '',
                   ['data-length']: '1',
                   ['data-orientation']: 'h',
                   style: 'width: 2em; height: 2em;',
@@ -186,6 +193,7 @@ export default [
                 attributes: {
                   class: 'ship_box',
                   // draggable: 'true',
+                  ['data-id']: '',
                   ['data-length']: '1',
                   ['data-orientation']: 'h',
                   style: 'width: 2em; height: 2em;',
@@ -205,6 +213,7 @@ export default [
                 attributes: {
                   class: 'ship_box',
                   // draggable: 'true',
+                  ['data-id']: '',
                   ['data-length']: '1',
                   ['data-orientation']: 'h',
                   style: 'width: 2em; height: 2em;',
@@ -224,6 +233,7 @@ export default [
                 attributes: {
                   class: 'ship_box',
                   // draggable: 'true',
+                  ['data-id']: '',
                   ['data-length']: '1',
                   ['data-orientation']: 'h',
                   style: 'width: 2em; height: 2em;',

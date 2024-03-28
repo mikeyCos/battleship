@@ -1,11 +1,6 @@
 import pubSub from '../../containers/pubSub';
 
 export default (state) => ({
-  // init() {
-  //   pubSub.publish('notify', 'Place ships');
-  //   this.start = this.start.bind(this);
-  //   this.renderShip = this.renderShip.bind(this);
-  // },
   offSetX: 0,
   offSetY: 0,
   init() {
@@ -17,7 +12,6 @@ export default (state) => ({
   },
   dragStartHandler(e) {
     console.log('drag start');
-    // When mousedown happens
     this.draggable = e.currentTarget;
     this.dragStart = e.target.parentElement;
     this.dropPlaceholder = this.draggable.cloneNode();
@@ -47,21 +41,23 @@ export default (state) => ({
       //  Append the draggable to the cell content container
       console.log('dragging over drop zone');
       this.cell = cell;
-      const cellContent = cell.firstChild;
-      cellContent.appendChild(this.dropPlaceholder);
-      this.draggable.classList.add('ship_box_transparent');
+      const x = parseInt(this.cell.dataset.x);
+      const y = parseInt(this.cell.dataset.y);
+      const shipLength = parseInt(this.draggable.dataset.length);
+      const id = this.draggable.dataset.id;
+      this.game.playerOneBoard.placeShip([x, y], shipLength, false, id);
+      // this.dropHandler(false);
     } else {
+      console.log('dragging over a non drop zone');
       if (this.draggable.classList.contains('ship_box_transparent')) {
         this.cell.firstChild.lastChild.remove();
         this.cell = null;
         this.draggable.classList.remove('ship_box_transparent');
       }
-      console.log('dragging over a non drop zone');
     }
   },
   dragEndHandler(e) {
     console.log('drag end');
-    // When mouseup happens
     this.draggable.style.left = `0px`;
     this.draggable.style.top = `0px`;
 
@@ -69,46 +65,31 @@ export default (state) => ({
     this.draggable.classList.remove('ship_box_transparent');
     this.dragStart.classList.remove('dragstart');
 
-    this.dropHandler();
-
     document.removeEventListener('mousemove', this.dragMoveHandler);
     document.removeEventListener('mouseup', this.dragEndHandler);
+    this.dropHandler(true);
+    console.log(this.game.playerOneBoard.board);
   },
-  dragOverHandler(e) {
-    console.log('drag over');
-    console.log(e.target);
-    // e.preventDefault();
-    // Need to check if the content container has the draggable
-    // If content container does NOT have draggable element
-    //  Do content.appendChild(draggable)
-  },
-  dragEnterHandler(e) {
-    console.log('drag enter');
-  },
-  dragLeaveHandler(e) {
-    // If draggable has NOT been dropped then it leaves the drop zone and is dropped outside the drop zone
-    //  It needs to return to it's original draggable starting location(?)
-    // If draggable has been dropped in the drop zone then dragged again and dropped outside the drop zone
-    //  It needs to return to where it was dropped in the drop zone(?)
-    console.log('drag leave');
-  },
-  dropHandler() {
+  dropHandler(dragStop) {
     console.log('drag drop');
-    if (this.cell || this.dragStart.isEqualNode(this.cell)) {
+    if (this.dragStart.isEqualNode(this.cell)) {
       console.log('this.dragStart is a cell');
     }
 
-    if (this.cell) {
+    if (dragStop && this.cell) {
       this.cell.firstChild.replaceChild(this.draggable, this.dropPlaceholder);
       this.draggable.style.left = `-4%`;
       this.draggable.style.top = `-4%`;
       const x = parseInt(this.cell.dataset.x);
       const y = parseInt(this.cell.dataset.y);
-
       const shipLength = parseInt(this.draggable.dataset.length);
-
       // this.game.playerOneBoard.placeShip([x, y], shipLength, false);
       this.cell = null;
+    } else if (!dragStop && this.cell) {
+      console.log('else block of dropHandler');
+      const cellContent = this.cell.firstChild;
+      cellContent.appendChild(this.dropPlaceholder);
+      this.draggable.classList.add('ship_box_transparent');
     }
   },
   reset(e) {
@@ -121,19 +102,5 @@ export default (state) => ({
     this.gameReady = true;
     this.render();
     this.renderWait();
-  },
-  boardHandler(e) {
-    console.log(e.target);
-    console.log(e.target.parentElement);
-    const btn = e.target.parentElement;
-    const x = parseInt(btn.dataset.x);
-    const y = parseInt(btn.dataset.y);
-    if (!isNaN(x) || !isNaN(y)) {
-      // Place ship
-      console.log(`Placing a ship starting at [${x}, ${y}]`);
-      this.game.playerOneBoard.placeShip([2, 2], 3, false);
-      this.game.playerTwoBoard.placeShip([6, 2], 3, false);
-      this.renderShip(btn);
-    }
   },
 });

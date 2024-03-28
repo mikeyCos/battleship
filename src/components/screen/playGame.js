@@ -2,6 +2,9 @@ import pubSub from '../../containers/pubSub';
 import composeGame from './composeGame';
 
 export default (state) => ({
+  init() {
+    console.log(`init running from playGame`);
+  },
   unbindEvents() {
     this.playerOneBoard.removeEventListener('click', this.boardHandler);
     this.playerTwoBoard.removeEventListener('click', this.boardHandler);

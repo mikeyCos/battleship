@@ -50,23 +50,16 @@ export default (mode) => {
     bindEvents() {
       if (!this.gameReady) {
         this.dragStartHandler = this.dragStartHandler.bind(this);
-        this.dragMoveHandler = this.dragMoveHandler.bind(this);
         this.dragEndHandler = this.dragEndHandler.bind(this);
-        this.dragOverHandler = this.dragOverHandler.bind(this);
-        // this.dragEnterHandler = this.dragEnterHandler.bind(this);
-        // this.dragLeaveHandler = this.dragLeaveHandler.bind(this);
-        // this.dropHandler = this.dropHandler.bind(this);
+        this.dragMoveHandler = this.dragMoveHandler.bind(this);
+        this.dropHandler = this.dropHandler.bind(this);
         this.startBtn.addEventListener('click', this.start);
 
         this.ships.forEach((ship) => {
           ship.addEventListener('mousedown', this.dragStartHandler);
           // ship.addEventListener('mouseup', this.dragEndHandler);
         });
-
-        // this.playerOneBoard.addEventListener('drop', this.dropHandler);
-        // this.playerOneBoard.addEventListener('dragover', this.dragOverHandler);
-        // this.playerOneBoard.addEventListener('dragenter', this.dragEnterHandler);
-        // this.playerOneBoard.addEventListener('dragleave', this.dragLeaveHandler);
+        pubSub.subscribe('drop', this.dropHandler);
       }
       if (this.gameReady) {
         this.updateGameState(playGame);
@@ -76,8 +69,8 @@ export default (mode) => {
         pubSub.subscribe('renderAttack', this.renderAttack);
         pubSub.subscribe('endGame', this.endGame);
         pubSub.subscribe('renderWait', this.renderWait);
+        this.boardHandler = this.boardHandler.bind(this);
       }
-      this.boardHandler = this.boardHandler.bind(this);
       this.playerOneBoard.addEventListener('click', this.boardHandler);
       this.playerTwoBoard.addEventListener('click', this.boardHandler);
     },
