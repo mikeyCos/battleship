@@ -72,7 +72,7 @@ export default () => {
     return x >= 0 && x < 10 && y >= 0 && y < 10;
   };
 
-  const checkBoard = ([x, y]) => {
+  const checkBoard = ([x, y], id) => {
     // Check if there is a ship at x and y
     // Check if all surrounding coordinates are undefined
     // Return true if ship can be place
@@ -92,11 +92,14 @@ export default () => {
       // Need to check if a and b are within the board's size
       // The value of a and b can only be between from 0 to 9.
       // It is pointless to check if there is space when a ship is placed at the border of the board
-      return validateCoordinate(a, b) ? boolean && board[a][b].ship === undefined : boolean;
+      return validateCoordinate(a, b)
+        ? boolean && (board[a][b].ship === undefined || board[a][b].ship.id === id)
+        : boolean;
     });
   };
 
-  const placeShip = (coordinates, shipLength, orientation, id) => {
+  const memo = [];
+  const placeShip = (coordinates, shipLength, orientation, id, isDragging) => {
     // Be able to place ships at specific coordinates by calling the ship factory function.
     // Ship must fit on board based on coordinates
     //  What if ship can be rotated?
@@ -117,39 +120,75 @@ export default () => {
     // If id exists on board
     //  Find the cells with ship.id === id
     //  Replace cells with Cell()
-    const tmpBoard = board.flat().filter((item) => (item.ship ? item.ship.id === id : false));
-    if (tmpBoard.length > 0) {
-      console.log(tmpBoard);
-      tmpBoard.forEach((cell) => {
-        cell = Cell();
-      });
-      console.log(tmpBoard);
-      console.log(board);
-    }
+    // memo = memo.filter((cell) => {
+    //   if (cell.id === id) {
+    //     const { row, col } = cell;
+    //     board[row][col] = Cell();
+    //     return false;
+    //   } else {
+    //     return true;
+    //   }
+    // });
+
+    // const isShipOnBoard = memo.some((cell) => cell.id === id);
+    // if (isShipOnBoard) {
+    //   for (let i = 0; i < memo.length; i += 1) {
+    //     if (memo[i].id === id) {
+    //       console.log(`memo[i].id: ${memo[i].id}`);
+    //       console.log(`id: ${id}`);
+    //       const { row, col } = memo[i];
+    //       board[row][col] = Cell();
+    //       memo.splice(i, 1);
+    //     }
+    //   }
+    // }
 
     const [x, y] = parseCoordinate(coordinates);
-    const newShip = Ship(shipLength, id);
-    const shipCoordinates = generateShipCoordinates([x, y], orientation, newShip.length);
-    if (shipCoordinates.every(checkBoard)) {
+    const shipCoordinates = generateShipCoordinates([x, y], orientation, shipLength);
+    const isValidCoordinates = shipCoordinates.every((coordinate) => {
+      return checkBoard(coordinate, id);
+    });
+
+    if (isValidCoordinates && !isDragging) {
+      const newShip = Ship(shipLength, id);
       // Check if x and y are within the board's size
       // Check if there is a ship at x and y
+
+      const isShipOnBoard = memo.some((cell) => cell.id === id);
+      if (isShipOnBoard) {
+        for (let i = 0; i < memo.length; i += 1) {
+          if (memo[i].id === id) {
+            const { row, col } = memo[i];
+            board[row][col] = Cell();
+            memo.splice(i, 1);
+          }
+        }
+      }
+
       if (orientation) {
         // Vertical
         for (let i = x; i < x + newShip.length; i += 1) {
           board[i][y] = Cell(newShip);
+          memo.push({ row: i, col: y, id });
         }
       } else {
         // Horizontal
         // board[x].fill(newShip, y, y + newShip.length);
         for (let i = y; i < y + newShip.length; i += 1) {
           board[x][i] = Cell(newShip);
+          memo.push({ row: x, col: i, id });
         }
       }
-      pubSub.publish('drop', false);
+
       // Pubsub publish something...(?)
-    } /*else {
-      throw new Error('There is a ship at or near coordinates');
-    } */
+      pubSub.publish('drop', false, true);
+    } else if (isValidCoordinates && isDragging) {
+      console.log('dragging');
+      pubSub.publish('drop', true, true);
+    } else if (!isValidCoordinates && isDragging) {
+      console.log(`there is a ship on or near coordinates`);
+      pubSub.publish('drop', true, false);
+    }
   };
 
   const shots = [];
@@ -237,4 +276,10 @@ const numbers = [
   ],
 ];
 
-const foo = numbers.flat().filter((item) => item.num.value === 1);
+const nar = { num: { value: 1987398789273 } };
+const memo = [];
+// numbers[0][4] = nar;
+// const ref = numbers[0][4];
+// memo.push(ref);
+// memo[0] = {};
+memo.push({ y: 0, x: 4 });

@@ -1,5 +1,21 @@
 # Changelog
 ---
+
+### 30 MAR 2024
+- 
+---
+### 29 MAR 2024
+- If a ship already exists on the gameboard, it will be removed then readded to the gameboard either to it's original or new location.
+- Ships will hover over ships that are existing on the gameboard; ships are surrounded with empty grid cells, one cell from the ship.
+- Added `isValidDrop` parameter to the `dropHandler`.
+- Tests in `gameboard.test` are failing.
+- Initiated a `rotateHandler`; ships are planned to rotate on click only when the ships are on the board.
+---
+### 28 MAR 2024
+- Rewrote the `dropHandler` in the `composeGame` module.
+- The `dropHandler` method is published from the `gameboard` module when `placeShip` is called.
+-  Currently, ships do not hover over existing ships on the board except when a ship is initially from the 'port'. For example, if ship 'A' and ship 'B' are placed on the board, then ship 'A' is dragged over ship 'B', there will be no visual feedback showing ship 'A' is dragging over ship 'B'.
+---
 ### 27 MAR 2024
 - The `dropHandler` is called in the `dragEndHandler` and `dragMoveHandler`.
 - The `dropHandler` method now has a `dragStop` parameter.

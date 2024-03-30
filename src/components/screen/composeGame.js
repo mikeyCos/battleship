@@ -15,8 +15,6 @@ export default (state) => ({
     this.draggable = e.currentTarget;
     this.dragStart = e.target.parentElement;
     this.dropPlaceholder = this.draggable.cloneNode();
-    this.draggable.classList.add('dragging');
-    this.dragStart.classList.add('dragstart');
     this.dropPlaceholder.classList.add('ship_box_placeholder');
     this.offSetX = e.clientX;
     this.offSetY = e.clientY;
@@ -25,31 +23,38 @@ export default (state) => ({
   },
   dragMoveHandler(e) {
     // console.clear();
-    console.log('drag move');
+    // console.log('drag move');
+
+    this.draggable.classList.add('dragging');
+    this.dragStart.classList.add('dragstart');
     this.draggable.style.left = `${e.clientX - this.offSetX}px`;
     this.draggable.style.top = `${e.clientY - this.offSetY}px`;
 
     const { left, top, width } = this.draggable.getBoundingClientRect();
-    const shipLength = this.draggable.dataset.length;
+    const shipLength = parseInt(this.draggable.dataset.length);
     const offSet = (width / shipLength) * 0.5;
-
     const cell = document
       .elementsFromPoint(left + offSet, top + offSet)
       .find((element) => element.classList.contains('cell'));
     if (cell) {
-      // If draggable is over drop zone AND if draggable is more than 50% over it's 'last' cell
+      // Dragging over drop zone
+      // If draggable is more than 50% over it's 'last' cell
       //  Append the draggable to the cell content container
-      console.log('dragging over drop zone');
+      // console.log('dragging over drop zone');
       this.cell = cell;
       const x = parseInt(this.cell.dataset.x);
       const y = parseInt(this.cell.dataset.y);
-      const shipLength = parseInt(this.draggable.dataset.length);
+
       const id = this.draggable.dataset.id;
-      this.game.playerOneBoard.placeShip([x, y], shipLength, false, id);
-      // this.dropHandler(false);
+      this.game.playerOneBoard.placeShip([x, y], shipLength, false, id, true);
+
+      // this.dropHandler(true);
     } else {
-      console.log('dragging over a non drop zone');
-      if (this.draggable.classList.contains('ship_box_transparent')) {
+      // Dragging over a non drop zone
+      if (
+        this.draggable.classList.contains('ship_box_transparent') &&
+        this.cell.firstChild.lastChild
+      ) {
         this.cell.firstChild.lastChild.remove();
         this.cell = null;
         this.draggable.classList.remove('ship_box_transparent');
@@ -57,7 +62,7 @@ export default (state) => ({
     }
   },
   dragEndHandler(e) {
-    console.log('drag end');
+    // console.log('drag end');
     this.draggable.style.left = `0px`;
     this.draggable.style.top = `0px`;
 
@@ -67,29 +72,67 @@ export default (state) => ({
 
     document.removeEventListener('mousemove', this.dragMoveHandler);
     document.removeEventListener('mouseup', this.dragEndHandler);
-    this.dropHandler(true);
-    console.log(this.game.playerOneBoard.board);
-  },
-  dropHandler(dragStop) {
-    console.log('drag drop');
-    if (this.dragStart.isEqualNode(this.cell)) {
-      console.log('this.dragStart is a cell');
-    }
-
-    if (dragStop && this.cell) {
-      this.cell.firstChild.replaceChild(this.draggable, this.dropPlaceholder);
-      this.draggable.style.left = `-4%`;
-      this.draggable.style.top = `-4%`;
+    // this.dropHandler(false);
+    // console.log(this.game.playerOneBoard.board);
+    if (this.cell) {
+      // If user has stopped dragging over the drop zone
+      // console.log(`dragEndHandler running with this.cell defined`);
       const x = parseInt(this.cell.dataset.x);
       const y = parseInt(this.cell.dataset.y);
       const shipLength = parseInt(this.draggable.dataset.length);
-      // this.game.playerOneBoard.placeShip([x, y], shipLength, false);
-      this.cell = null;
-    } else if (!dragStop && this.cell) {
-      console.log('else block of dropHandler');
+      const id = this.draggable.dataset.id;
+      this.game.playerOneBoard.placeShip([x, y], shipLength, false, id, false);
+    }
+
+    if (!this.dragStart.classList.contains('port_ship') && this.draggable) {
+      // If dragStart is not the port_ship element
+      // const btn = this.dragStart.parentElement;
+      // const x = parseInt(btn.dataset.x);
+      // const y = parseInt(btn.dataset.y);
+      // const shipLength = parseInt(this.draggable.dataset.length);
+      // const id = this.draggable.dataset.id;
+      // this.game.playerOneBoard.placeShip([x, y], shipLength, false, id, false);
+      this.draggable.style.left = `-4%`;
+      this.draggable.style.top = `-4%`;
+      console.log(this.boards.playerOne);
+    }
+  },
+  dropHandler(isDragging, isValidDrop) {
+    // console.log('drag drop');
+    if (this.cell) {
       const cellContent = this.cell.firstChild;
-      cellContent.appendChild(this.dropPlaceholder);
-      this.draggable.classList.add('ship_box_transparent');
+      if (isDragging && isValidDrop) {
+        // If user is dragging over the drop zone
+        // How to handle if there is a ship at or near a coordinate?
+        // console.log(`dragging over drop zone`);
+        cellContent.appendChild(this.dropPlaceholder);
+        this.draggable.classList.add('ship_box_transparent');
+      } else if (!isDragging && isValidDrop) {
+        // If user has stopped dragging over the drop zone
+        // console.log(`dragging stopped over the drop zone`);
+        cellContent.appendChild(this.draggable);
+        this.dropPlaceholder.remove();
+        this.draggable.style.left = `-4%`;
+        this.draggable.style.top = `-4%`;
+        // this.draggable = null;
+        this.draggable.addEventListener('click', this.rotateHandler);
+      } else if (isDragging && !isValidDrop) {
+        // console.log(`there is a ship on or near coordinates`);
+        if (this.dropPlaceholder) {
+          this.dropPlaceholder.remove();
+          this.draggable.classList.remove('ship_box_transparent');
+        }
+      }
+    } else if (!this.cell && isDragging === false) {
+      // If user has stopped dragging outside the drop zone
+      // Draggable needs to append back to this.dragStart
+      console.log(`dragging stopped outside the drop zone`);
+    }
+  },
+  rotateHandler(e) {
+    console.log(`rotateHandler being called`);
+    if (!this.draggable.classList.contains('dragging')) {
+      console.log(`rotateHandler being called`);
     }
   },
   reset(e) {

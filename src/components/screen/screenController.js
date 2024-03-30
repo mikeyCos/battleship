@@ -53,11 +53,11 @@ export default (mode) => {
         this.dragEndHandler = this.dragEndHandler.bind(this);
         this.dragMoveHandler = this.dragMoveHandler.bind(this);
         this.dropHandler = this.dropHandler.bind(this);
+        this.rotateHandler = this.rotateHandler.bind(this);
         this.startBtn.addEventListener('click', this.start);
 
         this.ships.forEach((ship) => {
           ship.addEventListener('mousedown', this.dragStartHandler);
-          // ship.addEventListener('mouseup', this.dragEndHandler);
         });
         pubSub.subscribe('drop', this.dropHandler);
       }
