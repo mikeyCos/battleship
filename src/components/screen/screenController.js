@@ -54,12 +54,18 @@ export default (mode) => {
         this.dragMoveHandler = this.dragMoveHandler.bind(this);
         this.dropHandler = this.dropHandler.bind(this);
         this.rotateHandler = this.rotateHandler.bind(this);
-        this.startBtn.addEventListener('click', this.start);
+        this.reset = this.reset.bind(this);
 
         this.ships.forEach((ship) => {
+          // https://stackoverflow.com/questions/40464690/want-to-perform-different-task-on-mousedown-and-click-event
           ship.addEventListener('mousedown', this.dragStartHandler);
         });
+
+        if (!this.mode) {
+          this.startBtn.addEventListener('click', this.start);
+        }
         pubSub.subscribe('drop', this.dropHandler);
+        pubSub.subscribe('rotate', this.rotateHandler);
       }
       if (this.gameReady) {
         this.updateGameState(playGame);
@@ -76,7 +82,7 @@ export default (mode) => {
     },
     render() {
       const gameContainer = createElement('section');
-      const boardContainer = createElement('div');
+      const boardsContainer = createElement('div');
       const playerOneContainer = createElement('div');
       const playerTwoContainer = createElement('div');
       const playerOneHeader = createElement('h4');
@@ -86,7 +92,7 @@ export default (mode) => {
       const gameStartBtnText = createElement('span');
       gameStartBtnText.textContent = 'Play';
       gameContainer.id = 'game_container';
-      boardContainer.id = 'board_container';
+      boardsContainer.id = 'boards_container';
       playerOneContainer.classList.add('player_one');
       playerTwoContainer.classList.add('player_two');
       playerOneHeader.textContent = 'Your grid';
@@ -98,14 +104,11 @@ export default (mode) => {
       playerTwoContainer.appendChild(this.renderBoard(this.boards.playerTwo));
       playerOneContainer.appendChild(playerOneHeader);
       playerTwoContainer.appendChild(playerTwoHeader);
-      boardContainer.appendChild(playerOneContainer);
-      boardContainer.appendChild(playerTwoContainer);
+      boardsContainer.appendChild(playerOneContainer);
+      boardsContainer.appendChild(playerTwoContainer);
       gameStartBtn.appendChild(gameStartBtnText);
       gameStartContainer.appendChild(gameStartBtn);
       if (!this.gameReady) {
-        playerTwoContainer.classList.add('wait');
-        playerTwoContainer.appendChild(gameStartContainer);
-
         portConfig.forEach((port) => {
           const playerOnePort = createElement(port.element);
           playerOnePort.setAttributes(port.attributes);
@@ -113,14 +116,19 @@ export default (mode) => {
           playerOneContainer.appendChild(playerOnePort);
         });
 
-        portConfig.forEach((port) => {
-          const playerTwoPort = createElement(port.element);
-          playerTwoPort.setAttributes(port.attributes);
-          playerTwoPort.setChildren(port.children);
-          playerTwoContainer.appendChild(playerTwoPort);
-        });
+        if (this.mode) {
+          portConfig.forEach((port) => {
+            const playerTwoPort = createElement(port.element);
+            playerTwoPort.setAttributes(port.attributes);
+            playerTwoPort.setChildren(port.children);
+            playerTwoContainer.appendChild(playerTwoPort);
+          });
+        } else {
+          playerTwoContainer.classList.add('wait');
+          playerTwoContainer.appendChild(gameStartContainer);
+        }
       }
-      gameContainer.appendChild(boardContainer);
+      gameContainer.appendChild(boardsContainer);
       if (this.gameReady) this.gameContainer.replaceWith(gameContainer);
       this.cacheDOM(gameContainer);
       this.bindEvents();

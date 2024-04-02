@@ -26,6 +26,8 @@
 //   },
 // });
 
+import generateUUID from '../helpers/generateUUID';
+
 export default (player) => {
   // Make the ‘computer’ capable of making random plays.
   // The AI does not have to be smart,
@@ -41,6 +43,7 @@ export default (player) => {
     }
     return coordinate;
   };
+
   const attack = () => {
     // Returns a random unique coordinate that is in-bounds of the board
     // Note, if shots.length is 100, game will be over

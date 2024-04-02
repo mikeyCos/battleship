@@ -1,13 +1,26 @@
 import Gameboard from '../containers/gameboard';
+import crypto from 'crypto';
 
-// const gameboard = Gameboard();
+const generateUUID = () => {
+  // Returns the first 6 characters from crypto.randomUUID()
+  // Pseudo-randomly changes a lowercase letter to uppercase
+  const uuid = crypto.randomUUID();
+  return [...uuid.substring(0, uuid.indexOf('-'))].reduce((word, currentChar) => {
+    const check = Math.floor(Math.random() * 2);
+    if (check == false && currentChar.match(/[a-z]/)) {
+      return word + currentChar.toUpperCase();
+    }
+    return word + currentChar;
+  });
+};
+
 let gameboard;
 
 beforeEach(() => {
   gameboard = Gameboard();
-  gameboard.placeShip([5, 3], 3, false);
-  gameboard.placeShip([2, 8], 3, true);
-  gameboard.placeShip([10, 1], 1, false);
+  gameboard.placeShip([5, 3], 3, false, false, false, generateUUID());
+  gameboard.placeShip([2, 8], 3, true, false, false, generateUUID());
+  gameboard.placeShip([10, 1], 1, false, false, false, generateUUID());
 
   gameboard.receiveAttack([5, 3]);
   gameboard.receiveAttack([6, 3]);
@@ -34,7 +47,7 @@ describe(`Tests gameboard.placeShip`, () => {
     expect(shipCoordinates.every((cell) => cell.ship !== undefined)).toBeTruthy();
   });
 
-  test(`A ship of length 3 is placed at [2, 8] horizontally: gameboard.placeShip([2, 8])`, () => {
+  test(`A ship of length 3 is placed at [2, 8] vertically: gameboard.placeShip([2, 8])`, () => {
     const shipCoordinates = [gameboard.board[2][1], gameboard.board[3][1], gameboard.board[4][1]];
     expect(shipCoordinates.every((cell) => cell.ship !== undefined)).toBeTruthy();
   });
@@ -43,21 +56,29 @@ describe(`Tests gameboard.placeShip`, () => {
     expect(gameboard.board[9][9].ship !== undefined).toBeTruthy();
   });
 
-  // test(`There is already a ship at [5, 3] horizontally: gameboard.placeShip([5, 3])`, () => {
-  //   expect(() => gameboard.placeShip([5, 3], 3, false)).toThrow(Error);
-  // });
+  test(`A ship cannot be placed at [5, 3] horizontally: gameboard.placeShip([5, 3])`, () => {
+    const shipID = generateUUID();
+    gameboard.placeShip([5, 3], 3, false, false, false, shipID);
+    expect(gameboard.board[7][4].ship.id !== shipID).toBeTruthy();
+  });
 
-  // test(`There must be at least 1 empty coordinate between ships`, () => {
-  //   expect(() => gameboard.placeShip([5, 2], 3, false)).toThrow(Error);
-  // });
+  test(`A ship cannot be placed at [5, 2]`, () => {
+    const shipID = generateUUID();
+    gameboard.placeShip([5, 2], 3, false, false, false, shipID);
+    expect(gameboard.board[8][4].ship === undefined).toBeTruthy();
+  });
 
-  // test(`There must be at least 1 empty coordinate between ships`, () => {
-  //   expect(() => gameboard.placeShip([4, 4], 3, false)).toThrow(Error);
-  // });
+  test(`A ship cannot be placed at [4, 4]`, () => {
+    const shipID = generateUUID();
+    gameboard.placeShip([4, 4], 3, false, false, false, shipID);
+    expect(gameboard.board[6][3].ship === undefined).toBeTruthy();
+  });
 
-  // test(`There must be at least 1 empty coordinate between ships`, () => {
-  //   expect(() => gameboard.placeShip([3, 2], 3, false)).toThrow(Error);
-  // });
+  test(`A ship cannot be placed at [3, 2]`, () => {
+    const shipID = generateUUID();
+    gameboard.placeShip([3, 2], 3, false, false, false, shipID);
+    expect(gameboard.board[8][2].ship === undefined).toBeTruthy();
+  });
 });
 
 describe(`Tests gameboard.receiveAttack`, () => {
@@ -86,18 +107,6 @@ describe(`Tests gameboard.receiveAttack`, () => {
     gameboard.receiveAttack([10, 3]);
     expect(gameboard.getBoardCell([10, 3]).miss).toBeTruthy();
   });
-
-  // test(`gameboard.receiveAttack([10, 3]) will throw an error, [10, 3] cannot be attacked again`, () => {
-  //   gameboard.receiveAttack([10, 3]);
-  //   expect(() => gameboard.receiveAttack([10, 3])).toThrow(Error);
-  // });
-
-  // test(`Tests if gameboard.receiveAttack() can be called again after error thrown`, () => {
-  //   gameboard.receiveAttack([10, 3]);
-  //   expect(() => gameboard.receiveAttack([10, 3])).toThrow(Error);
-  //   gameboard.receiveAttack([1, 1]);
-  //   expect(gameboard.getBoardCell([1, 1]).miss).toBeTruthy();
-  // });
 });
 
 describe(`Tests ship.isSunk`, () => {
@@ -124,5 +133,21 @@ describe(`Tests gameboard.getStatus`, () => {
     gameboard.receiveAttack([7, 3]);
     gameboard.receiveAttack([2, 6]);
     expect(gameboard.getStatus()).toBeTruthy();
+  });
+});
+
+describe(`Tests gameboard.clearBoard`, () => {
+  test(`Gameboard.board should have no ships`, () => {
+    gameboard.clearBoard();
+    const shipsCoordinates = [
+      gameboard.board[7][4],
+      gameboard.board[7][5],
+      gameboard.board[7][6],
+      gameboard.board[2][1],
+      gameboard.board[3][1],
+      gameboard.board[4][1],
+      gameboard.board[9][9],
+    ];
+    expect(shipsCoordinates.every((cell) => cell.ship === undefined)).toBeTruthy();
   });
 });

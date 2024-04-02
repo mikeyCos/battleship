@@ -33,3 +33,12 @@
   background: transparent;
   border: transparent;
 }
+
+.ship_box_placeholder {
+  border-color: #40bf44;
+  background: rgba(64, 191, 68, 0.05);
+}
+
+.rotate_error {
+  border-color: red;
+}

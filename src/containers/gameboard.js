@@ -1,9 +1,11 @@
 import Ship from '../containers/ship';
 import pubSub from './pubSub';
+import generateUUID from '../helpers/generateUUID';
 
 export default () => {
   // Keep track of missed attacks so they can display them properly.
   // Be able to report whether or not all of their ships have been sunk.
+  const memo = [];
   const Cell = (ship) => {
     return ship
       ? {
@@ -40,6 +42,15 @@ export default () => {
         0     1      2    3     4     5     6     7     8     9
   ]
   */
+  const clearBoard = () => {
+    for (let i = 0; i < memo.length; i += 1) {
+      const { row, col } = memo[i];
+      console.log(`row: ${row} | col: ${col}`);
+      board[row][col] = Cell();
+      memo.splice(i, 1);
+      i -= 1;
+    }
+  };
 
   const parseCoordinate = ([x, y]) => {
     // Parses coordinate inputted by user such that
@@ -48,8 +59,38 @@ export default () => {
     return [board.length - y, x - 1];
   };
 
+  const generateRandomCoordinate = () => {
+    // Returns random coordinate with values between 1 and 10
+    const coordinate = [];
+    for (let i = 0; i < 2; i += 1) {
+      coordinate.push(Math.floor(Math.random() * 10 + 1));
+    }
+    return coordinate;
+  };
+
+  // const generateRandomCoordinates = (ships) => {
+  //   const coordinates = [];
+  //   // Generate an array of unique coordinates
+  //   // The array must equal to the amount of ships
+  //   let i = 0;
+  //   while (i < ships.length) {
+  //     const [x, y] = generateRandomCoordinate();
+  //     const orientation = Math.floor(Math.random() * 2) === 1;
+  //     const shipCoordinates = generateShipCoordinates([x, y])
+  //     const isValidCoordinate = shipCoordinates(checkBoard);
+  //     if (!coordinates.find(([a, b]) => a === x && b === y)) {
+  //       coordinates.push([x, y]);
+  //       console.log(ships[i]);
+  //       i += 1;
+  //     } else {
+  //       continue;
+  //     }
+  //   }
+  //   return coordinates;
+  // };
+
   const generateShipCoordinates = ([x, y], orientation, shipLength) => {
-    const coordinates = [[x, y]];
+    const coordinates = [];
 
     if (orientation) {
       // Vertical
@@ -98,8 +139,9 @@ export default () => {
     });
   };
 
-  const memo = [];
-  const placeShip = (coordinates, shipLength, orientation, id, isDragging) => {
+  const placeShip = (coordinates, shipLength, orientation, isDragging, isRotating, id) => {
+    // How many parameters is too much?
+
     // Be able to place ships at specific coordinates by calling the ship factory function.
     // Ship must fit on board based on coordinates
     //  What if ship can be rotated?
@@ -149,18 +191,22 @@ export default () => {
       return checkBoard(coordinate, id);
     });
 
+    console.log(...shipCoordinates);
+    console.log(isValidCoordinates);
     if (isValidCoordinates && !isDragging) {
       const newShip = Ship(shipLength, id);
       // Check if x and y are within the board's size
       // Check if there is a ship at x and y
 
-      const isShipOnBoard = memo.some((cell) => cell.id === id);
+      const isShipOnBoard = memo.some((cell) => cell.id === id && id !== undefined);
       if (isShipOnBoard) {
         for (let i = 0; i < memo.length; i += 1) {
           if (memo[i].id === id) {
             const { row, col } = memo[i];
+            console.log(`row: ${row} | col: ${col}`);
             board[row][col] = Cell();
             memo.splice(i, 1);
+            i -= 1;
           }
         }
       }
@@ -180,15 +226,45 @@ export default () => {
         }
       }
 
-      // Pubsub publish something...(?)
-      pubSub.publish('drop', false, true);
-    } else if (isValidCoordinates && isDragging) {
+      if (isRotating) {
+        pubSub.publish('rotate', true);
+      } else {
+        pubSub.publish('drop', false, true);
+      }
+    } else if (isValidCoordinates && isDragging && !isRotating) {
       console.log('dragging');
       pubSub.publish('drop', true, true);
-    } else if (!isValidCoordinates && isDragging) {
+    } else if (!isValidCoordinates && isDragging && !isRotating) {
       console.log(`there is a ship on or near coordinates`);
       pubSub.publish('drop', true, false);
+    } else if (!isValidCoordinates && !isDragging && isRotating) {
+      console.log(`cannot rotate`);
+      pubSub.publish('rotate', false);
     }
+  };
+
+  const placeShipsRandom = () => {
+    const ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
+    const coordinates = [];
+    let i = 0;
+    while (i < ships.length) {
+      // generateRandomCoordinate()
+      const [x, y] = generateRandomCoordinate();
+      const shipCoordinates = generateShipCoordinates([x, y]);
+      const isValidCoordinate = shipCoordinates.every(checkBoard);
+      if (!coordinates.find(([a, b]) => a === x && b === y) && isValidCoordinate) {
+        const orientation = Math.floor(Math.random() * 2) === 1;
+        placeShip([x, y], ships[i], orientation, false, false, generateUUID());
+        coordinates.push([x, y]);
+        console.log(ships[i]);
+        i += 1;
+      } else {
+        continue;
+      }
+    }
+    console.log(coordinates);
+    console.log(board);
+    // placeShip(coordinates, shipLength, orientation, isDragging, isRotate, id)
   };
 
   const shots = [];
@@ -231,8 +307,10 @@ export default () => {
   return {
     receiveAttack,
     placeShip,
+    placeShipsRandom,
     getStatus,
     getBoardCell,
+    clearBoard,
     get board() {
       return board;
     },

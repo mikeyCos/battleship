@@ -1,8 +1,23 @@
 # Changelog
 ---
-
-### 30 MAR 2024
+### 02 APR 2024
 - 
+---
+### 01 APR 2024
+- Added a `isRotating` parameter to the `placeShip` method in the `gameboard` object.
+- Added a `rotate` subscriber to be published from the `placeShip` method.
+- Created `placeShipsRandom` method in the `gameboard` object; currently, does not work as intended.
+- If there is a ship in the way of another ship to rotate, a `rotate_error` class is added and removed. 
+---
+### 31 MAR 2024
+- Created a `this.dragTimer` property that references a `timeoutID`, and the `rotateHandler` will call `clearTimeout` with `this.dragTimer`.
+- Ships can be rotated on the two-dimensional array representing the gameboard.
+- Ships will not rotate when they are in port.
+- The `rotateHandler` is supposed to run only one time; the option `once: true` is passed in while adding the event.
+---
+### 30 MAR 2024
+- Updated `gameboard.test` to accommodate `placeShip` changes.
+- Imported `crypto` in `gameboard.test` module to call `crypto.randomUUID()`.
 ---
 ### 29 MAR 2024
 - If a ship already exists on the gameboard, it will be removed then readded to the gameboard either to it's original or new location.

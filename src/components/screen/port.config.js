@@ -28,7 +28,6 @@ export default [
                 element: 'div',
                 attributes: {
                   class: 'ship_box',
-                  // draggable: 'true',
                   ['data-id']: '',
                   ['data-length']: '4',
                   ['data-orientation']: 'h',
@@ -238,6 +237,36 @@ export default [
                   ['data-orientation']: 'h',
                   style: 'width: 2em; height: 2em;',
                 },
+              },
+            ],
+          },
+        ],
+      },
+      {
+        element: 'div',
+        attributes: {
+          class: 'btns_container',
+        },
+        children: [
+          {
+            element: 'div',
+            attributes: {
+              class: 'reset',
+            },
+            children: [
+              {
+                element: 'button',
+                attributes: {
+                  class: 'reset_btn',
+                },
+                children: [
+                  {
+                    element: 'span',
+                    attributes: {
+                      textContent: 'Reset',
+                    },
+                  },
+                ],
               },
             ],
           },

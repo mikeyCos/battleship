@@ -1,24 +1,24 @@
-#board_container {
+#boards_container {
   margin-top: 4em;
   display: flex;
   gap: 8rem;
   user-select: none;
 }
 
-#board_container > * > .board > * {
+#boards_container > * > .board > * {
   display: flex;
 }
 
-#board_container > *.wait > *:not(.game_start) {
+#boards_container > *.wait > *:not(.game_start) {
   opacity: 0.4;
 }
 
-#board_container > * > .board > * > button {
+#boards_container > * > .board > * > button {
   cursor: pointer;
   border: none;
 }
 
-#board_container > *:not(.wait) > * > * > .cell > .cell_content > .ship {
+#boards_container > *:not(.wait) > * > * > .cell > .cell_content > .ship {
   background-color: transparent;
 }
 
@@ -63,11 +63,11 @@
 }
 
 /* #board_container > *:not(.wait) > .board > .board_row > .cell.hit > .cell_content > .ship, */
-#board_container > * > .board > * > .cell.hit > .cell_content > .ship {
+#boards_container > * > .board > * > .cell.hit > .cell_content > .ship {
   background-color: red;
 }
 
-#board_container > * > .board > * > .cell.miss > .cell_content {
+#boards_container > * > .board > * > .cell.miss > .cell_content {
   background-color: grey;
 }
 
