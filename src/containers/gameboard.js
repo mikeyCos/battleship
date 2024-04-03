@@ -5,6 +5,8 @@ import generateUUID from '../helpers/generateUUID';
 export default () => {
   // Keep track of missed attacks so they can display them properly.
   // Be able to report whether or not all of their ships have been sunk.
+  // The memo array stores a Cell's references that resemble where ships have been placed.
+  // The memo array is used in the methods clearBoard and placeShip
   const memo = [];
   const Cell = (ship) => {
     return ship
@@ -67,27 +69,6 @@ export default () => {
     }
     return coordinate;
   };
-
-  // const generateRandomCoordinates = (ships) => {
-  //   const coordinates = [];
-  //   // Generate an array of unique coordinates
-  //   // The array must equal to the amount of ships
-  //   let i = 0;
-  //   while (i < ships.length) {
-  //     const [x, y] = generateRandomCoordinate();
-  //     const orientation = Math.floor(Math.random() * 2) === 1;
-  //     const shipCoordinates = generateShipCoordinates([x, y])
-  //     const isValidCoordinate = shipCoordinates(checkBoard);
-  //     if (!coordinates.find(([a, b]) => a === x && b === y)) {
-  //       coordinates.push([x, y]);
-  //       console.log(ships[i]);
-  //       i += 1;
-  //     } else {
-  //       continue;
-  //     }
-  //   }
-  //   return coordinates;
-  // };
 
   const generateShipCoordinates = ([x, y], orientation, shipLength) => {
     const coordinates = [];
@@ -159,32 +140,6 @@ export default () => {
     // What if there is a ship already at given coordinates?
     // A ship MUST be 1 coordinate away from another ship
 
-    // If id exists on board
-    //  Find the cells with ship.id === id
-    //  Replace cells with Cell()
-    // memo = memo.filter((cell) => {
-    //   if (cell.id === id) {
-    //     const { row, col } = cell;
-    //     board[row][col] = Cell();
-    //     return false;
-    //   } else {
-    //     return true;
-    //   }
-    // });
-
-    // const isShipOnBoard = memo.some((cell) => cell.id === id);
-    // if (isShipOnBoard) {
-    //   for (let i = 0; i < memo.length; i += 1) {
-    //     if (memo[i].id === id) {
-    //       console.log(`memo[i].id: ${memo[i].id}`);
-    //       console.log(`id: ${id}`);
-    //       const { row, col } = memo[i];
-    //       board[row][col] = Cell();
-    //       memo.splice(i, 1);
-    //     }
-    //   }
-    // }
-
     const [x, y] = parseCoordinate(coordinates);
     const shipCoordinates = generateShipCoordinates([x, y], orientation, shipLength);
     const isValidCoordinates = shipCoordinates.every((coordinate) => {
@@ -227,6 +182,7 @@ export default () => {
       }
 
       if (isRotating) {
+        console.log(`rotating`);
         pubSub.publish('rotate', true);
       } else {
         pubSub.publish('drop', false, true);
@@ -248,23 +204,18 @@ export default () => {
     const coordinates = [];
     let i = 0;
     while (i < ships.length) {
-      // generateRandomCoordinate()
       const [x, y] = generateRandomCoordinate();
-      const shipCoordinates = generateShipCoordinates([x, y]);
+      const [parsedX, parsedY] = parseCoordinate([x, y]);
+      const orientation = Math.floor(Math.random() * 2) === 1;
+      const shipLength = ships[i];
+      const shipCoordinates = generateShipCoordinates([parsedX, parsedY], orientation, shipLength);
       const isValidCoordinate = shipCoordinates.every(checkBoard);
       if (!coordinates.find(([a, b]) => a === x && b === y) && isValidCoordinate) {
-        const orientation = Math.floor(Math.random() * 2) === 1;
-        placeShip([x, y], ships[i], orientation, false, false, generateUUID());
+        placeShip([x, y], shipLength, orientation, false, false, generateUUID());
         coordinates.push([x, y]);
-        console.log(ships[i]);
         i += 1;
-      } else {
-        continue;
       }
     }
-    console.log(coordinates);
-    console.log(board);
-    // placeShip(coordinates, shipLength, orientation, isDragging, isRotate, id)
   };
 
   const shots = [];

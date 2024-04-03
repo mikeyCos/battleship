@@ -3,7 +3,8 @@ import createElement from '../../helpers/createElement';
 import pubSub from '../../containers/pubSub';
 import composeGame from './composeGame';
 import playGame from './playGame';
-import portConfig from './port.config';
+import port from '../port/port';
+import board from '../board/board';
 import '../../styles/screenController.css';
 import '../../styles/port.css';
 
@@ -27,14 +28,13 @@ export default (mode) => {
       pubSub.publish('notify', 'Place ships');
       this.updateGameState(composeGame);
       this.start = this.start.bind(this);
-      this.renderShip = this.renderShip.bind(this);
     },
     updateGameState(callback) {
       Object.assign(this, callback());
     },
     cacheDOM(element) {
       this.gameContainer = element;
-      this.boardContainer = element.querySelector('#board_container');
+      this.boardContainer = element.querySelector('#boards_container');
       this.playerOneContainer = element.querySelector('.player_one');
       this.playerTwoContainer = element.querySelector('.player_two');
       this.playerOneBoard = element.querySelector('.player_one > .board');
@@ -42,31 +42,20 @@ export default (mode) => {
       this.playerOneHeader = element.querySelector('.player_one > h4');
       this.playerTwoHeader = element.querySelector('.player_two > h4');
       this.startBtn = element.querySelector('.game_start_btn');
-      this.playerOneCells = element.querySelectorAll('.player_one > .board > .cell');
-      this.playerTwoCells = element.querySelectorAll('.player_two > .board > .cell');
-
-      this.ships = element.querySelectorAll('.ship_box');
     },
     bindEvents() {
       if (!this.gameReady) {
-        this.dragStartHandler = this.dragStartHandler.bind(this);
-        this.dragEndHandler = this.dragEndHandler.bind(this);
-        this.dragMoveHandler = this.dragMoveHandler.bind(this);
-        this.dropHandler = this.dropHandler.bind(this);
-        this.rotateHandler = this.rotateHandler.bind(this);
-        this.reset = this.reset.bind(this);
-
-        this.ships.forEach((ship) => {
-          // https://stackoverflow.com/questions/40464690/want-to-perform-different-task-on-mousedown-and-click-event
-          ship.addEventListener('mousedown', this.dragStartHandler);
-        });
+        // this.reset = this.reset.bind(this);
+        // this.ships.forEach((ship) => {
+        // https://stackoverflow.com/questions/40464690/want-to-perform-different-task-on-mousedown-and-click-event
+        // ship.addEventListener('mousedown', this.dragStartHandler);
+        // });
 
         if (!this.mode) {
           this.startBtn.addEventListener('click', this.start);
         }
-        pubSub.subscribe('drop', this.dropHandler);
-        pubSub.subscribe('rotate', this.rotateHandler);
       }
+
       if (this.gameReady) {
         this.updateGameState(playGame);
         this.renderAttack = this.renderAttack.bind(this);
@@ -100,8 +89,8 @@ export default (mode) => {
       gameStartContainer.classList.add('game_start');
       gameStartBtn.classList.add('game_start_btn');
       // Renders players' boards
-      playerOneContainer.appendChild(this.renderBoard(this.boards.playerOne));
-      playerTwoContainer.appendChild(this.renderBoard(this.boards.playerTwo));
+      playerOneContainer.appendChild(board(this.boards.playerOne));
+      playerTwoContainer.appendChild(board(this.boards.playerTwo));
       playerOneContainer.appendChild(playerOneHeader);
       playerTwoContainer.appendChild(playerTwoHeader);
       boardsContainer.appendChild(playerOneContainer);
@@ -109,20 +98,9 @@ export default (mode) => {
       gameStartBtn.appendChild(gameStartBtnText);
       gameStartContainer.appendChild(gameStartBtn);
       if (!this.gameReady) {
-        portConfig.forEach((port) => {
-          const playerOnePort = createElement(port.element);
-          playerOnePort.setAttributes(port.attributes);
-          playerOnePort.setChildren(port.children);
-          playerOneContainer.appendChild(playerOnePort);
-        });
-
+        playerOneContainer.appendChild(port(this.game, this.boards));
         if (this.mode) {
-          portConfig.forEach((port) => {
-            const playerTwoPort = createElement(port.element);
-            playerTwoPort.setAttributes(port.attributes);
-            playerTwoPort.setChildren(port.children);
-            playerTwoContainer.appendChild(playerTwoPort);
-          });
+          playerTwoContainer.appendChild(port(this.game, this.boards));
         } else {
           playerTwoContainer.classList.add('wait');
           playerTwoContainer.appendChild(gameStartContainer);
@@ -134,55 +112,6 @@ export default (mode) => {
       this.bindEvents();
       if (!this.gameReady) return gameContainer;
       // Does having this if statement matter?
-    },
-    renderBoard(board) {
-      const playerBoard = createElement('div');
-      playerBoard.classList.add('board');
-      board.forEach((row, y) => {
-        const boardRow = createElement('div');
-        boardRow.classList.add('board_row');
-        row.forEach((cell, x) => {
-          const cellBtn = createElement('button');
-          cellBtn.setAttributes({
-            class: 'cell',
-            ['data-x']: x + 1,
-            ['data-y']: row.length - y,
-          });
-          // Need to show only activePlayer's ships
-          // Need to hide the opponent's ships when activePlayer changes
-          const cellContent = createElement('div');
-          if (cell.ship) {
-            // Problem, allows opponents to cheat in a browser developer tools
-            const cellShip = createElement('div');
-            cellShip.classList.add('ship');
-            cellContent.appendChild(cellShip);
-          }
-          cellContent.classList.add('cell_content');
-          cellBtn.appendChild(cellContent);
-          // Need to check for left and top edges of board
-          // To create row and column labels
-          if (x === 0 || y === 0) {
-            const rowMarker = createElement('div');
-            const colMarker = createElement('div');
-            if (x === 0) {
-              rowMarker.setAttributes({ class: 'row_marker', textContent: `${y + 1}` });
-              cellContent.appendChild(rowMarker);
-            }
-
-            if (y === 0) {
-              colMarker.setAttributes({
-                class: 'col_marker',
-                textContent: `${String.fromCharCode(65 + x)}`,
-              });
-              cellContent.appendChild(colMarker);
-            }
-          }
-          boardRow.appendChild(cellBtn);
-          // playerBoard.appendChild(cellBtn);
-        });
-        playerBoard.appendChild(boardRow);
-      });
-      return playerBoard;
     },
   };
   screenController.init();

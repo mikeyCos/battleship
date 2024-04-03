@@ -1,7 +1,13 @@
 # Changelog
 ---
-### 02 APR 2024
+### 03 APR 2024
 - 
+---
+### 02 APR 2024
+- Created `board`/`port` modules.
+- The `board` module is responsible for rendering a board based on the parameter, a two-dimensional array representing a gameboard.
+- The `port` module is responsible for rendering and controller a board's port; controls ship drag and drop behaviors.
+- The button of class `.reset_btn` will rerender a board and port.
 ---
 ### 01 APR 2024
 - Added a `isRotating` parameter to the `placeShip` method in the `gameboard` object.
