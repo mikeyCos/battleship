@@ -42,3 +42,19 @@
 .rotate_error {
   border-color: red;
 }
+
+.btns_container {
+  display: flex;
+}
+
+.reset_btn.inactive {
+  pointer-events: none;
+}
+
+.reset_btn.inactive > span {
+  opacity: 0.5;
+}
+
+.ready_btn.inactive {
+  /* display: none; */
+}

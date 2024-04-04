@@ -1,21 +1,29 @@
-import pubSub from '../../containers/pubSub';
-import board from '../board/board';
-import port from '../port/port';
-
 export default (state) => ({
-  offSetX: 0,
-  offSetY: 0,
+  playersReady: [],
   init() {
     console.log('init running from composeGame');
+  },
+  foo(playerReady) {
+    const isPlayerReady = this.playersReady.some((player) => player === playerReady);
+    if (!isPlayerReady) {
+      this.playersReady.push(playerReady);
+    } else {
+      const index = this.playersReady.indexOf(isPlayerReady);
+      this.playersReady.splice(index, 1);
+    }
+    console.log(this.playersReady);
+    if (this.playersReady.length === 2 && this.startBtn.classList.contains('inactive')) {
+      this.startBtn.classList.remove('inactive');
+    } else {
+      this.startBtn.classList.add('inactive');
+    }
   },
   start(e) {
     // Set this.gameReady to true
     // Publish something...?
     // Reveal player two's board
     if (!this.mode) {
-      // this.boards.playerTwo.placeShipsRandom();
       this.game.playerTwo.board.placeShipsRandom();
-      console.log(this.game.playerTwo.board.board);
     }
     this.gameReady = true;
     this.render();

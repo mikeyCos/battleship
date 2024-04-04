@@ -28,17 +28,17 @@
   width: min-content;
 }
 
-.player_two > .game_start {
+.game_start_btn.inactive {
   display: none;
 }
 
-.player_two.wait > .game_start {
+.game_start_btn {
   display: block;
   position: absolute;
   top: 20%;
 }
 
-.game_start > button {
+.game_start_btn > button {
   font-size: 4rem;
 }
 

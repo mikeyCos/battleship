@@ -47,7 +47,6 @@ export default () => {
   const clearBoard = () => {
     for (let i = 0; i < memo.length; i += 1) {
       const { row, col } = memo[i];
-      console.log(`row: ${row} | col: ${col}`);
       board[row][col] = Cell();
       memo.splice(i, 1);
       i -= 1;
@@ -120,7 +119,16 @@ export default () => {
     });
   };
 
-  const placeShip = (coordinates, shipLength, orientation, isDragging, isRotating, id) => {
+  const placeShip = (
+    coordinates,
+    shipLength,
+    orientation,
+    isDragging,
+    isRotating,
+    id,
+    dropSubscriber,
+    rotateSubscriber,
+  ) => {
     // How many parameters is too much?
 
     // Be able to place ships at specific coordinates by calling the ship factory function.
@@ -146,8 +154,6 @@ export default () => {
       return checkBoard(coordinate, id);
     });
 
-    console.log(...shipCoordinates);
-    console.log(isValidCoordinates);
     if (isValidCoordinates && !isDragging) {
       const newShip = Ship(shipLength, id);
       // Check if x and y are within the board's size
@@ -158,7 +164,6 @@ export default () => {
         for (let i = 0; i < memo.length; i += 1) {
           if (memo[i].id === id) {
             const { row, col } = memo[i];
-            console.log(`row: ${row} | col: ${col}`);
             board[row][col] = Cell();
             memo.splice(i, 1);
             i -= 1;
@@ -174,7 +179,6 @@ export default () => {
         }
       } else {
         // Horizontal
-        // board[x].fill(newShip, y, y + newShip.length);
         for (let i = y; i < y + newShip.length; i += 1) {
           board[x][i] = Cell(newShip);
           memo.push({ row: x, col: i, id });
@@ -183,19 +187,19 @@ export default () => {
 
       if (isRotating) {
         console.log(`rotating`);
-        pubSub.publish('rotate', true);
+        pubSub.publish(rotateSubscriber, true);
       } else {
-        pubSub.publish('drop', false, true);
+        pubSub.publish(dropSubscriber, false, true);
       }
     } else if (isValidCoordinates && isDragging && !isRotating) {
       console.log('dragging');
-      pubSub.publish('drop', true, true);
+      pubSub.publish(dropSubscriber, true, true);
     } else if (!isValidCoordinates && isDragging && !isRotating) {
       console.log(`there is a ship on or near coordinates`);
-      pubSub.publish('drop', true, false);
+      pubSub.publish(dropSubscriber, true, false);
     } else if (!isValidCoordinates && !isDragging && isRotating) {
       console.log(`cannot rotate`);
-      pubSub.publish('rotate', false);
+      pubSub.publish(rotateSubscriber, false);
     }
   };
 
@@ -203,6 +207,7 @@ export default () => {
     const ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
     const coordinates = [];
     let i = 0;
+
     while (i < ships.length) {
       const [x, y] = generateRandomCoordinate();
       const [parsedX, parsedY] = parseCoordinate([x, y]);
@@ -267,48 +272,3 @@ export default () => {
     },
   };
 };
-
-const numbers = [
-  [
-    {
-      num: {
-        value: 1,
-      },
-    },
-    {
-      num: {
-        value: 2,
-      },
-    },
-    {
-      num: {
-        value: 3,
-      },
-    },
-    {
-      num: {
-        value: 1,
-      },
-    },
-  ],
-  [
-    {
-      num: {
-        value: 8,
-      },
-    },
-    {
-      num: {
-        value: 1,
-      },
-    },
-  ],
-];
-
-const nar = { num: { value: 1987398789273 } };
-const memo = [];
-// numbers[0][4] = nar;
-// const ref = numbers[0][4];
-// memo.push(ref);
-// memo[0] = {};
-memo.push({ y: 0, x: 4 });

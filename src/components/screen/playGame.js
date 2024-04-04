@@ -1,5 +1,4 @@
 import pubSub from '../../containers/pubSub';
-import composeGame from './composeGame';
 
 export default (state) => ({
   init() {

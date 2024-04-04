@@ -242,19 +242,64 @@ export default {
         {
           element: 'div',
           attributes: {
-            class: 'reset inactive',
+            class: 'reset',
           },
           children: [
             {
               element: 'button',
               attributes: {
-                class: 'reset_btn',
+                class: 'reset_btn inactive',
               },
               children: [
                 {
                   element: 'span',
                   attributes: {
                     textContent: 'Reset',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          element: 'div',
+          attributes: {
+            class: 'random',
+          },
+          children: [
+            {
+              element: 'button',
+              attributes: {
+                class: 'random_btn',
+              },
+              children: [
+                {
+                  element: 'span',
+                  attributes: {
+                    textContent: 'Randomize',
+                  },
+                },
+              ],
+            },
+          ],
+        },
+        {
+          element: 'div',
+          attributes: {
+            class: 'ready',
+          },
+          children: [
+            {
+              element: 'button',
+              attributes: {
+                class: 'ready_btn inactive',
+                ['data-ready']: true,
+              },
+              children: [
+                {
+                  element: 'span',
+                  attributes: {
+                    textContent: 'Ready',
                   },
                 },
               ],

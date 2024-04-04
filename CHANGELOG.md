@@ -1,7 +1,14 @@
 # Changelog
 ---
-### 03 APR 2024
+### 04 APR 2024
 - 
+---
+### 03 APR 2024
+- Added the following subscribers: `dropSubscriber`/`rotateSubscriber`.
+- Ships can only be dropped over their respective boards; for example, player one ships can only be dropped on player one's board.
+- Currently, the randomize button does not work.
+- Human versus human mode will reveal a start button as long as both players are ready.
+- The ready buttons both for players will have `Ready` when a player is not ready and `Unready` when they are ready.
 ---
 ### 02 APR 2024
 - Created `board`/`port` modules.
