@@ -29,8 +29,8 @@ export default () => {
 
       return notificationsContainer;
     },
-    updateNotification(something) {
-      this.notificationMessage.textContent = something;
+    updateNotification(text) {
+      this.notificationMessage.textContent = text;
     },
   };
 

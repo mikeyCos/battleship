@@ -41,6 +41,7 @@
 
 .rotate_error {
   border-color: red;
+  animation: linear 0.005s infinite shake;
 }
 
 .btns_container {
@@ -55,6 +56,24 @@
   opacity: 0.5;
 }
 
+.random_btn {
+  display: none;
+}
+
 .ready_btn.inactive {
-  /* display: none; */
+  display: none;
+}
+
+@keyframes shake {
+  0% {
+    left: -5px;
+  }
+
+  50% {
+    left: 0px;
+  }
+
+  100% {
+    left: 5px;
+  }
 }

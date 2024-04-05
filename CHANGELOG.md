@@ -1,7 +1,13 @@
 # Changelog
 ---
 ### 04 APR 2024
-- 
+- Rewrote and renamed `foo` method in `composeGame` module to `isGameReady`.
+- The `isGameReady` method now takes two parameters, `player`/`isReady`.
+- The `isGameReady` checks for mode.
+- The computer's board is hidden on load but revealed when human player has placed all their ships.
+- In human versus human mode, both players can reset their boards and players can hide/unhide their respective boards once all ships are on their board.
+- When a ship is sunk a `done` class is added to the button elements containing the ship that has been sunk.
+- Experimented and added a variety of CSS properties to ships and their surrounding elements.
 ---
 ### 03 APR 2024
 - Added the following subscribers: `dropSubscriber`/`rotateSubscriber`.

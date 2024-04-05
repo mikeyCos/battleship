@@ -3,11 +3,12 @@ import portConfig from './port.config';
 import pubSub from '../../containers/pubSub';
 import board from '../board/board';
 
-export default (player, game) => {
+export default (player, game, mode) => {
   const port = {
     // Rename to portController or shipsController?
     player,
     game,
+    mode,
     init() {
       this.dragStartHandler = this.dragStartHandler.bind(this);
       this.dragEndHandler = this.dragEndHandler.bind(this);
@@ -36,9 +37,9 @@ export default (player, game) => {
         ship.addEventListener('mousedown', this.dragStartHandler);
       });
 
+      // this.readyEvent = new Event('click');
       this.resetBtn.addEventListener('click', this.resetHandler);
       this.readyBtn.addEventListener('click', this.readyHandler);
-
       pubSub.subscribe(this.dropSubscriber, this.dropHandler);
       pubSub.subscribe(this.rotateSubscriber, this.rotateHandler);
     },
@@ -47,11 +48,11 @@ export default (player, game) => {
       playerPort.setAttributes(portConfig.attributes);
       playerPort.setChildren(portConfig.children);
       this.cacheDOM(playerPort);
+      if (!this.mode) this.readyBtn.classList.add('inactive');
       this.bindEvents();
       return playerPort;
     },
     dragStartHandler(e) {
-      console.log('drag start');
       this.draggable = e.currentTarget;
       this.dragStart = e.target.parentElement;
       this.dropPlaceholder = this.draggable.cloneNode();
@@ -60,7 +61,6 @@ export default (player, game) => {
       this.offSetY = e.clientY;
 
       this.dragTimer = setTimeout(() => {
-        console.log(`adding mousemove and mouseup events`);
         document.addEventListener('mousemove', this.dragMoveHandler);
         document.addEventListener('mouseup', this.dragEndHandler);
         this.draggable.removeEventListener('click', this.rotateHandler);
@@ -69,8 +69,6 @@ export default (player, game) => {
       this.draggable.addEventListener('click', this.rotateHandler, { once: true });
     },
     dragMoveHandler(e) {
-      // console.clear();
-      console.log('drag move');
       this.draggable.classList.add('dragging');
       this.dragStart.classList.add('dragstart');
 
@@ -88,7 +86,6 @@ export default (player, game) => {
       const board = document
         .elementsFromPoint(left + offSet, top + offSet)
         .find((element) => element.classList.contains('board'));
-      // // console.log(board ? board.parentElement : player);
       const isPlayerShip = board ? board.parentElement.contains(this.port) : false;
       if (cell && isPlayerShip) {
         // Dragging over drop zone
@@ -124,7 +121,6 @@ export default (player, game) => {
       }
     },
     dragEndHandler(e) {
-      console.log('drag end');
       this.draggable.style.left = `0px`;
       this.draggable.style.top = `0px`;
 
@@ -134,7 +130,6 @@ export default (player, game) => {
 
       document.removeEventListener('mousemove', this.dragMoveHandler);
       document.removeEventListener('mouseup', this.dragEndHandler);
-      // console.log(this.game.playerOneBoard.board);
       if (this.cell) {
         // If user has stopped dragging over the drop zone
         const x = parseInt(this.cell.dataset.x);
@@ -162,7 +157,6 @@ export default (player, game) => {
       }
     },
     dropHandler(isDragging, isValidDrop) {
-      // console.log('drag drop');
       if (this.cell) {
         const cellContent = this.cell.firstChild;
         if (isDragging && isValidDrop) {
@@ -171,7 +165,6 @@ export default (player, game) => {
           this.draggable.classList.add('ship_box_transparent');
         } else if (!isDragging && isValidDrop) {
           // If user has stopped dragging over the drop zone
-          console.log(`dragging ended over the drop zone`);
           cellContent.appendChild(this.draggable);
           this.dropPlaceholder.remove();
           this.draggable.style.left = `-4%`;
@@ -180,9 +173,15 @@ export default (player, game) => {
             this.resetBtn.classList.remove('inactive');
           }
 
-          if (this.isPortsEmpty()) {
-            console.log(`ALL SHIPS ARE PLACED ON BOARD`);
-            this.readyBtn.classList.remove('inactive');
+          if (this.isPortsEmpty() && !this.gameReady) {
+            this.gameReady = true;
+            this.readyBtn.click();
+            if (this.mode) this.readyBtn.classList.remove('inactive');
+            [...this.port.children].forEach((child) => {
+              if (!child.classList.contains('btns_container')) {
+                child.style.display = 'none';
+              }
+            });
           }
         } else if (isDragging && !isValidDrop) {
           // If user is dragging over an invalid drop
@@ -191,10 +190,6 @@ export default (player, game) => {
             this.draggable.classList.remove('ship_box_transparent');
           }
         }
-      } else if (!this.cell && isDragging === false) {
-        // If user has stopped dragging outside the drop zone
-        // Draggable needs to append back to this.dragStart
-        console.log(`dragging ended outside the drop zone`);
       }
     },
     rotateHandler(e) {
@@ -207,7 +202,6 @@ export default (player, game) => {
         ) {
           // If ship is not being dragged and it is not in port
           e.preventDefault();
-          console.log(`rotateHandler being called`);
           this.cell = this.dragStart.parentElement;
           const x = parseInt(this.cell.dataset.x);
           const y = parseInt(this.cell.dataset.y);
@@ -227,7 +221,6 @@ export default (player, game) => {
         }
         e.stopImmediatePropagation();
       } else if (e === true && parseInt(this.draggable.dataset.length) > 1) {
-        console.log(`rotateHandler setting styles`);
         this.draggable.dataset.orientation = newOrientation ? 'v' : 'h';
         const newWidth = newOrientation ? this.draggable.style.width : this.draggable.style.height;
         const newHeight = newOrientation ? this.draggable.style.height : this.draggable.style.width;
@@ -242,6 +235,7 @@ export default (player, game) => {
     },
     resetHandler(e) {
       // Clears board
+      this.gameReady = false;
       const playerBoard = this.resetBtn.closest(
         this.resetBtn.closest('.player_one') ? '.player_one' : '.player_two',
       ).firstChild;
@@ -249,17 +243,23 @@ export default (player, game) => {
       this.playerBoard.clearBoard();
       this.port.replaceWith(this.render());
       playerBoard.replaceWith(board(this.playerBoard.board));
+      pubSub.publish('playerReady', this.player);
     },
     isPortsEmpty() {
       return [...this.ports].every((port) => port.firstChild === null);
     },
     readyHandler(e) {
-      console.log(e.currentTarget);
-      const isReady = e.currentTarget.dataset.ready === 'true';
+      const isReady = e.currentTarget.dataset.ready !== 'true';
       e.currentTarget.textContent = isReady ? 'Unready' : 'Ready';
-      e.currentTarget.dataset.ready = !isReady;
-      console.log(this.player);
-      pubSub.publish('playerReady', this.player);
+      e.currentTarget.dataset.ready = isReady;
+      if (this.mode) this.hideShips(isReady);
+      pubSub.publish('playerReady', this.player, isReady);
+    },
+    hideShips(isReady) {
+      this.ships.forEach((ship) => {
+        const display = isReady ? 'none' : 'block';
+        ship.style.display = display;
+      });
     },
   };
 

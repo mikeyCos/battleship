@@ -293,7 +293,7 @@ export default {
               element: 'button',
               attributes: {
                 class: 'ready_btn inactive',
-                ['data-ready']: true,
+                ['data-ready']: false,
               },
               children: [
                 {

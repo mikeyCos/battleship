@@ -26,24 +26,7 @@ export default () => {
         };
   };
   const board = new Array(10).fill().map(() => new Array(10).fill().map(() => Cell()));
-  // 10 x 10 grid
-  // const board = new Array(10).fill().map(() => new Array(10).fill(undefined));
-  /*
-  [
-        1     2     3     4     5     6     7     8     9     10
-  10  [null, null, null, null, null, null, null, null, null, null], 0
-  09  [null, null, null, null, null, null, null, null, null, null], 1
-  08  [null, null, null, null, null, null, null, null, null, null], 2
-  07  [null, null, null, null, null, null, null, null, null, null], 3
-  06  [null, null, null, null, null, null, null, null, null, null], 4
-  05  [null, null, null, null, null, null, null, null, null, null], 5
-  04  [null, null, null, null, null, null, null, null, null, null], 6
-  03  [null, null, null, null, null, null, null, null, null, null], 7
-  02  [null, null, null, null, null, null, null, null, null, null], 8
-  01  [null, null, null, null, null, null, null, null, null, null], 9
-        0     1      2    3     4     5     6     7     8     9
-  ]
-  */
+
   const clearBoard = () => {
     for (let i = 0; i < memo.length; i += 1) {
       const { row, col } = memo[i];
@@ -60,6 +43,10 @@ export default () => {
     return [board.length - y, x - 1];
   };
 
+  const unparseCoordinate = ([x, y]) => {
+    return [y + 1, board.length - x];
+  };
+
   const generateRandomCoordinate = () => {
     // Returns random coordinate with values between 1 and 10
     const coordinate = [];
@@ -74,13 +61,11 @@ export default () => {
 
     if (orientation) {
       // Vertical
-      // [5, 3] in 2d array terms => [7][4], [8][4], [9][4]
       for (let i = x; i < x + shipLength; i += 1) {
         coordinates.push([i, y]);
       }
     } else {
       // Horizontal
-      // [5, 3] in 2d array terms => [7][4], [7][5], [7][6]
       for (let i = y; i < y + shipLength; i += 1) {
         coordinates.push([x, i]);
       }
@@ -131,23 +116,6 @@ export default () => {
   ) => {
     // How many parameters is too much?
 
-    // Be able to place ships at specific coordinates by calling the ship factory function.
-    // Ship must fit on board based on coordinates
-    //  What if ship can be rotated?
-    // If ship is horizontal
-    //  Involves columns
-    // If ship is vertical
-    //  Involves rows
-    // For example, if ship is a length of 5 AND horizontal
-    //  [x, y] => [5, 3] => placeShip([5, 3])
-    //  Ship should be on board from [5, 3] to [9, 3]
-    //  Based on array => board[7][4] to board[7][8]
-    // What if coordinates are based on draggable ships?
-    //  How to determine if the ship will fit on the board?
-    //  How to handle if the ship does not fit on the board?
-    // What if there is a ship already at given coordinates?
-    // A ship MUST be 1 coordinate away from another ship
-
     const [x, y] = parseCoordinate(coordinates);
     const shipCoordinates = generateShipCoordinates([x, y], orientation, shipLength);
     const isValidCoordinates = shipCoordinates.every((coordinate) => {
@@ -186,19 +154,18 @@ export default () => {
       }
 
       if (isRotating) {
-        console.log(`rotating`);
         pubSub.publish(rotateSubscriber, true);
       } else {
         pubSub.publish(dropSubscriber, false, true);
       }
     } else if (isValidCoordinates && isDragging && !isRotating) {
-      console.log('dragging');
+      // Draggable still dragging and valid placement
       pubSub.publish(dropSubscriber, true, true);
     } else if (!isValidCoordinates && isDragging && !isRotating) {
-      console.log(`there is a ship on or near coordinates`);
+      // Draggable still dragging and invalid placement
       pubSub.publish(dropSubscriber, true, false);
     } else if (!isValidCoordinates && !isDragging && isRotating) {
-      console.log(`cannot rotate`);
+      // Draggable is not dragging, invalid placement, and fails to rotate
       pubSub.publish(rotateSubscriber, false);
     }
   };
@@ -234,18 +201,25 @@ export default () => {
     // Have a receiveAttack function that takes a pair of coordinates
     // Determines whether or not the attack hit a ship
     // Then sends the ‘hit’ function to the correct ship, or records the coordinates of the missed shot.
-    // Can I store the missed shots directly on the board?
-    // How to handle if a coordinate has already been attacked?
-    //  Throw an error?
-
     const cell = getBoardCell([x, y]);
     const isValidAttack = validateAttack(x, y);
 
     if (isValidAttack) {
       cell.attack();
       shots.push([x, y]);
-      // Publish to the screenController.renderAttack method?
       pubSub.publish('renderAttack', cell, [x, y]);
+      const ship = cell.ship;
+      if (ship && ship.isSunk()) {
+        // Need to find all coordinates for the ship
+        // const shipCoordinates = memo.filter((shipMemo) => shipMemo.id === ship.id);
+        const shipCoordinates = memo.reduce((accumulator, current) => {
+          if (current.id === ship.id) {
+            accumulator.push(unparseCoordinate([current.row, current.col]));
+          }
+          return accumulator;
+        }, []);
+        pubSub.publish('renderAttack', cell, shipCoordinates);
+      }
     }
   };
 

@@ -1,9 +1,7 @@
 import pubSub from '../../containers/pubSub';
 
 export default (state) => ({
-  init() {
-    console.log(`init running from playGame`);
-  },
+  init() {},
   unbindEvents() {
     this.playerOneBoard.removeEventListener('click', this.boardHandler);
     this.playerTwoBoard.removeEventListener('click', this.boardHandler);
@@ -19,16 +17,27 @@ export default (state) => ({
     ].flatMap((row) => [...row.children]);
     return board.find((btn) => btn.dataset.x == x && btn.dataset.y == y);
   },
-  renderAttack(cell, coordinate) {
-    const button = this.getButton(coordinate);
-    button.classList.add(cell.miss ? 'miss' : 'hit');
+  renderAttack(cell, coordinates) {
+    console.log(coordinates);
+    const isArray = coordinates.every((item) => Array.isArray(item));
+    if (isArray) {
+      coordinates.forEach((coordinate) => {
+        const button = this.getButton(coordinate);
+        console.log(button);
+        button.classList.add('done');
+      });
+    } else {
+      const button = this.getButton(coordinates);
+      button.classList.add(cell.miss ? 'miss' : 'hit');
+    }
+    // const button = this.getButton(coordinates);
+    // button.classList.add(cell.miss ? 'miss' : 'hit');
   },
   renderWait() {
     let notificationMessage = `Player one's turn.`;
     if (this.game.activePlayer === this.game.playerOne) {
       // If game.activePlayer is NOT playerOne
       // Put 'wait' class on the player one's container
-      console.log(`Player two attacks player one`);
       this.playerOneHeader.textContent = `Your grid`;
       this.playerTwoHeader.textContent = `Opponent's grid`;
       this.playerOneContainer.classList.add('wait');
@@ -36,7 +45,6 @@ export default (state) => ({
       this.playerOneBoard.removeEventListener('click', this.boardHandler);
       this.playerTwoBoard.addEventListener('click', this.boardHandler);
     } else {
-      console.log(`Player one attacks player two`);
       this.playerOneHeader.textContent = `Opponent's grid`;
       this.playerTwoHeader.textContent = `Your grid`;
       this.playerTwoContainer.classList.add('wait');
@@ -56,7 +64,6 @@ export default (state) => ({
   endGame(message) {
     this.unbindEvents();
     pubSub.publish('notify', message);
-    console.log(`game is over`);
   },
   boardHandler(e) {
     const btn = e.target.parentElement;

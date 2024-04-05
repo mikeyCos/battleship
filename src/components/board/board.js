@@ -18,6 +18,9 @@ export default (playerBoard) => {
           // Need to show only activePlayer's ships
           // Need to hide the opponent's ships when activePlayer changes
           const cellContent = createElement('div');
+          const blankWrapper = createElement('span');
+          blankWrapper.classList.add('blank_wrapper');
+          cellContent.appendChild(blankWrapper);
           if (cell.ship) {
             // Problem, allows opponents to cheat in a browser developer tools
             const cellShip = createElement('div');
