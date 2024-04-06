@@ -41,7 +41,7 @@ export default (mode) => {
       switchPlayers(activePlayer);
       pubSub.publish('renderWait');
     } else {
-      pubSub.publish('endGame', status.message);
+      pubSub.publish('endgame', status.player);
     }
   };
 
@@ -49,8 +49,8 @@ export default (mode) => {
     const status = { status: playerOneBoard.getStatus() || playerTwoBoard.getStatus() };
     if (status.status) {
       // Game is over
-      const message = playerOneBoard.getStatus() ? 'Player two won!' : 'Player one won!';
-      Object.assign(status, { message });
+      const player = playerOneBoard.getStatus() ? 'two' : 'one';
+      Object.assign(status, { player });
     }
     return status;
   };

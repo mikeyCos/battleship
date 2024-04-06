@@ -1,5 +1,16 @@
 # Changelog
 ---
+### 05 APR 2024
+- Created Git branch 'styling'.
+- Created a variety of custom CSS variables for `:root` selector in `app.css`
+- Added a variety of CSS properties throughout CSS files.
+- Notifications container position set to absolute.
+- During a game, players hovering over their board will get visual feedback for only empty cells; if a miss or hit was recorded, there will be no style on hover.
+- Refactored `notifications` and `notifications.config` modules.
+- The `notifications` module will render a default message only on load.
+- The `notifications` module will render a message corresponding to the state of the game; for example, if a game mode is selected, the message becomes `Place ships`.
+- The `render` method in the `notifications` module now has two parameters, `type` and `player`; `type` determines what message object will be 'fetched' from the `notificationsConfig.options` array.
+---
 ### 04 APR 2024
 - Rewrote and renamed `foo` method in `composeGame` module to `isGameReady`.
 - The `isGameReady` method now takes two parameters, `player`/`isReady`.

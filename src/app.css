@@ -6,6 +6,21 @@
   font-style: normal;
 }
 
+:root {
+  --color-font-primary: #000000;
+  --color-font-secondary: #e8e9eb;
+  --color-background-primary: #313638;
+  --color-background-secondary: #f06543;
+  --color-background-default: #ffffff;
+  --color-accent: #f09d51;
+  --color-box-shadow: #000000;
+  --flex-gap-small: 0.5rem;
+  --padding-small-btn: 0.5rem;
+  --padding-med-btn: 1rem;
+  --padding-large-btn: 2rem;
+  --border-radius-btn: 0.5rem;
+}
+
 *,
 *::before,
 *::after {

@@ -228,6 +228,7 @@ export default (player, game, mode) => {
         this.draggable.style.height = newOrientation ? newWidth : newHeight;
       } else if (e === false) {
         this.draggable.classList.add('rotate_error');
+
         setTimeout(() => {
           this.draggable.classList.remove('rotate_error');
         }, 250);

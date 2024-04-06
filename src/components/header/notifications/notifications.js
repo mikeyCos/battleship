@@ -1,36 +1,48 @@
 import createElement from '../../../helpers/createElement';
 import pubSub from '../../../containers/pubSub';
+import notificationsConfig, { container } from './notifications.config';
 import '../../../styles/notifications.css';
 
 export default () => {
   const notifications = {
     init() {
-      this.updateNotification = this.updateNotification.bind(this);
+      this.render = this.render.bind(this);
     },
     cacheDOM(element) {
-      this.notificationMessage = element.querySelector('#notification_message');
+      this.notificationContainer = element;
     },
     bindEvents() {
-      pubSub.subscribe('notify', this.updateNotification);
+      pubSub.subscribe('notify', this.render);
     },
-    render() {
-      const notificationsContainer = createElement('div');
-      const notificationMessage = createElement('div');
+    render(type, player) {
+      console.log(type);
+      console.log(player);
+      const messageType = type ? type : 'default';
+      const notificationContainer = createElement(container.element);
+      notificationContainer.setAttributes(container.attributes);
+      notificationContainer.setChildren(container.children);
+      const notificationWrapper = notificationContainer.firstChild;
 
-      notificationsContainer.classList.add('notifications_container');
+      const message = notificationsConfig.options.find((message) => message.type === messageType);
+      if (player) {
+        message.createAttributes(player);
+      }
+      const notificationMessage = createElement(notificationsConfig.element);
       notificationMessage.setAttributes({
-        id: 'notification_message',
-        textContent: 'Pick game mode',
+        ...notificationsConfig.attributes,
+        ...message.attributes,
       });
+      notificationContainer.classList.add(message.type);
+      notificationWrapper.appendChild(notificationMessage);
 
-      notificationsContainer.appendChild(notificationMessage);
-      this.cacheDOM(notificationsContainer);
+      if (type) {
+        this.notificationContainer.replaceWith(notificationContainer);
+        if (message.sibling) notificationWrapper.setChildren(message.sibling);
+      }
+
+      this.cacheDOM(notificationContainer);
       this.bindEvents();
-
-      return notificationsContainer;
-    },
-    updateNotification(text) {
-      this.notificationMessage.textContent = text;
+      if (!player) return notificationContainer;
     },
   };
 

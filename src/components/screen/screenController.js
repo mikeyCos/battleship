@@ -25,7 +25,7 @@ export default (mode) => {
         playerOne: this.game.playerOneBoard.board,
         playerTwo: this.game.playerTwoBoard.board,
       };
-      pubSub.publish('notify', 'Place ships');
+      pubSub.publish('notify', 'place');
       this.updateGameState(composeGame);
       this.play = this.play.bind(this);
       this.isGameReady = this.isGameReady.bind(this);
@@ -58,7 +58,7 @@ export default (mode) => {
         this.endGame = this.endGame.bind(this);
         this.renderWait = this.renderWait.bind(this);
         pubSub.subscribe('renderAttack', this.renderAttack);
-        pubSub.subscribe('endGame', this.endGame);
+        pubSub.subscribe('endgame', this.endGame);
         pubSub.subscribe('renderWait', this.renderWait);
         this.boardHandler = this.boardHandler.bind(this);
       }
@@ -106,11 +106,13 @@ export default (mode) => {
       }
 
       gameContainer.appendChild(boardsContainer);
-      if (this.gameReady) this.gameContainer.replaceWith(gameContainer);
+      if (this.gameReady) {
+        this.gameContainer.replaceWith(gameContainer);
+        boardsContainer.classList.add('busy');
+      }
       this.cacheDOM(gameContainer);
       this.bindEvents();
       if (!this.gameReady) return gameContainer;
-      // Does having this if statement matter?
     },
   };
   screenController.init();

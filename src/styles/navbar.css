@@ -1,11 +1,15 @@
 #navbar {
   display: flex;
   justify-content: space-between;
+  position: relative;
+  z-index: 1;
 }
 
 #navbar > * {
   display: flex;
   list-style: none;
+  align-items: center;
+  gap: var(--flex-gap-small);
 }
 
 .nav_right {
@@ -16,10 +20,52 @@
   /* Experimenting */
   position: absolute;
   right: 0;
-  top: 1em;
+  top: 2.5em;
   padding: 1rem;
+}
+
+.nav_item {
+  color: var(--color-font-primary);
+  font-style: normal;
+  font-size: 1.2rem;
+  text-decoration: none;
+}
+
+.nav_item:not(.github):hover {
+  color: white;
+}
+
+.nav_item > svg {
+  color: white;
+  width: 2.5rem;
+  height: auto;
+}
+
+.nav_item > .github_logo:hover {
+  color: rgb(149, 0, 255);
+  animation: linear 2s infinite rotate;
 }
 
 .nav_item.nav_logo {
   display: flex;
+  align-items: center;
+  gap: var(--flex-gap-small);
+}
+
+.nav_item.nav_logo > h1 {
+  font-size: 2rem;
+}
+
+.leave_game.inactive {
+  display: none;
+}
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0deg);
+  }
+
+  100% {
+    transform: rotate(360deg);
+  }
 }

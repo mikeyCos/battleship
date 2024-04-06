@@ -11,11 +11,20 @@
 
 #boards_container > *.wait > *:not(.game_play) {
   opacity: 0.4;
+  pointer-events: none;
 }
 
-#boards_container > * > .board > * > button {
-  cursor: pointer;
+#boards_container > * > .board > * > .cell {
   border: none;
+}
+
+#boards_container.busy > * > .board > * > .cell:not(.hit):not(.miss) {
+  cursor: pointer;
+}
+
+#boards_container.busy > * > .board > * > .cell:not(.hit):not(.miss):hover > .cell_content {
+  border-width: 3px;
+  border-color: green;
 }
 
 #boards_container > *:not(.wait) > * > * > .cell > .cell_content > .ship {
@@ -39,7 +48,8 @@
 .play_btn {
   display: block;
   position: absolute;
-  top: 20%;
+  top: 10%;
+  padding: var(--padding-med-btn);
 }
 
 .play_btn > button {
@@ -62,70 +72,42 @@
   Show only active player's ship when game is in play
   */
   pointer-events: none;
-  height: inherit;
+  height: 100%;
   background-color: cornflowerblue;
 }
 
 .cell > .cell_content > .blank_wrapper {
   display: block;
-  /* width: 100%;
-  height: 100%; */
-  z-index: -1;
 }
 
-.cell.done > .cell_content > .blank_wrapper {
-  /* border: 2px solid red; */
-}
-
-.cell.hit > .cell_content > .blank_wrapper::before,
-.cell.hit > .cell_content > .blank_wrapper::after {
-  content: '';
-  position: absolute;
-  background: red;
-  left: 50%;
-  width: 2px;
-  top: -25%;
-  height: 150%;
-  z-index: -1;
-}
-
-.cell.done > .cell_content > .ship {
-  border: 2px solid red;
-}
-
-#boards_container > * > .board > * > .cell.hit > .cell_content > .blank_wrapper::before {
-  transform: rotate(45deg);
-  margin-top: -1px;
-}
-
-#boards_container > * > .board > * > .cell.hit > .cell_content > .blank_wrapper::after {
-  transform: rotate(-45deg);
-  margin-top: 1px;
-}
-
-/* #board_container > *:not(.wait) > .board > .board_row > .cell.hit > .cell_content > .ship, */
-#boards_container > * > .board > * > .cell.hit.done > .cell_content > .ship {
-  /* Original */
-  /* border: 2px solid red; */
+.cell.done > .cell_content {
+  border-color: red;
+  border-width: 2px;
 }
 
 #boards_container > * > .board > * > .cell.hit > .cell_content > .ship::before,
 #boards_container > * > .board > * > .cell.hit > .cell_content > .ship::after {
-  /* Original */
-  content: '';
-  position: absolute;
-  background: red;
+  /* Original values */
+  /*
   left: 50%;
   width: 2px;
   top: -25%;
   height: 150%;
+  */
+  content: '';
+  position: absolute;
+  background: red;
+  left: 45%;
+  width: 3px;
+  top: -10%;
+  height: 120%;
   z-index: 2;
 }
 
 #boards_container > * > .board > * > .cell.hit > .cell_content > .ship::before {
   /* Original */
   transform: rotate(45deg);
-  margin-top: -1px;
+  margin-top: 1px;
 }
 
 #boards_container > * > .board > * > .cell.hit > .cell_content > .ship::after {
@@ -147,8 +129,17 @@
   z-index: 1;
 }
 
+#boards_container > * > .board > * > .cell.done > .cell_content > .blank_wrapper {
+  position: absolute;
+  border: 4px solid red;
+  top: -2px;
+  left: -2px;
+  z-index: 2;
+  width: inherit;
+  height: inherit;
+}
+
 #boards_container > * > .board > * > .cell.miss > .cell_content {
-  /* background-color: grey; */
   background-color: #e1e3e8;
 }
 

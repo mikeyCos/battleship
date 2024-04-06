@@ -20,6 +20,7 @@ export default (state) => ({
   renderAttack(cell, coordinates) {
     console.log(coordinates);
     const isArray = coordinates.every((item) => Array.isArray(item));
+
     if (isArray) {
       coordinates.forEach((coordinate) => {
         const button = this.getButton(coordinate);
@@ -34,7 +35,7 @@ export default (state) => ({
     // button.classList.add(cell.miss ? 'miss' : 'hit');
   },
   renderWait() {
-    let notificationMessage = `Player one's turn.`;
+    let player = 'one';
     if (this.game.activePlayer === this.game.playerOne) {
       // If game.activePlayer is NOT playerOne
       // Put 'wait' class on the player one's container
@@ -51,19 +52,19 @@ export default (state) => ({
       this.playerOneContainer.classList.remove('wait');
       this.playerOneBoard.addEventListener('click', this.boardHandler);
       this.playerTwoBoard.removeEventListener('click', this.boardHandler);
-      notificationMessage = `Player two's turn.`;
+      player = 'two';
     }
 
-    pubSub.publish('notify', notificationMessage);
+    pubSub.publish('notify', 'turn', player);
 
     if (!this.mode && this.game.activePlayer === this.game.playerTwo) {
       // Optional, put a setTimeout()
       this.game.playRound();
     }
   },
-  endGame(message) {
+  endGame(player) {
     this.unbindEvents();
-    pubSub.publish('notify', message);
+    pubSub.publish('notify', 'gameover', player);
   },
   boardHandler(e) {
     const btn = e.target.parentElement;

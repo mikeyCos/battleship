@@ -21,6 +21,9 @@ const BuildElement = (state) => ({
   setStyle: (text) => {
     state.style.cssText = text;
   },
+  setID: (id) => {
+    state.id = id;
+  },
   setClassName: (arrClass) => {
     arrClass.forEach((className) => state.classList.add(className));
   },

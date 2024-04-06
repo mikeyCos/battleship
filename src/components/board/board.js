@@ -22,6 +22,7 @@ export default (playerBoard) => {
           blankWrapper.classList.add('blank_wrapper');
           cellContent.appendChild(blankWrapper);
           if (cell.ship) {
+            console.log(cell.ship.length);
             // Problem, allows opponents to cheat in a browser developer tools
             const cellShip = createElement('div');
             cellShip.classList.add('ship');
