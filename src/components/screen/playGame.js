@@ -18,7 +18,6 @@ export default (state) => ({
     return board.find((btn) => btn.dataset.x == x && btn.dataset.y == y);
   },
   renderAttack(cell, coordinates) {
-    console.log(coordinates);
     const isArray = coordinates.every((item) => Array.isArray(item));
 
     if (isArray) {
@@ -31,8 +30,6 @@ export default (state) => ({
       const button = this.getButton(coordinates);
       button.classList.add(cell.miss ? 'miss' : 'hit');
     }
-    // const button = this.getButton(coordinates);
-    // button.classList.add(cell.miss ? 'miss' : 'hit');
   },
   renderWait() {
     let player = 'one';

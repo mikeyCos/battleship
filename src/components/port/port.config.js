@@ -20,7 +20,7 @@ export default {
           element: 'div',
           attributes: {
             class: 'port_ship',
-            style: 'width: 8em; height: 2em;',
+            style: 'width: 8em; height: 2em; padding-right: 6px; padding-bottom: 0px;',
           },
           children: [
             {
@@ -30,7 +30,7 @@ export default {
                 ['data-id']: '',
                 ['data-length']: '4',
                 ['data-orientation']: 'h',
-                style: 'width: 8em; height: 2em;',
+                style: 'width: 8em; height: 2em; padding-right: 6px; padding-bottom: 0px;',
               },
             },
           ],
@@ -47,7 +47,7 @@ export default {
           element: 'div',
           attributes: {
             class: 'port_ship',
-            style: 'width: 6em; height: 2em;',
+            style: 'width: 6em; height: 2em; padding-right: 4px; padding-bottom: 0px;',
           },
           children: [
             {
@@ -57,7 +57,7 @@ export default {
                 ['data-id']: '',
                 ['data-length']: '3',
                 ['data-orientation']: 'h',
-                style: 'width: 6em; height: 2em;',
+                style: 'width: 6em; height: 2em; padding-right: 4px; padding-bottom: 0px;',
               },
             },
           ],
@@ -66,7 +66,7 @@ export default {
           element: 'div',
           attributes: {
             class: 'port_ship',
-            style: 'width: 6em; height: 2em;',
+            style: 'width: 6em; height: 2em; padding-right: 4px; padding-bottom: 0px;',
           },
           children: [
             {
@@ -76,7 +76,7 @@ export default {
                 ['data-id']: '',
                 ['data-length']: '3',
                 ['data-orientation']: 'h',
-                style: 'width: 6em; height: 2em;',
+                style: 'width: 6em; height: 2em; padding-right: 4px; padding-bottom: 0px;',
               },
             },
           ],
@@ -93,7 +93,7 @@ export default {
           element: 'div',
           attributes: {
             class: 'port_ship',
-            style: 'width: 4em; height: 2em;',
+            style: 'width: 4em; height: 2em; padding-right: 2px; padding-bottom: 0px;',
           },
           children: [
             {
@@ -103,7 +103,7 @@ export default {
                 ['data-id']: '',
                 ['data-length']: '2',
                 ['data-orientation']: 'h',
-                style: 'width: 4em; height: 2em;',
+                style: 'width: 4em; height: 2em; padding-right: 2px; padding-bottom: 0px;',
               },
             },
           ],
@@ -112,7 +112,7 @@ export default {
           element: 'div',
           attributes: {
             class: 'port_ship',
-            style: 'width: 4em; height: 2em;',
+            style: 'width: 4em; height: 2em; padding-right: 2px; padding-bottom: 0px;',
           },
           children: [
             {
@@ -122,7 +122,7 @@ export default {
                 ['data-id']: '',
                 ['data-length']: '2',
                 ['data-orientation']: 'h',
-                style: 'width: 4em; height: 2em;',
+                style: 'width: 4em; height: 2em; padding-right: 2px; padding-bottom: 0px;',
               },
             },
           ],
@@ -131,7 +131,7 @@ export default {
           element: 'div',
           attributes: {
             class: 'port_ship',
-            style: 'width: 4em; height: 2em;',
+            style: 'width: 4em; height: 2em; padding-right: 2px; padding-bottom: 0px;',
           },
           children: [
             {
@@ -141,7 +141,7 @@ export default {
                 ['data-id']: '',
                 ['data-length']: '2',
                 ['data-orientation']: 'h',
-                style: 'width: 4em; height: 2em;',
+                style: 'width: 4em; height: 2em; padding-right: 2px; padding-bottom: 0px;',
               },
             },
           ],
@@ -270,7 +270,7 @@ export default {
             {
               element: 'button',
               attributes: {
-                class: 'random_btn',
+                class: 'randomize_btn',
               },
               children: [
                 {

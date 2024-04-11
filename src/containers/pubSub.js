@@ -4,10 +4,8 @@ export default {
     // When would you want to subscribe a single function in the same subscriber more than once?
     this.subscribers[subscriber] = this.subscribers[subscriber] || [];
     if (!this.subscribers[subscriber].find((handler) => handler.name === fn.name)) {
-      console.log(subscriber);
       this.subscribers[subscriber].push(fn);
     }
-    console.log(this.subscribers);
   },
   unsubscribe(subscriber, fn) {
     if (this.subscribers[subscriber]) {

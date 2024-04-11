@@ -6,27 +6,22 @@
   position: relative;
   border: 1px dotted #b2b2b9;
   margin: 0.5em;
-  /* box-sizing: content-box; */
+  box-sizing: content-box;
 }
 
 .ship_box {
   z-index: 2;
-  position: absolute;
-  background: rgba(0, 0, 255, 0.05);
-  border: 2px solid #00f;
   left: 0;
   top: 0;
-  /* box-sizing: content-box; */
+  border: 2px solid #00f;
+  background: rgba(0, 0, 255, 0.05);
+  position: absolute !important;
+  margin: -2px;
+  box-sizing: content-box;
 }
 
 .ship_box:hover {
   cursor: move;
-}
-
-.cell_content > .ship_box {
-  /* Comment out if using box-sizing: content */
-  left: -4%;
-  top: -4%;
 }
 
 .ship_box.dragging.ship_box_transparent {
@@ -35,7 +30,6 @@
 }
 
 .ship_box_placeholder {
-  border-width: 3px;
   border-color: #40bf44;
   background: rgba(64, 191, 68, 0.05);
 }
@@ -64,7 +58,7 @@
 }
 
 .random_btn {
-  display: none;
+  /* display: none; */
 }
 
 .ready_btn.inactive {

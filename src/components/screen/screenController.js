@@ -22,8 +22,10 @@ export default (mode) => {
     game: GameController(mode),
     init() {
       this.boards = {
-        playerOne: this.game.playerOneBoard.board,
-        playerTwo: this.game.playerTwoBoard.board,
+        // playerOne: this.game.playerOneBoard.board,
+        // playerTwo: this.game.playerTwoBoard.board,
+        playerOne: board('player_one', this.game.playerOneBoard.board),
+        playerTwo: board('player_two', this.game.playerTwoBoard.board),
       };
       pubSub.publish('notify', 'place');
       this.updateGameState(composeGame);
@@ -85,8 +87,10 @@ export default (mode) => {
       gamePlayContainer.classList.add('game_play');
       gamePlayBtn.classList.add('play_btn');
       // Renders players' boards
-      playerOneContainer.appendChild(board(this.boards.playerOne));
-      playerTwoContainer.appendChild(board(this.boards.playerTwo));
+      // playerOneContainer.appendChild(board('player_one', this.boards.playerOne));
+      // playerTwoContainer.appendChild(board('player_two', this.boards.playerTwo));
+      playerOneContainer.appendChild(this.boards.playerOne.render());
+      playerTwoContainer.appendChild(this.boards.playerTwo.render());
       playerOneContainer.appendChild(playerOneHeader);
       playerTwoContainer.appendChild(playerTwoHeader);
       boardsContainer.appendChild(playerOneContainer);
@@ -94,10 +98,14 @@ export default (mode) => {
       gamePlayBtn.appendChild(gamePlayBtnText);
       gamePlayContainer.appendChild(gamePlayBtn);
       if (!this.gameReady) {
-        playerOneContainer.appendChild(port('player_one', this.game, this.mode));
+        playerOneContainer.appendChild(
+          port('player_one', this.game, this.mode, this.boards.playerOne),
+        );
+        playerTwoContainer.appendChild(
+          port('player_two', this.game, this.mode, this.boards.playerTwo),
+        );
+        gamePlayBtn.classList.add('inactive');
         if (this.mode) {
-          playerTwoContainer.appendChild(port('player_two', this.game, this.mode));
-          gamePlayBtn.classList.add('inactive');
         } else {
           playerTwoContainer.classList.add('inactive');
           playerTwoContainer.classList.add('wait');

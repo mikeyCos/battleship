@@ -15,8 +15,6 @@ export default () => {
       pubSub.subscribe('notify', this.render);
     },
     render(type, player) {
-      console.log(type);
-      console.log(player);
       const messageType = type ? type : 'default';
       const notificationContainer = createElement(container.element);
       notificationContainer.setAttributes(container.attributes);

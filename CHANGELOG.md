@@ -1,5 +1,12 @@
 # Changelog
 ---
+### 10 APR 2024
+- Created `getCellContent`/`getShipBox`/`placeRandom`/`randomizeHandler` methods in `port` module.
+- All players can now randomize ships; ships are placed on the board pseudo-randomly.
+- The `board` module now returns a board object and adds a `pushShip_player_one`/`pushShip_player_two` subscriber based on the player parameter.
+- The `placeShipsRandom` method in the `gameboard` module will publish the `placeRandom_one`/`placeRandom_two` subscribers.
+- In player vs computer mode, the randomize button unintentionally adds and removes an `inactive` class to the `.player_two` container.
+---
 ### 05 APR 2024
 - Created Git branch 'styling'.
 - Created a variety of custom CSS variables for `:root` selector in `app.css`

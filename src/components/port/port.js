@@ -3,12 +3,13 @@ import portConfig from './port.config';
 import pubSub from '../../containers/pubSub';
 import board from '../board/board';
 
-export default (player, game, mode) => {
+export default (player, game, mode, board) => {
   const port = {
     // Rename to portController or shipsController?
     player,
     game,
     mode,
+    board,
     init() {
       this.dragStartHandler = this.dragStartHandler.bind(this);
       this.dragEndHandler = this.dragEndHandler.bind(this);
@@ -18,11 +19,14 @@ export default (player, game, mode) => {
       this.dragStartHandler = this.dragStartHandler.bind(this);
       this.resetHandler = this.resetHandler.bind(this);
       this.readyHandler = this.readyHandler.bind(this);
+      this.randomizeHandler = this.randomizeHandler.bind(this);
+      this.placeRandom = this.placeRandom.bind(this);
 
       this.playerBoard =
         player === 'player_one' ? this.game.playerOneBoard : this.game.playerTwoBoard;
       this.dropSubscriber = `drop${player.substring(player.indexOf('_'))}`;
       this.rotateSubscriber = `rotate${player.substring(player.indexOf('_'))}`;
+      this.placeRandomSubscriber = `placeRandom${player.substring(player.indexOf('_'))}`;
     },
     cacheDOM(element) {
       this.port = element;
@@ -30,6 +34,7 @@ export default (player, game, mode) => {
       this.ships = element.querySelectorAll('.ship_box');
       this.resetBtn = element.querySelector('.reset_btn');
       this.readyBtn = element.querySelector('.ready_btn');
+      this.randomizeBtn = element.querySelector('.randomize_btn');
     },
     bindEvents() {
       this.ships.forEach((ship) => {
@@ -37,11 +42,12 @@ export default (player, game, mode) => {
         ship.addEventListener('mousedown', this.dragStartHandler);
       });
 
-      // this.readyEvent = new Event('click');
       this.resetBtn.addEventListener('click', this.resetHandler);
       this.readyBtn.addEventListener('click', this.readyHandler);
+      this.randomizeBtn.addEventListener('click', this.randomizeHandler);
       pubSub.subscribe(this.dropSubscriber, this.dropHandler);
       pubSub.subscribe(this.rotateSubscriber, this.rotateHandler);
+      pubSub.subscribe(this.placeRandomSubscriber, this.placeRandom);
     },
     render() {
       const playerPort = createElement(portConfig.element);
@@ -49,6 +55,7 @@ export default (player, game, mode) => {
       playerPort.setChildren(portConfig.children);
       this.cacheDOM(playerPort);
       if (!this.mode) this.readyBtn.classList.add('inactive');
+
       this.bindEvents();
       return playerPort;
     },
@@ -60,6 +67,7 @@ export default (player, game, mode) => {
       this.offSetX = e.clientX;
       this.offSetY = e.clientY;
 
+      console.log(this.draggable);
       this.dragTimer = setTimeout(() => {
         document.addEventListener('mousemove', this.dragMoveHandler);
         document.addEventListener('mouseup', this.dragEndHandler);
@@ -97,7 +105,7 @@ export default (player, game, mode) => {
 
         const id = this.draggable.dataset.id;
         const orientation = this.draggable.dataset.orientation !== 'h';
-        // this.game.playerOneBoard.placeShip([x, y], shipLength, orientation, true, false, id);
+
         this.playerBoard.placeShip(
           [x, y],
           shipLength,
@@ -137,7 +145,7 @@ export default (player, game, mode) => {
         const shipLength = parseInt(this.draggable.dataset.length);
         const id = this.draggable.dataset.id;
         const orientation = this.draggable.dataset.orientation !== 'h';
-        // this.game.playerOneBoard.placeShip([x, y], shipLength, orientation, false, false, id);
+
         this.playerBoard.placeShip(
           [x, y],
           shipLength,
@@ -152,8 +160,6 @@ export default (player, game, mode) => {
 
       if (!this.dragStart.classList.contains('port_ship') && this.draggable) {
         // If dragStart is not the port_ship element
-        this.draggable.style.left = `-4%`;
-        this.draggable.style.top = `-4%`;
       }
     },
     dropHandler(isDragging, isValidDrop) {
@@ -167,8 +173,6 @@ export default (player, game, mode) => {
           // If user has stopped dragging over the drop zone
           cellContent.appendChild(this.draggable);
           this.dropPlaceholder.remove();
-          this.draggable.style.left = `-4%`;
-          this.draggable.style.top = `-4%`;
           if (this.resetBtn.classList.contains('inactive')) {
             this.resetBtn.classList.remove('inactive');
           }
@@ -183,6 +187,11 @@ export default (player, game, mode) => {
               }
             });
           }
+
+          pubSub.publish(`pushShip_${this.player}`, {
+            ...this.draggable.dataset,
+            style: this.draggable.style.cssText,
+          });
         } else if (isDragging && !isValidDrop) {
           // If user is dragging over an invalid drop
           if (this.dropPlaceholder) {
@@ -207,7 +216,6 @@ export default (player, game, mode) => {
           const y = parseInt(this.cell.dataset.y);
           const shipLength = parseInt(this.draggable.dataset.length);
           const id = this.draggable.dataset.id;
-          // this.game.playerOneBoard.placeShip([x, y], shipLength, newOrientation, false, true, id);
           this.playerBoard.placeShip(
             [x, y],
             shipLength,
@@ -224,8 +232,20 @@ export default (player, game, mode) => {
         this.draggable.dataset.orientation = newOrientation ? 'v' : 'h';
         const newWidth = newOrientation ? this.draggable.style.width : this.draggable.style.height;
         const newHeight = newOrientation ? this.draggable.style.height : this.draggable.style.width;
+        const newPaddingRight = newOrientation
+          ? this.draggable.style.paddingRight
+          : this.draggable.style.paddingBottom;
+        const newPaddingBottom = newOrientation
+          ? this.draggable.style.paddingBottom
+          : this.draggable.style.paddingRight;
         this.draggable.style.width = newOrientation ? newHeight : newWidth;
         this.draggable.style.height = newOrientation ? newWidth : newHeight;
+        this.draggable.style.paddingRight = newOrientation ? newPaddingBottom : newPaddingRight;
+        this.draggable.style.paddingBottom = newOrientation ? newPaddingRight : newPaddingBottom;
+        pubSub.publish(`pushShip_${this.player}`, {
+          ...this.draggable.dataset,
+          style: this.draggable.style.cssText,
+        });
       } else if (e === false) {
         this.draggable.classList.add('rotate_error');
 
@@ -243,7 +263,7 @@ export default (player, game, mode) => {
 
       this.playerBoard.clearBoard();
       this.port.replaceWith(this.render());
-      playerBoard.replaceWith(board(this.playerBoard.board));
+      playerBoard.replaceWith(this.board.render());
       pubSub.publish('playerReady', this.player);
     },
     isPortsEmpty() {
@@ -256,11 +276,75 @@ export default (player, game, mode) => {
       if (this.mode) this.hideShips(isReady);
       pubSub.publish('playerReady', this.player, isReady);
     },
+    randomizeHandler(e) {
+      this.resetBtn.click();
+      this.playerBoard.placeShipsRandom(this.player.substring(this.player.indexOf('_') + 1));
+      if (this.isPortsEmpty() && !this.gameReady) {
+        this.gameReady = true;
+        // this.readyBtn.click();
+        if (this.mode) this.readyBtn.classList.remove('inactive');
+        [...this.port.children].forEach((child) => {
+          if (!child.classList.contains('btns_container')) {
+            child.style.display = 'none';
+          }
+        });
+      }
+    },
     hideShips(isReady) {
       this.ships.forEach((ship) => {
         const display = isReady ? 'none' : 'block';
         ship.style.display = display;
       });
+    },
+    getCellContent([x, y]) {
+      // Find cell with dataset.x === x && dataset.y ===y
+      // return document.querySelector(`.cell[data-x='${x}'][data-y='${y}'] > .cell_content`);
+      return document.querySelector(
+        `.${this.player} > * > * > .cell[data-x='${x}'][data-y='${y}'] > .cell_content`,
+      );
+    },
+    getShipBox(shipLength) {
+      return document.querySelector(
+        `.${this.player} > .port > * > .port_ship > .ship_box[data-length='${shipLength}']`,
+      );
+      // return [...this.ships].find(
+      //   (ship) =>
+      //     ship.dataset.length === shipLength && ship.parentElement.classList.contains('port_ship'),
+      // );
+    },
+    placeRandom(shipData) {
+      const cellContent = this.getCellContent(shipData.coordinates);
+      const shipBox = this.getShipBox(shipData.length);
+      const newOrientation = shipData.orientation ? 'v' : 'h';
+      if (shipBox.dataset.orientation !== newOrientation) {
+        shipBox.dataset.orientation = newOrientation;
+        const newWidth = newOrientation ? shipBox.style.width : shipBox.style.height;
+        const newHeight = newOrientation ? shipBox.style.height : shipBox.style.width;
+        const newPaddingRight = newOrientation
+          ? shipBox.style.paddingRight
+          : shipBox.style.paddingBottom;
+        const newPaddingBottom = newOrientation
+          ? shipBox.style.paddingBottom
+          : shipBox.style.paddingRight;
+        shipBox.style.width = newOrientation ? newHeight : newWidth;
+        shipBox.style.height = newOrientation ? newWidth : newHeight;
+        shipBox.style.paddingRight = newOrientation ? newPaddingBottom : newPaddingRight;
+        shipBox.style.paddingBottom = newOrientation ? newPaddingRight : newPaddingBottom;
+      }
+      pubSub.publish(`pushShip_${this.player}`, {
+        ...shipBox.dataset,
+        style: shipBox.style.cssText,
+      });
+      cellContent.appendChild(shipBox);
+
+      this.playerBoard.placeShip(
+        shipData.coordinates,
+        shipData.length,
+        shipData.orientation,
+        false,
+        false,
+        shipBox.dataset.id,
+      );
     },
   };
 

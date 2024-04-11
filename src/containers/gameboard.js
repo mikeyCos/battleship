@@ -126,7 +126,6 @@ export default () => {
       const newShip = Ship(shipLength, id);
       // Check if x and y are within the board's size
       // Check if there is a ship at x and y
-
       const isShipOnBoard = memo.some((cell) => cell.id === id && id !== undefined);
       if (isShipOnBoard) {
         for (let i = 0; i < memo.length; i += 1) {
@@ -170,7 +169,7 @@ export default () => {
     }
   };
 
-  const placeShipsRandom = () => {
+  const placeShipsRandom = (player) => {
     const ships = [4, 3, 3, 2, 2, 2, 1, 1, 1, 1];
     const coordinates = [];
     let i = 0;
@@ -179,13 +178,21 @@ export default () => {
       const [x, y] = generateRandomCoordinate();
       const [parsedX, parsedY] = parseCoordinate([x, y]);
       const orientation = Math.floor(Math.random() * 2) === 1;
-      const shipLength = ships[i];
-      const shipCoordinates = generateShipCoordinates([parsedX, parsedY], orientation, shipLength);
+      const length = ships[i];
+      const shipCoordinates = generateShipCoordinates([parsedX, parsedY], orientation, length);
       const isValidCoordinate = shipCoordinates.every(checkBoard);
       if (!coordinates.find(([a, b]) => a === x && b === y) && isValidCoordinate) {
-        placeShip([x, y], shipLength, orientation, false, false, generateUUID());
+        // placeShip([x, y], length, orientation, false, false, generateUUID());
+        pubSub.publish(`placeRandom_${player}`, {
+          coordinates: [x, y],
+          length: length,
+          orientation,
+        });
         coordinates.push([x, y]);
         i += 1;
+        console.log([x, y]);
+        console.log([parsedX, parsedY]);
+        console.log(board);
       }
     }
   };

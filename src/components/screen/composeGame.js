@@ -32,7 +32,7 @@ export default (state) => ({
   },
   play(e) {
     if (!this.mode) {
-      this.game.playerTwo.board.placeShipsRandom();
+      this.game.playerTwo.board.placeShipsRandom('two');
     }
     this.gameReady = true;
     this.render();

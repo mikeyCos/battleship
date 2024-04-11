@@ -1,11 +1,23 @@
+import pubSub from '../../containers/pubSub';
 import createElement from '../../helpers/createElement';
 
-export default (playerBoard) => {
+export default (player, playerBoard) => {
   const board = {
-    render(board) {
+    board: playerBoard,
+    ships: [],
+    player,
+    init() {
+      this.bindEvents();
+    },
+    bindEvents() {
+      this.pushShip = this.pushShip.bind(this);
+      console.log(this.player);
+      pubSub.subscribe(`pushShip_${this.player}`, this.pushShip);
+    },
+    render() {
       const playerBoard = createElement('div');
       playerBoard.classList.add('board');
-      board.forEach((row, y) => {
+      this.board.forEach((row, y) => {
         const boardRow = createElement('div');
         boardRow.classList.add('board_row');
         row.forEach((cell, x) => {
@@ -18,16 +30,25 @@ export default (playerBoard) => {
           // Need to show only activePlayer's ships
           // Need to hide the opponent's ships when activePlayer changes
           const cellContent = createElement('div');
+          const cellContentSpace = document.createTextNode('\u00A0');
           const blankWrapper = createElement('span');
           blankWrapper.classList.add('blank_wrapper');
           cellContent.appendChild(blankWrapper);
+          cellContent.appendChild(cellContentSpace);
+
           if (cell.ship) {
-            console.log(cell.ship.length);
+            cellBtn.classList.add('busy');
             // Problem, allows opponents to cheat in a browser developer tools
             const cellShip = createElement('div');
-            cellShip.classList.add('ship');
-            cellContent.appendChild(cellShip);
+            const findShip = this.ships.find((ship) => ship.id === cell.ship.id);
+            if (findShip) {
+              cellShip.style.cssText = findShip.style;
+              this.ships.splice(this.ships.indexOf(findShip), 1);
+              cellShip.classList.add('ship_box');
+              cellContent.appendChild(cellShip);
+            }
           }
+
           cellContent.classList.add('cell_content');
           cellBtn.appendChild(cellContent);
           // Need to check for left and top edges of board
@@ -36,26 +57,38 @@ export default (playerBoard) => {
             const rowMarker = createElement('div');
             const colMarker = createElement('div');
             if (x === 0) {
-              rowMarker.setAttributes({ class: 'row_marker', textContent: `${y + 1}` });
+              rowMarker.setAttributes({ class: 'marker marker_row', textContent: `${y + 1}` });
               cellContent.appendChild(rowMarker);
             }
 
             if (y === 0) {
               colMarker.setAttributes({
-                class: 'col_marker',
+                class: 'marker marker_col',
                 textContent: `${String.fromCharCode(65 + x)}`,
               });
               cellContent.appendChild(colMarker);
             }
           }
           boardRow.appendChild(cellBtn);
-          // playerBoard.appendChild(cellBtn);
         });
         playerBoard.appendChild(boardRow);
       });
       return playerBoard;
     },
+    pushShip(shipData) {
+      // Need to save ship info; CSS and ID
+      const findShip = this.ships.find((ship) => ship.id === shipData.id);
+
+      if (!findShip) {
+        this.ships.push(shipData);
+      } else {
+        const index = this.ships.indexOf(findShip);
+        this.ships[index] = shipData;
+      }
+    },
   };
 
-  return board.render(playerBoard);
+  board.init();
+  // return board.render(playerBoard);
+  return board;
 };
