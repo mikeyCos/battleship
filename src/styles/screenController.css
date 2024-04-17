@@ -14,9 +14,107 @@
   pointer-events: none;
 }
 
+#boards_container.busy > *:not(.wait) > * > * > * > * > .ship_box {
+  display: none;
+}
+
+#boards_container.busy > * > * > * > .cell:not(.hit):not(.miss):hover {
+  border-color: rgba(255, 255, 255, 0.1);
+}
+
+#boards_container.busy > * > * > * > .cell:not(.hit):not(.miss):hover > .cell_content::after {
+  border: 2px solid #40bf44;
+  background: rgba(64, 191, 68, 0.05);
+  position: absolute;
+  width: 2em;
+  height: 2em;
+  padding: 1em;
+  top: 0px;
+  left: 0;
+  margin: -2px;
+  content: '';
+  display: block;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.player_two.inactive {
+  display: none;
+}
+
+.player_two {
+  position: relative;
+}
+
 .cell {
   border: 1px solid #b4b4ff;
   padding: 0;
+}
+
+.cell.hit > .cell_content > .blank_wrapper::before,
+.cell.hit > .cell_content > .blank_wrapper::after {
+  content: '';
+  position: absolute;
+  background: red;
+}
+
+.cell.hit > .cell_content > .blank_wrapper::before {
+  left: 50%;
+  width: 2px;
+  top: -25%;
+  height: 150%;
+  margin-top: 1px;
+}
+
+.cell.hit > .cell_content > .blank_wrapper::after {
+  top: 50%;
+  height: 2px;
+  left: -25%;
+  width: 150%;
+  margin-left: -1px;
+}
+
+.cell.hit > .cell_content > .blank_wrapper::before,
+.cell.hit > .cell_content > .blank_wrapper::after {
+  transform: rotate(-45deg);
+}
+
+#boards_container > * > * > * > .hit.done > * > .ship_box {
+  display: block;
+  border-color: red;
+}
+
+.hit.done {
+  border: 1px solid red;
+}
+
+.cell.done > .cell_content > .ship_box {
+  background-color: rgba(255, 0, 0, 0.05);
+}
+
+.cell.miss > .cell_content {
+  background-color: transparent;
+}
+
+.cell.miss > .cell_content > .blank_wrapper::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  height: 4px;
+  width: 4px;
+  background: #333;
+  border-radius: 50%;
+  margin-top: -2px;
+  margin-left: -2px;
+}
+
+.cell.miss > .cell_content > .blank_wrapper {
+  content: '';
+  display: block;
+  height: 2em;
+  width: 2em;
+  background-color: #fafad2;
 }
 
 .cell_content {
@@ -44,4 +142,14 @@
   position: absolute;
   font-size: 11px;
   z-index: -1;
+}
+
+.game_play > .play_btn.inactive {
+  display: none;
+}
+
+.game_play {
+  display: block;
+  position: absolute;
+  top: 10%;
 }

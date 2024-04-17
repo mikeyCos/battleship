@@ -1,3 +1,7 @@
+.port.inactive {
+  display: none;
+}
+
 .port_lines {
   display: flex;
 }

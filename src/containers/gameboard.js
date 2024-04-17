@@ -190,9 +190,6 @@ export default () => {
         });
         coordinates.push([x, y]);
         i += 1;
-        console.log([x, y]);
-        console.log([parsedX, parsedY]);
-        console.log(board);
       }
     }
   };

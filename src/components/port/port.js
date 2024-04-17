@@ -55,7 +55,7 @@ export default (player, game, mode, board) => {
       playerPort.setChildren(portConfig.children);
       this.cacheDOM(playerPort);
       if (!this.mode) this.readyBtn.classList.add('inactive');
-
+      if (!this.mode && this.player === 'player_two') this.port.classList.add('inactive');
       this.bindEvents();
       return playerPort;
     },
@@ -177,10 +177,14 @@ export default (player, game, mode, board) => {
             this.resetBtn.classList.remove('inactive');
           }
 
-          if (this.isPortsEmpty() && !this.gameReady) {
-            this.gameReady = true;
-            this.readyBtn.click();
-            if (this.mode) this.readyBtn.classList.remove('inactive');
+          if (this.isPortsEmpty() && !this.playerReady) {
+            this.playerReady = true;
+            if (!this.mode) pubSub.publish('playerReady', this.player);
+            if (this.mode) {
+              this.readyBtn.click();
+              this.readyBtn.classList.remove('inactive');
+            }
+
             [...this.port.children].forEach((child) => {
               if (!child.classList.contains('btns_container')) {
                 child.style.display = 'none';
@@ -256,7 +260,7 @@ export default (player, game, mode, board) => {
     },
     resetHandler(e) {
       // Clears board
-      this.gameReady = false;
+      this.playerReady = false;
       const playerBoard = this.resetBtn.closest(
         this.resetBtn.closest('.player_one') ? '.player_one' : '.player_two',
       ).firstChild;
@@ -264,7 +268,7 @@ export default (player, game, mode, board) => {
       this.playerBoard.clearBoard();
       this.port.replaceWith(this.render());
       playerBoard.replaceWith(this.board.render());
-      pubSub.publish('playerReady', this.player);
+      pubSub.publish('playerReady', this.player, false);
     },
     isPortsEmpty() {
       return [...this.ports].every((port) => port.firstChild === null);
@@ -273,22 +277,25 @@ export default (player, game, mode, board) => {
       const isReady = e.currentTarget.dataset.ready !== 'true';
       e.currentTarget.textContent = isReady ? 'Unready' : 'Ready';
       e.currentTarget.dataset.ready = isReady;
-      if (this.mode) this.hideShips(isReady);
+      this.hideShips(isReady);
       pubSub.publish('playerReady', this.player, isReady);
     },
     randomizeHandler(e) {
       this.resetBtn.click();
       this.playerBoard.placeShipsRandom(this.player.substring(this.player.indexOf('_') + 1));
-      if (this.isPortsEmpty() && !this.gameReady) {
-        this.gameReady = true;
-        // this.readyBtn.click();
-        if (this.mode) this.readyBtn.classList.remove('inactive');
+      if (this.mode) {
+        // If human vs human
+        this.readyBtn.classList.remove('inactive');
+      }
+      if (this.isPortsEmpty() && !this.playerReady) {
         [...this.port.children].forEach((child) => {
           if (!child.classList.contains('btns_container')) {
             child.style.display = 'none';
           }
         });
       }
+      this.resetBtn.classList.remove('inactive');
+      pubSub.publish('playerReady', this.player);
     },
     hideShips(isReady) {
       this.ships.forEach((ship) => {

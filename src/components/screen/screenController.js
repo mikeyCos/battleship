@@ -104,8 +104,8 @@ export default (mode) => {
         playerTwoContainer.appendChild(
           port('player_two', this.game, this.mode, this.boards.playerTwo),
         );
-        gamePlayBtn.classList.add('inactive');
         if (this.mode) {
+          gamePlayBtn.classList.add('inactive');
         } else {
           playerTwoContainer.classList.add('inactive');
           playerTwoContainer.classList.add('wait');

@@ -1,5 +1,14 @@
 # Changelog
 ---
+### 16 APR 2024
+- The `randomizeHandler` no longer sets a player as ready.
+- In human vs computer mode, when a player clicks the randomize button or finishes manually placing their ships, then the computer's board and a play button will appear.
+- In human vs human mode, players will need to click on the ready/unready button to hide or unhide their ships after clicking the randomize button.
+- Before and after pseudo classes applied to the `blank_wrapper` span to create an 'X' shape for hits.
+- An after pseudo class is applied to the `blank_wrapper` span to stylized a miss.
+- The computer's port is hidden when human player is ready.
+- Started write-up in `README.md`.
+---
 ### 10 APR 2024
 - Created `getCellContent`/`getShipBox`/`placeRandom`/`randomizeHandler` methods in `port` module.
 - All players can now randomize ships; ships are placed on the board pseudo-randomly.

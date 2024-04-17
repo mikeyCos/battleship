@@ -11,7 +11,6 @@ export default (player, playerBoard) => {
     },
     bindEvents() {
       this.pushShip = this.pushShip.bind(this);
-      console.log(this.player);
       pubSub.subscribe(`pushShip_${this.player}`, this.pushShip);
     },
     render() {
