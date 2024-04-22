@@ -67,7 +67,6 @@ export default (player, game, mode, board) => {
       this.offSetX = e.clientX;
       this.offSetY = e.clientY;
 
-      console.log(this.draggable);
       this.dragTimer = setTimeout(() => {
         document.addEventListener('mousemove', this.dragMoveHandler);
         document.addEventListener('mouseup', this.dragEndHandler);
@@ -287,6 +286,7 @@ export default (player, game, mode, board) => {
         // If human vs human
         this.readyBtn.classList.remove('inactive');
       }
+
       if (this.isPortsEmpty() && !this.playerReady) {
         [...this.port.children].forEach((child) => {
           if (!child.classList.contains('btns_container')) {
@@ -305,7 +305,6 @@ export default (player, game, mode, board) => {
     },
     getCellContent([x, y]) {
       // Find cell with dataset.x === x && dataset.y ===y
-      // return document.querySelector(`.cell[data-x='${x}'][data-y='${y}'] > .cell_content`);
       return document.querySelector(
         `.${this.player} > * > * > .cell[data-x='${x}'][data-y='${y}'] > .cell_content`,
       );
@@ -314,10 +313,6 @@ export default (player, game, mode, board) => {
       return document.querySelector(
         `.${this.player} > .port > * > .port_ship > .ship_box[data-length='${shipLength}']`,
       );
-      // return [...this.ships].find(
-      //   (ship) =>
-      //     ship.dataset.length === shipLength && ship.parentElement.classList.contains('port_ship'),
-      // );
     },
     placeRandom(shipData) {
       const cellContent = this.getCellContent(shipData.coordinates);
@@ -338,7 +333,8 @@ export default (player, game, mode, board) => {
         shipBox.style.paddingRight = newOrientation ? newPaddingBottom : newPaddingRight;
         shipBox.style.paddingBottom = newOrientation ? newPaddingRight : newPaddingBottom;
       }
-      pubSub.publish(`pushShip_${this.player}`, {
+
+      pubSub.publish(`pushShip_${this.player.substring(player.indexOf('_'))}`, {
         ...shipBox.dataset,
         style: shipBox.style.cssText,
       });

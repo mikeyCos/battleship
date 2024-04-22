@@ -11,7 +11,7 @@ export default (player, playerBoard) => {
     },
     bindEvents() {
       this.pushShip = this.pushShip.bind(this);
-      pubSub.subscribe(`pushShip_${this.player}`, this.pushShip);
+      pubSub.subscribe(`pushShip_${this.player.substring(player.indexOf('_'))}`, this.pushShip);
     },
     render() {
       const playerBoard = createElement('div');

@@ -10,8 +10,6 @@ export default () => {
       this.home = element;
       this.header = this.home.querySelector('h2');
       this.modeBtns = this.home.querySelectorAll('.gamemode_btn');
-      console.log(this.home);
-      console.log(this.modeBtns);
     },
     bindEvents() {
       this.setGameMode = this.setGameMode.bind(this);
@@ -34,7 +32,6 @@ export default () => {
     },
     setGameMode(e) {
       const gamemode = !e.currentTarget.classList.value.includes('computer');
-      console.log(gamemode);
       pubSub.publish('main_render', gamemode);
     },
   };

@@ -22,8 +22,6 @@ export default (mode) => {
     game: GameController(mode),
     init() {
       this.boards = {
-        // playerOne: this.game.playerOneBoard.board,
-        // playerTwo: this.game.playerTwoBoard.board,
         playerOne: board('player_one', this.game.playerOneBoard.board),
         playerTwo: board('player_two', this.game.playerTwoBoard.board),
       };

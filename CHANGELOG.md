@@ -1,5 +1,10 @@
 # Changelog
 ---
+### 21 APR 2024
+- A few `pubSub.subscribe` use `this.player.substring(player.indexOf('_'))` in a template string for a subscriber name.
+- Updated `About` section and added an `Instructions` section to README.md.
+- Applied minimal styles for changing layouts from mobile to desktop or vice-versa.
+---
 ### 16 APR 2024
 - The `randomizeHandler` no longer sets a player as ready.
 - In human vs computer mode, when a player clicks the randomize button or finishes manually placing their ships, then the computer's board and a play button will appear.

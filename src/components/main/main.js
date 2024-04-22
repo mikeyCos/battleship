@@ -14,7 +14,6 @@ export default () => {
     },
     cacheDOM(element) {
       this.main = element;
-      console.log(this.main);
     },
     bindEvents() {
       pubSub.subscribe('main_render', this.render);
