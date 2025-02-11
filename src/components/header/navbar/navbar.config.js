@@ -17,13 +17,13 @@ export default [
               class: 'nav_item nav_logo',
             },
             children: [
-              {
+              /* {
                 element: 'img',
                 attributes: {
                   src: '#',
                   // onload: 'SVGInject(this)',
                 },
-              },
+              }, */
               {
                 element: 'h1',
                 attributes: {
@@ -42,7 +42,7 @@ export default [
       class: 'nav_right',
     },
     children: [
-      {
+      /*       {
         element: 'li',
         children: [
           {
@@ -64,6 +64,20 @@ export default [
               href: '#',
               class: 'nav_item',
               textContent: 'Placeholder',
+            },
+          },
+        ],
+      }, */
+      {
+        element: 'li',
+        children: [
+          {
+            element: 'a',
+            attributes: {
+              href: 'index.html',
+              target: '_self',
+              class: 'nav_item leave_game inactive',
+              textContent: 'Leave game',
             },
           },
         ],
@@ -88,20 +102,6 @@ export default [
                 },
               },
             ],
-          },
-        ],
-      },
-      {
-        element: 'li',
-        children: [
-          {
-            element: 'a',
-            attributes: {
-              href: 'index.html',
-              target: '_self',
-              class: 'nav_item leave_game inactive',
-              textContent: 'Leave game',
-            },
           },
         ],
       },

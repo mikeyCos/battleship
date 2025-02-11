@@ -1,5 +1,12 @@
 # Changelog
 ---
+### 11 FEB 2025
+- Removed `add`, `dist`, and `git` from dependencies in `package.json`.
+- Updated CHANGELOG.md format.
+- Created `demo` and `media` directories.
+- Added `*.gif` files to the `media` directory.
+- Moved `li` item containing Github icon to the last item in `.nav_right` unordered list.
+---
 ### 21 APR 2024
 - A few `pubSub.subscribe` use `this.player.substring(player.indexOf('_'))` in a template string for a subscriber name.
 - Updated `About` section and added an `Instructions` section to README.md.

@@ -18,10 +18,10 @@
 
 .nav_right > :last-child {
   /* Experimenting */
-  position: absolute;
+  /* position: absolute;
   right: 0;
   top: 2.5em;
-  padding: 1rem;
+  padding: 1rem; */
 }
 
 .nav_item {
