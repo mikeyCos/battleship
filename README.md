@@ -192,6 +192,7 @@ This is an example of how to list things you need to use the software and how to
   <a href="./demo/media/overview.gif">
     <img src="./demo/media/overview.gif" alt="Usage Overview">
   </a>
+  
   _For more examples, please refer to the [Demo](./demo/DEMO.md)_
 </div>
 
