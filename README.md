@@ -35,7 +35,7 @@
 <h3 align="center">Battleship</h3>
 
   <p align="center">
-    Inventory Application with CRUD methods and form validation.
+    Based on the classic board game Battleship and developed with TDD.
     <br />
     <a href="https://mikeycos.github.io/battleship">Live Preview</a>
     ·
