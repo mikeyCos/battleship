@@ -16,14 +16,6 @@
   position: relative;
 }
 
-.nav_right > :last-child {
-  /* Experimenting */
-  /* position: absolute;
-  right: 0;
-  top: 2.5em;
-  padding: 1rem; */
-}
-
 .nav_item {
   color: var(--color-font-primary);
   font-style: normal;

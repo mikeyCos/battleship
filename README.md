@@ -203,9 +203,9 @@ This is an example of how to list things you need to use the software and how to
 ## Roadmap
 
 - [x] Implement randomize functionality for human players.
-- [] Create a 'pass' screen that allows players to hide their ships after the previous player attacked.
-- [] Implement the ability for players to continue attacking after successful attacks.
-- [] Implement touch screen capability.
+- [ ] Create a 'pass' screen that allows players to hide their ships after the previous player attacked.
+- [ ] Implement the ability for players to continue attacking after successful attacks.
+- [ ] Implement touch screen capability.
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
@@ -214,8 +214,6 @@ This is an example of how to list things you need to use the software and how to
 ## Contact
 
 Your Name - [@twitter_handle](https://twitter.com/twitter_handle) - email@email_client.com
-
-Project Link: [Battleship Repo](https://github.com/mikeyCos/battleship)
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>
 
