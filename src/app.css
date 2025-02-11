@@ -1,0 +1,56 @@
+@font-face {
+  /* https://fonts.google.com/specimen/Roboto+Condensed */
+  font-family: 'Roboto Condensed';
+  src: url(./assets/fonts/Roboto_Condensed/static/RobotoCondensed-Medium.ttf);
+  font-weight: 600;
+  font-style: normal;
+}
+
+:root {
+  --color-font-primary: #000000;
+  --color-font-secondary: #e8e9eb;
+  --color-background-primary: #313638;
+  --color-background-secondary: #f06543;
+  --color-background-default: #ffffff;
+  --color-accent: #f09d51;
+  --color-box-shadow: #000000;
+  --flex-gap-small: 0.5rem;
+  --padding-small-btn: 0.5rem;
+  --padding-med-btn: 1rem;
+  --padding-large-btn: 2rem;
+  --border-radius-btn: 0.5rem;
+}
+
+*,
+*::before,
+*::after {
+  padding: 0;
+  margin: 0;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+
+body {
+  min-height: 100svh;
+  background-color: rgb(149, 116, 59);
+  font-family: 'Roboto Condensed', Arial;
+  font-family: 'Roboto Condensed';
+  font-family: Arial;
+}
+
+#battleship_app {
+  min-height: inherit;
+  display: grid;
+  grid-template-rows: min-content 1fr;
+}
+
+#main_content {
+  /* Temporary */
+  /* margin-top: 4em; */
+}
+
+#main_content > :first-child {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+}

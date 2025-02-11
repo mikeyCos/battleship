@@ -1,0 +1,29 @@
+#home {
+}
+
+.gamemode_btns {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 2em;
+}
+
+.gamemode_btns > * {
+  padding: var(--padding-large-btn);
+  border-radius: var(--border-radius-btn);
+  border: none;
+}
+
+.gamemode_btns > *:hover {
+  cursor: pointer;
+  box-shadow: 0rem 0rem 0.5rem 0rem black;
+}
+
+.gamemode_btns > *:active {
+  background: black;
+  color: white;
+}
+
+.gamemode_btns > * > span {
+  font-size: 2em;
+}
